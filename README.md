@@ -24,8 +24,12 @@
 ## Contactos
 ### Email
 > a18825@alunos.ipca.pt
+
 > a18833@alunos.ipca.pt
+
 > a18836@alunos.ipca.pt
+
 > a18845@alunos.ipca.pt
+
 > a19431@alunos.ipca.pt
 
