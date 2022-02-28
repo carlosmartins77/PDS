@@ -8,6 +8,7 @@
 * O utilizador cliente tem acesso apenas às vendas;
 * Uma opção para filtrar vendas por localizaçao;
 * Um filtro na parte das vendas, onde existe um campo onde é ordenado por preço: maior para menor e vice versa, etc.
+* Possibilidade de meter diferentes preços para diferentes horas. (Por exemplo, os bolos inciialmente sao publicados às 3 da tarde a 2 euros, depois automaticamnete a partir das 5 descem para 1.5 etc)
 
 #### Sistema de medalhas
 * Haver medalhas e prémios para os clientes que realizam mais compras. 
