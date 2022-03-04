@@ -1,0 +1,6 @@
+RNF01 - Atualização do stock das lojas - rapidez
+RNF02 - Atualização do estado do transportador - rapidez 
+RNF03 - O sistema deve ser compativel com pelo menos 2 browsers - 
+RNF04 - Os dados devem ser guardados numa base de dados 
+RNF05 - O site deve estar em português
+RNF06 - O site deve ser intuitivo/facil utilizaçao.
