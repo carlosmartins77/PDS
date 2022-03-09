@@ -1,0 +1,12 @@
+## Testes de Aceitação
+
+### Testes de Aceitação para US1.1a Realizar uma Encomenda (Efetuar Encomenda )
+- Tentar selecionar ofertas inválidas
+- Verificar se a encomenda foi corretamente atribuída
+### Testes de Aceitação para US1.2a Efetuar uma Oferta (Criar uma oferta)
+
+
+### Testes de Aceitação para US1.3a Registar Disponibilidade  (Registar disponibilidade)
+
+
+### Testes de Aceitação para US1.4a Autorizar/Não Autorizar Ofertas (Gerir ofertas/estafetas )
