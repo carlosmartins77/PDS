@@ -10,6 +10,10 @@ const req = require('express/lib/request');
 // Classes
 const Product = require('./Classes/Product')
 const Candidacy = require('./Classes/Candidacy')
+const Utilizador = require('./Classes/Utilizador')
+const Cliente = require('./Classes/Cliente')
+const Loja = require('./Classes/Loja')
+const Estafeta = require('./Classes/Estafeta')
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -44,75 +48,85 @@ router.route('/orders').post((request, response) => {
 */
 //#endregion
 
+// #region Permissoes
+
+
+
+
+//#endregion
+
 //#region Produto
 // Para todas as rotas produto
-router.use("/produto", (request, response, next) => {
-  console.log('midlleware do produto');
-  next();
+router.use("/produto/loja/", (request, response, next) => {
+    dboperations.getPermissoes(request.params.id).then(result => {
+        if (result == 0)
+            next();
+    })
+    response.status(403).send("Erro autorizacao")
 })
 
-// Rota publicarProduto
-router.route('/produto/publicarProduto').post((request, response) => {
-  let product = new Product(request.body.id, request.body.name_product, request.body.quantity_product, request.body.image_product)
-  console.log("Produto a publicar", product)
 
-  dboperations.newProduct(product).then(result => {
-    if (result) response.status(201).send("Editado com sucesso!")
-    response.status(404).send("Not Found")
-  })
+// Rota publicarProduto
+router.route('/produto/loja/publicarProduto').post((request, response) => {
+    let product = new Product(request.body.id, request.body.name_product, request.body.quantity_product, request.body.image_product)
+    console.log("Produto a publicar", product)
+
+    dboperations.newProduct(product).then(result => {
+        if (result) response.status(201).send("Editado com sucesso!")
+        response.status(404).send("Not Found")
+    })
 })
 
 // Rota editarProduto
-router.route('/produto/editarProduto').post((request, response) => {
-  let product = new Order(request.body.id, request.body.name_product, request.body.quantity_product, request.body.image_product)
-  console.log("Produto a editar", product)
+router.route('/produto/loja/editarProduto').post((request, response) => {
+    let product = new Order(request.body.id, request.body.name_product, request.body.quantity_product, request.body.image_product)
+    console.log("Produto a editar", product)
 
-  dboperations.editProduct(product).then(result => {
-    if (result) response.status(201).send("Editado com sucesso!")
-    response.status(404).send("Not Found")
-  })
+    dboperations.editProduct(product).then(result => {
+        if (result) response.status(201).send("Editado com sucesso!")
+        response.status(404).send("Not Found")
+    })
 })
 
 // Rota listarProdutos
 router.route('/produto/listarProdutos/:id').get((request, response) => {
-  dboperations.listProduct(request.params.id).then(result => {
-    response.json(result[0]);
-  })
-})
-  //#endregion 
+        dboperations.listProduct(request.params.id).then(result => {
+            response.json(result[0]);
+        })
+    })
+    //#endregion 
 
-  //#region Candidaturas Loja
-  // Rota candidaturas
-  router.use("/candidaturas", (request, response, next) => {
+//#region Candidaturas Loja
+// Rota candidaturas
+router.use("/candidaturas", (request, response, next) => {
     console.log('midlleware das candidaturas das lojas');
     next();
-  })
+})
 
 // Rota submeterCandidaturas
 router.route('/candidaturas/submeterCandidaturas').post((request, response) => {
-  let candidacy = new Candidacy(request.body.id, request.body.name_candidacy, request.body.address, request.body.nif, request.body.category, request.body.approval, request.body.doc)
-  console.log("Inicio", candidacy)
+        let candidacy = new Candidacy(request.body.id, request.body.name_candidacy, request.body.address, request.body.nif, request.body.category, request.body.approval, request.body.doc)
+        console.log("Inicio", candidacy)
 
-  dboperations.addOrder(candidacy).then(result => {
-    response.status(201).json(result);
-  })
-})
-//#endregion 
+        dboperations.addOrder(candidacy).then(result => {
+            response.status(201).json(result);
+        })
+    })
+    //#endregion 
 
 //#region Perfil
 // Rota perfil
 router.use("/perfil", (request, response, next) => {
-  console.log('midlleware do pefil');
-  next();
+    console.log('midlleware do pefil');
+    next();
 })
 
 // Rota mostrarPerfil
-router.route('/perfil/mostrarPerfil').get((request, response) => {
-})
+router.route('/perfil/mostrarPerfil').get((request, response) => {})
 
 //#endregion 
 
-app.listen(process.env.PORT, function (err) {
-  if (err) console.log("Error in server setup")
-  console.log("Server listening on Port", process.env.PORT);
+app.listen(process.env.PORT, function(err) {
+    if (err) console.log("Error in server setup")
+    console.log("Server listening on Port", process.env.PORT);
 })
