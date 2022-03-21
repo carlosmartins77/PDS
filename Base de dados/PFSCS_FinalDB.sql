@@ -354,7 +354,7 @@ INSERT [dbo].[Utilizador] ([utilizadorId], [password], [nome], [email], [contact
 
 /******************************* Inserts [dbo].[Cliente] *******************************/
 GO
-INSERT [dbo].[Cliente] ([clienteId], [dataNascimento], [pais], [localizacao], [distanciaRaio], [utilizadorId]) VALUES (1, CAST(N'1993-04-14' AS DATE), N'Portugal', N'Rua 24 junho, 4800-010', N'600m', 1)
+INSERT [dbo].[Cliente] ([clienteId], [dataNascimento], [pais], [localizacao], [distanciaRaio], [utilizadorId]) VALUES (1, CAST(N'1993-04-14' AS DATE), N'Portugal', N'Rua 24 junho, 4800-010', 600, 1)
 
 
 /******************************* Inserts [dbo].[HistoricoDePagamentosCliente] *******************************/
