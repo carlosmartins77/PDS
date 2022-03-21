@@ -421,6 +421,9 @@ REFERENCES [dbo].[SubCategoriaProduto] ([subCatProdId])
 GO
 ALTER TABLE [dbo].[Produto] CHECK CONSTRAINT [FK_Produto_SubCategoriaProduto]
 GO
+ALTER TABLE [dbo].[Produto] WITH CHECK ADD CONSTRAINT [FK_Produto_Loja] FOREIGN KEY ([lojaId])
+REFERENCES [dbo].[Loja] ([lojaId])
+GO
 ALTER TABLE [dbo].[Estafeta] WITH CHECK ADD CONSTRAINT [FK_Estafeta_Utilizador] FOREIGN KEY ([utilizadorId])
 REFERENCES [dbo].[Utilizador] ([utilizadorId])
 GO
