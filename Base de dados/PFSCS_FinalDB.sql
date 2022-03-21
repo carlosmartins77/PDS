@@ -35,6 +35,7 @@ CREATE TABLE [dbo].[Cliente](
 	[dataNascimento] [DATE] NOT NULL,
 	[pais] [varchar](25) NOT NULL,
 	[localizacao] [varchar](50) NOT NULL,
+	[distanciaRaio] [int] NOT NULL,
 	[utilizadorId] [smallint] NOT NULL,
  CONSTRAINT [PK_Cliente] PRIMARY KEY CLUSTERED 
 (
@@ -198,6 +199,8 @@ CREATE TABLE [dbo].[Produto](
 	[nomeProduto] [varchar](255) NOT NULL,
 	[quantidade] [int] NOT NULL,
 	[preco] [float] NOT NULL,
+	[horaRecolhaMin] [DATE] NOT NULL,
+	[horaRecolhaMax] [DATE] NOT NULL,
 	[fotoProduto] [nvarchar] (255) NOT NULL,
 	[lojaId] [smallint] NOT NULL,
 	[subCatProdId] [smallint] NOT NULL, 
@@ -351,7 +354,7 @@ INSERT [dbo].[Utilizador] ([utilizadorId], [password], [nome], [email], [contact
 
 /******************************* Inserts [dbo].[Cliente] *******************************/
 GO
-INSERT [dbo].[Cliente] ([clienteId], [dataNascimento], [pais], [localizacao], [utilizadorId]) VALUES (1, CAST(N'1993-04-14' AS DATE), N'Portugal', N'Rua 24 junho, 4800-010', 1)
+INSERT [dbo].[Cliente] ([clienteId], [dataNascimento], [pais], [localizacao], [distanciaRaio], [utilizadorId]) VALUES (1, CAST(N'1993-04-14' AS DATE), N'Portugal', N'Rua 24 junho, 4800-010', N'600m', 1)
 
 
 /******************************* Inserts [dbo].[HistoricoDePagamentosCliente] *******************************/
@@ -404,7 +407,7 @@ INSERT [dbo].[SubCategoriaProduto] ([subCatProdId], [nomeSubProd], [categoriaPro
 
 /******************************* Inserts [dbo].[Produto] *******************************/
 GO
-INSERT [dbo].[Produto] ([produtoId], [nomeProduto], [quantidade], [preco], [fotoProduto], [lojaId], [subCatProdId]) VALUES (1, N'Coca-Cola', 2, CAST(0.90 AS DECIMAL(3, 2)), N'fotoProduto.jpeg', 1, 1)
+INSERT [dbo].[Produto] ([produtoId], [nomeProduto], [quantidade], [preco], [horaRecolhaMin], [horaRecolhaMax], [fotoProduto], [lojaId], [subCatProdId]) VALUES (1, N'Coca-Cola', 2, CAST(0.90 AS DECIMAL(3, 2)), CAST(N'2022-03-18' AS DATE), CAST(N'2022-03-20' AS DATE), N'fotoProduto.jpeg', 1, 1)
 
 
 /******************************* Inserts [dbo].[Estafeta] *******************************/
