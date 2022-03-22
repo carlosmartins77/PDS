@@ -2,7 +2,7 @@ var config = {
   user: 'sa',
   password: '1234',
   server: 'localhost',
-  database: 'test',
+  database: 'PFSCS',
   options: {
     trustServerCertificate: true,
     enableArithAbort: true,
