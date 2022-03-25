@@ -2,7 +2,8 @@ const dboperations = require('../dboperations');
 const jwt = require('jsonwebtoken');
 
 // Classes
-const Product = require('../Classes/Product')
+const Product = require('../Classes/Product');
+const { decode } = require('jsonwebtoken');
 
 // Para todas as rotas produto
 const produto = async (request, response, next) => {
@@ -12,7 +13,7 @@ const produto = async (request, response, next) => {
     //  Retorna um objeto com os dados do utilizador
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
     request.user = await dboperations.finduser(decoded)
-    if (request.user[0].tipoPermissao == 1) next();
+    if (request.user[0].tipoPermissao == 1 || request.user[0].tipoPermissao == 2) next();
     else response.send("Nao possui autorizacao")
   } catch (error) {
     response.send(error)
@@ -52,13 +53,20 @@ const editarProduto = (request, response) => {
 }
 
 // Rota listarProdutos
-const listarProdutos = (request, response) => {
+const listarProdutos = async (request, response) => {
   try {
-    dboperations.listProduct(request.params.id).then(result => {
-      response.json(result[0]);
-    })
+    const token = request.body.token
+    //  Retorna um objeto com os dados do utilizador
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+    request.user = await dboperations.finduser(decoded)
+    if (request.user[0]) {
+      dboperations.listProduct().then(result => {
+        response.status(200).send(result);
+      })
+    }
+    return
   } catch (error) {
-
+    response.status(401).send(error.message)
   }
 }
 

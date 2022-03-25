@@ -128,9 +128,9 @@
         }
       }
     },
-    "/produto/listarProdutos/:id": {
-      "get": {
-        "description": "Listar um Produto",
+    "/listarProdutos": {
+      "post": {
+        "description": "Listar Produtos",
         "tags": [
           "Produtos"
         ],
@@ -140,20 +140,28 @@
             "JWT": []
           }
         ],
-        "parameters": [
-          {
-            "name": "Id",
-            "in": "path",
-            "description": "Produt id",
-            "required": true
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListarProduto"
+              },
+              "examples": {
+                "Produto": {
+                  "value": {
+                    "token": "eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0"
+                  }
+                }
+              }
+            }
           }
-        ],
+        },
         "responses": {
           "401": {
             "description": "Não possui autorização!"
           },
-          "400": {
-            "description": "Produto ja existe!"
+          "404": {
+            "description": "Não foi encontrado nada"
           },
           "200": {
             "description": "OK",
@@ -385,23 +393,32 @@
       "ListarProduto": {
         "type": "object",
         "properties": {
-          "name": {
+          "idProduto": {
+            "type": "integer"
+          },
+          "nomeProduto": {
             "type": "string"
           },
-          "password": {
+          "quantidade": {
+            "type": "integer"
+          },
+          "preco": {
+            "type": "number"
+          },
+          "horaRecolhaMin": {
             "type": "string"
           },
-          "email": {
+          "horaRecolhaMax": {
             "type": "string"
           },
-          "contact": {
-            "type": "number"
+          "fotoProduto": {
+            "type": "string"
           },
-          "nif": {
-            "type": "number"
+          "lojaId": {
+            "type": "integer"
           },
-          "permisson": {
-            "type": "number"
+          "SubcategoriaProdId": {
+            "type": "integer"
           }
         }
       }

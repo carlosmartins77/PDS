@@ -9,8 +9,8 @@ async function loginUser(user) {
       .input('email', sql.VarChar, user.email)
       .input('password', sql.VarChar, user.password)
       .query("SELECT * FROM Utilizador where email = @email and password = @password;")
-      console.log("dentro", logUser.recordset)
-      if (logUser.recordset.length > 0) return true
+    console.log("dentro", logUser.recordset)
+    if (logUser.recordset.length > 0) return true
     else return false
   }
   catch (err) {
@@ -98,13 +98,13 @@ async function editProduct(product) {
 // Listar um Produto 
 // Input _> Produto
 // Output _> true/erro
-async function listProduct(productid) {
+async function listProduct() {
   try {
     let pool = await sql.connect(config);
     let editProduct = await pool.request()
-      .input('input_parameter', sql.Int, productid)
-      .query("select * from Produtos where id = @input_parameter")
-    return true;
+      .query("select * from Produto")
+    console.log(editProduct.recordset)
+    return editProduct.recordset;
   }
   catch (err) {
     console.log("Listar Produto: ", err);
@@ -138,7 +138,7 @@ async function mostrarPerfil(email) {
     let perfil = await pool.request()
       .input('input_parameter', sql.VarChar, email)
       .query("select * from Utilizador where email = @input_parameter")
-      return perfil.recordset;
+    return perfil.recordset;
   }
   catch (err) {
     console.log("Mostrar perfil: ", err);
@@ -157,7 +157,7 @@ module.exports = {
   //#endregion
   //#region Lojas
   //#endregion
-
-  mostrarPerfil:mostrarPerfil
-
+  //#region Candidaturas
+  mostrarPerfil: mostrarPerfil
+  //#endregion
 }

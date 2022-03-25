@@ -19,10 +19,13 @@ router.route('/verificartoken/token').get(token)
 router.use("/produto", produto)
 router.route('/produto/publicarProduto').post(publicarProduto) // a dar
 router.route('/produto/editarProduto').post(editarProduto)
-router.route('/produto/listarProdutos/:id').get(listarProdutos)
+router.route('/listarProdutos').post(listarProdutos)
 
-router.route('/mostarperfil').post(mostrarPerfil)
+// Mostrar Perfil
+router.route('/mostarPerfil').post(mostrarPerfil)
 
+// Candidaturas Lojas
+router.route('/candidaturaLoja').post(mostrarPerfil)
 
 /*
 //#region Candidaturas Loja
