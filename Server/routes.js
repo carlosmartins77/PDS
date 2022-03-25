@@ -4,6 +4,7 @@ const dotenv = require('dotenv').config();
 const router = express.Router();
 const {produto, publicarProduto, editarProduto, listarProdutos} = require('./Functions/ProductRoutes')
 const {verificartoken, login, registeruser, token} = require('./Functions/OAuthRoutes')
+const {mostrarPerfil} = require('./Functions/PerfilRoutes')
 
 app.use('/', router);
 app.use(express.json());
@@ -19,6 +20,9 @@ router.use("/produto", produto)
 router.route('/produto/publicarProduto').post(publicarProduto) // a dar
 router.route('/produto/editarProduto').post(editarProduto)
 router.route('/produto/listarProdutos/:id').get(listarProdutos)
+
+router.route('/mostarperfil').post(mostrarPerfil)
+
 
 /*
 //#region Candidaturas Loja

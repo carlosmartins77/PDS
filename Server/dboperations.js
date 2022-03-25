@@ -132,6 +132,19 @@ async function newCandidacy(candidacy) {
 }
 //#endregion
 
+async function mostrarPerfil(email) {
+  try {
+    let pool = await sql.connect(config);
+    let perfil = await pool.request()
+      .input('input_parameter', sql.VarChar, email)
+      .query("select * from Utilizador where email = @input_parameter")
+      return perfil.recordset;
+  }
+  catch (err) {
+    console.log("Mostrar perfil: ", err);
+  }
+}
+
 module.exports = {
   //#region Produtos
   newProduct: newProduct,
@@ -144,5 +157,7 @@ module.exports = {
   //#endregion
   //#region Lojas
   //#endregion
+
+  mostrarPerfil:mostrarPerfil
 
 }
