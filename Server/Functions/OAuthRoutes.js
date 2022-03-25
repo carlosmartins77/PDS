@@ -6,20 +6,18 @@ const User = require('../Classes/User')
 
 const verificartoken = async (req, res, next) => {
   let token
-  if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
-    try {
-      token = req.headers.authorization.split(" ")[1]
+  try {
+    token = req.headers.authorization.split(" ")[1]
 
-      //  Retorna um objeto com os dados do utilizador
-      const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+    //  Retorna um objeto com os dados do utilizador
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
 
-      req.user = await dboperations.finduser(decoded)
-      next()
-    } catch (error) {
-      console.log(error)
-      res.status(401).json({ message: "User not authorized" })
-      return
-    }
+    req.user = await dboperations.finduser(decoded)
+    next()
+  } catch (error) {
+    console.log(error)
+    res.status(401).json({ message: "User not authorized" })
+    return
   }
   if (!token) {
     res.status(401).json({ message: "Not authorized, no token" })
@@ -33,13 +31,17 @@ const token = (req, res) => {
 }
 
 const login = async (req, res) => {
-  const email = req.body.email
-  const status = await dboperations.loginUser(email)
-  console.log(status)
-  if (status == true) {
-    const accessToken = generateAcessToken(email)
-    res.json({ token: accessToken })
-  } else res.json("Nao possui registo!! ")
+  try {
+    let user = new User("", req.body.password, req.body.username, 0, 0, 0)
+    console.log(user)
+    const status = await dboperations.loginUser(user)
+    if (status == true) {
+      const accessToken = generateAcessToken(req.body.username)
+      res.json({ token: accessToken })
+    } else res.json("Nao possui registo!! ")
+  } catch (error) {
+    res.status(401).send("erro ", error)
+  }
 }
 
 function generateAcessToken(user) {
@@ -61,10 +63,10 @@ const registeruser = async (request, response) => {
     // Verificar se ja existe alguem com esse mail
     let newuser = await dboperations.finduser(request.body.email)
     console.log("novo: ", newuser)
-    if(newuser.length == 0){
+    if (newuser.length == 0) {
       dboperations.registeruser(user)
       response.send("Registo efetuado")
-    }else response.send("Ja possui um utilizador com esse email!")
+    } else response.send("Ja possui um utilizador com esse email!")
   } catch (error) {
     console.log(error);
   }
@@ -73,6 +75,6 @@ const registeruser = async (request, response) => {
 module.exports = {
   verificartoken: verificartoken,
   token: token,
-  login:login,
-  registeruser : registeruser
+  login: login,
+  registeruser: registeruser
 }

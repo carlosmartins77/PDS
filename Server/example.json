@@ -1,0 +1,601 @@
+
+{
+  "x-generator": "NSwag v13.14.7.0 (NJsonSchema v10.5.2.0 (Newtonsoft.Json v9.0.0.0))",
+  "swagger": "2.0",
+  "info": {
+    "title": "EMSAC API",
+    "description": "EMSAC API",
+    "contact": {
+      "name": "18845/19432 - ISI 2021 - LESI",
+      "url": "https://www.ipca.pt",
+      "email": ""
+    },
+    "license": {
+      "name": "Use under IPCA rights",
+      "url": "https://www.ipca.pt/license"
+    },
+    "version": "1.0.0"
+  },
+  "host": "localhost:44348",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "text/plain",
+    "application/json",
+    "text/json"
+  ],
+  "paths": {
+    "/orders/get_team_orders/{id}": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "Orders_GetTeamOrders",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Order"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              
+            ]
+          }
+        ]
+    }
+    },
+    "/orders/get_product_list": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "Orders_GetProductList",
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              
+            ]
+          }
+        ]
+      }
+    },
+    "/orders/get_most_selled_products": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "Orders_GetProductsMostSelled",
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductSelled"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              
+            ]
+          }
+        ]
+      }
+    },
+    "/orders/get_most_expensive_teams": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "Orders_GetMostExpensiveTeams",
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TeamCost"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              
+            ]
+          }
+        ]
+      }
+    },
+    "/orders/get_average_infected": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "Orders_GetAverageInfected",
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              
+            ]
+          }
+        ]
+      }
+    },
+    "/orders/create_new_order": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "Orders_CreateNewOrder",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "or",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              
+            ]
+          }
+        ]
+      }
+    },
+    "/orders/create_new_product": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "Orders_CreateNewProduct",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "pro",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Product"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              
+            ]
+          }
+        ]
+      }
+    },
+    "/orders/deliver_order": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "Orders_DeliverOrder",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "del",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Delivery"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              
+            ]
+          }
+        ]
+      }
+    },
+    "/orders/delete_product/{id}": {
+      "delete": {
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "Orders_DeleteProduct",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              
+            ]
+          }
+        ]
+      }
+    },
+    "/orders/edit_product": {
+      "put": {
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "Orders_EditProduct",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "pr",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Product"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              
+            ]
+          }
+        ]
+      }
+    },
+    "/orders/login": {
+      "post": {
+        "tags": [
+          "Security"
+        ],
+        "operationId": "Security_Login",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "loginDetalhes",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AuthRequest"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AuthResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Order": {
+      "type": "object",
+      "required": [
+        "id",
+        "date",
+        "total_price",
+        "id_team",
+        "delivered"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "total_price": {
+          "type": "number",
+          "format": "float"
+        },
+        "id_team": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "delivered": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProductOrder"
+          }
+        }
+      }
+    },
+    "ProductOrder": {
+      "type": "object",
+      "required": [
+        "id_product",
+        "quantity",
+        "unitPrice"
+      ],
+      "properties": {
+        "id_product": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "unitPrice": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "required": [
+        "id",
+        "unitPrice"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "label": {
+          "type": "string"
+        },
+        "unitPrice": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "ProductSelled": {
+      "type": "object",
+      "required": [
+        "id",
+        "quantity"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    },
+    "TeamCost": {
+      "type": "object",
+      "required": [
+        "id",
+        "cost"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "label": {
+          "type": "string"
+        },
+        "cost": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "Delivery": {
+      "type": "object",
+      "required": [
+        "id",
+        "date",
+        "id_order"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id_order": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "AuthResponse": {
+      "type": "object",
+      "required": [
+        "expiration"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "expiration": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "AuthRequest": {
+      "type": "object",
+      "required": [
+        "username",
+        "password"
+      ],
+      "properties": {
+        "username": {
+          "type": "string",
+          "minLength": 1
+        },
+        "password": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "JWT": {
+      "type": "apiKey",
+      "description": "Type into the value field: Bearer {token}",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "JWT": [
+        
+      ]
+    }
+  ]
+}

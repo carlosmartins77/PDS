@@ -8,11 +8,13 @@ const {verificartoken, login, registeruser, token} = require('./Functions/OAuthR
 app.use('/', router);
 app.use(express.json());
 
+// Login 
 router.use('/verificartoken', verificartoken) // a dar
 router.route('/login').post(login) // a dar
 router.route('/registeruser').post(registeruser) // a dar
 router.route('/verificartoken/token').get(token)
 
+// Produto
 router.use("/produto", produto)
 router.route('/produto/publicarProduto').post(publicarProduto) // a dar
 router.route('/produto/editarProduto').post(editarProduto)

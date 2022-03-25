@@ -5,6 +5,8 @@
 # npm i cors     
 # npm i express jsonwebtoken dotenv
 # npm i bcrypt
+# npm install -g swagger
+
 
 # token require('crypto').randomBytes#(64).toString('hex')
 

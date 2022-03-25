@@ -2,13 +2,15 @@ var config = require('./dbconfig');
 const sql = require('mssql');
 
 //#region Login 
-async function loginUser(useremail) {
+async function loginUser(user) {
   try {
     let pool = await sql.connect(config);
     let logUser = await pool.request()
-      .input('email', sql.VarChar, useremail)
-      .query("SELECT * FROM Utilizador where email = @email;")
-    if (logUser.recordset.length > 0) return true
+      .input('email', sql.VarChar, user.email)
+      .input('password', sql.VarChar, user.password)
+      .query("SELECT * FROM Utilizador where email = @email and password = @password;")
+      console.log("dentro", logUser.recordset)
+      if (logUser.recordset.length > 0) return true
     else return false
   }
   catch (err) {
@@ -66,7 +68,7 @@ async function newProduct(product) {
       .input('image', sql.VarChar, product.image)
       .input('lojaId', sql.Int, product.lojaId)
       .input('subCatProdId', sql.Int, product.subCatProdId)
-      .query("Insert into Produto (nomeProduto, quantidade, preco, horaRecolhaMin, horaRecolhaMax, fotoProduto, lojaId, subCatProdId) values (@name, @quantity, @price, @hourRecoMin,@hourRecoMax, @image,@lojaId, @subCatProdId);")
+      .query("Insert into Produto (nomeProduto, quantidade, preco, horaRecolhaMin, horaRecolhaMax, fotoProduto, lojaId, SubcategoriaProdId) values (@name, @quantity, @price, @hourRecoMin,@hourRecoMax, @image,@lojaId, @subCatProdId);")
     return true;
   }
   catch (err) {

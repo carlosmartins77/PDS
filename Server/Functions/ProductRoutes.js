@@ -19,36 +19,47 @@ const produto = async (request, response, next) => {
   }
 }
 
-
 // Rota publicarProduto
 const publicarProduto = (request, response) => {
-  // Name, Quantity, Price, hourRecoMin, HourRecoMax, Image, lojaId, subCatProdId
-  let product = new Product(request.body.name, request.body.quantity, request.body.price, request.body.hourRecoMin, request.body.hourRecoMax,
-    request.body.image, request.body.lojaId, request.body.subCatProdId)
-  console.log("Produto a publicar", product)
+  try {
+    // Name, Quantity, Price, hourRecoMin, HourRecoMax, Image, lojaId, subCatProdId
+    let product = new Product(request.body.name, request.body.quantity, request.body.price, request.body.hourRecoMin, request.body.hourRecoMax,
+      request.body.image, request.body.lojaId, request.body.subCatProdId)
+    console.log("Produto a publicar", product)
 
-  dboperations.newProduct(product).then(result => {
-    if (result) response.status(201).send("Editado com sucesso!")
-    response.status(404).send("Not Found")
-  })
+    dboperations.newProduct(product).then(result => {
+      if (result) response.status(201).send("Editado com sucesso!")
+      response.status(404).send("Not Found")
+    })
+  } catch (error) {
+
+  }
 }
 
 // Rota editarProduto
 const editarProduto = (request, response) => {
-  let product = new Order(request.body.id, request.body.name_product, request.body.quantity_product, request.body.image_product)
-  console.log("Produto a editar", product)
+  try {
+    let product = new Order(request.body.id, request.body.name_product, request.body.quantity_product, request.body.image_product)
+    console.log("Produto a editar", product)
 
-  dboperations.editProduct(product).then(result => {
-    if (result) response.status(201).send("Editado com sucesso!")
-    response.status(404).send("Not Found")
-  })
+    dboperations.editProduct(product).then(result => {
+      if (result) response.status(201).send("Editado com sucesso!")
+      response.status(404).send("Not Found")
+    })
+  } catch (error) {
+
+  }
 }
 
 // Rota listarProdutos
 const listarProdutos = (request, response) => {
-  dboperations.listProduct(request.params.id).then(result => {
-    response.json(result[0]);
-  })
+  try {
+    dboperations.listProduct(request.params.id).then(result => {
+      response.json(result[0]);
+    })
+  } catch (error) {
+
+  }
 }
 
 module.exports = {

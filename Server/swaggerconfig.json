@@ -1,0 +1,170 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "PSF: Portugal Food Sustainability",
+    "description": "API ...",
+    "termsOfService": "http://localhost:5000/terms",
+    "contact": {
+      "name": "18845/... - PDS 2022 - LESI",
+      "url": "https://www.ipca.pt",
+      "email": "a18845@alunos.ipca.pt"
+    },
+    "license": {
+      "name": "Use under IPCA rights",
+      "url": "https://www.ipca.pt/license"
+    },
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/produto/publicarProduto": {
+      "post": {
+        "description": "Publicar um novo Produto",
+        "tags": [
+          "Produtos"
+        ],
+        "operationId": "Produtos_publicarProduto",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Produto"
+              },
+              "examples": {
+                "Produto": {
+                  "value": {
+                    "name": "bolos",
+                    "image": "/imagem/133.png",
+                    "quantity": 3,
+                    "price": 23.99,
+                    "hourRecoMin": "10/10/21",
+                    "hourRecoMax": "10/10/21",
+                    "lojaId": 1,
+                    "subCatProdId": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Não possui autorização!"
+          },
+          "400": {
+            "description": "Produto ja existe!"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Produto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "description": "Efetuar Login",
+        "tags": [
+          "Security"
+        ],
+        "operationId": "Security_login",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Produto"
+              },
+              "examples": {
+                "Login": {
+                  "value": {
+                    "username": "name@example.pt",
+                    "password": "123456789"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Não possui autorização!"
+          },
+          "400": {
+            "description": "Ja existe esse utilizador!"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Login"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Produto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer"
+          },
+          "price": {
+            "type": "number"
+          },
+          "hourRecoMin": {
+            "type": "string"
+          },
+          "hourRecoMax": {
+            "type": "string"
+          },
+          "lojaId": {
+            "type": "integer"
+          },
+          "subCatProdId": {
+            "type": "integer"
+          }
+        }
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
