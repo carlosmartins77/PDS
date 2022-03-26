@@ -48,6 +48,20 @@ async function finduser(useremail) {
     console.log("Find User: ", err);
   }
 }
+
+
+async function compareuser(useremail) {
+  try {
+    const pool = await sql.connect(config);
+    const user = await pool.request()
+      .input('email', sql.VarChar, useremail)
+      .query("SELECT * FROM AdminLoja INNER JOIN Loja ON AdminLoja.idAdminLoja = Loja.adminlojaId INNER JOIN Utilizador ON AdminLoja.utilizadorId = Utilizador.idUtilizador where Utilizador.email = @email")
+    return user.recordset
+  }
+  catch (err) {
+    console.log("Find User: ", err);
+  }
+}
 //#endregion
 
 //#region Produto
@@ -154,6 +168,7 @@ module.exports = {
   loginUser: loginUser,
   finduser: finduser,
   registeruser: registeruser,
+  compareuser: compareuser,
   //#endregion
   //#region Lojas
   //#endregion

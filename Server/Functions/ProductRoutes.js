@@ -9,12 +9,17 @@ const { decode } = require('jsonwebtoken');
 const produto = async (request, response, next) => {
   try {
     const token = request.body.token
-    console.log(request.body)
     //  Retorna um objeto com os dados do utilizador
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-    request.user = await dboperations.finduser(decoded)
-    if (request.user[0].tipoPermissao == 1 || request.user[0].tipoPermissao == 2) next();
-    else response.send("Nao possui autorizacao")
+    request.use = await dboperations.finduser(decoded)
+    // verificar se possui a loja onde pretende publicar o produto associado
+    request.user = await dboperations.compareuser(request.use[0].email)
+    if (request.user[0]) {
+      if (request.use[0].tipoPermissao == 1 || request.use[0].tipoPermissao == 2) next();
+      else response.send("Nao possui autorizacao")
+    }else{
+      response.send("Nao possui autorizacao")
+    }
   } catch (error) {
     response.send(error)
   }
@@ -29,11 +34,10 @@ const publicarProduto = (request, response) => {
     console.log("Produto a publicar", product)
 
     dboperations.newProduct(product).then(result => {
-      if (result) response.status(201).send("Editado com sucesso!")
-      response.status(404).send("Not Found")
+      if (result) response.status(201).send("Publicado com sucesso!")
+      response.send("Not Found")
     })
   } catch (error) {
-
   }
 }
 
@@ -48,7 +52,6 @@ const editarProduto = (request, response) => {
       response.status(404).send("Not Found")
     })
   } catch (error) {
-
   }
 }
 
