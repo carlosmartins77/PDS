@@ -9,9 +9,8 @@ async function loginUser(user) {
       .input('email', sql.VarChar, user.email)
       .input('password', sql.VarChar, user.password)
       .query("SELECT * FROM Utilizador where email = @email and password = @password;")
-    console.log("dentro", logUser.recordset)
-    if (logUser.recordset.length > 0) return true
-    else return false
+    console.log("dentro", logUser.recordset[0])
+    return !!logUser.recordset[0]
   }
   catch (err) {
     console.log("Login: ", err);

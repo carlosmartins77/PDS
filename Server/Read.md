@@ -6,7 +6,8 @@
 # npm i express jsonwebtoken dotenv
 # npm i bcrypt
 # npm install -g swagger
-
+# npm i supertest
+# npm i jest
 
 # token require('crypto').randomBytes#(64).toString('hex')
 

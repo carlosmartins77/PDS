@@ -35,10 +35,11 @@ const login = async (req, res) => {
     let user = new User("", req.body.password, req.body.username, 0, 0, 0)
     console.log(user)
     const status = await dboperations.loginUser(user)
+    console.log(status)
     if (status == true) {
       const accessToken = generateAcessToken(req.body.username)
       res.json({ token: accessToken })
-    } else res.json("Nao possui registo!! ")
+    } else res.json("Nao possui registo!!")
   } catch (error) {
     res.status(401).send("erro ", error)
   }
