@@ -10,18 +10,19 @@ const produto = async(request, response, next) => {
     try {
         const token = request.body.token
             //  Retorna um objeto com os dados do utilizador
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        console.log("email")
+        const decoded = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         request.use = await dboperations.finduser(decoded)
             // verificar se possui a loja onde pretende publicar o produto associado
         request.user = await dboperations.compareuser(request.use[0].email)
         if (request.user[0]) {
-            if (request.use[0].tipoPermissao == 1 || request.use[0].tipoPermissao == 2) next();
+            if (request.use[0].tipoPermissao == 2) next();
             else response.status(403).send("Nao possui autorizacao")
         } else {
             response.status(403).send("Nao possui autorizacao")
         }
-    } catch (error) {
-        response.send(error)
+    } catch (Error) {
+        response.status(403).send("Nao possui autorizacao")
     }
 }
 
@@ -35,9 +36,11 @@ const publicarProduto = (request, response) => {
 
         dboperations.newProduct(product).then(result => {
             if (result) response.status(201).send("Publicado com sucesso!")
-            response.status(404).send("Not Found")
+            else response.status(404).send("Not Found")
         })
-    } catch (error) {}
+    } catch (Error) {
+        console.log("publicarProduto: ", Error)
+    }
 }
 
 // Rota editarProduto
@@ -47,10 +50,13 @@ const editarProduto = (request, response) => {
         console.log("Produto a editar", product)
 
         dboperations.editProduct(product).then(result => {
-            if (result) response.status(201).send("Editado com sucesso!")
-            response.status(404).send("Not Found")
+            if (result) {
+                response.status(201).send("Editado com sucesso!")
+            } else response.status(404).send("Not Found")
         })
-    } catch (error) {}
+    } catch (Error) {
+        console.log("editarProduto: ", Error)
+    }
 }
 
 // Rota listarProdutos
@@ -66,8 +72,8 @@ const listarProdutos = async(request, response) => {
             })
         }
         return
-    } catch (error) {
-        response.status(401).send(error.message)
+    } catch (Error) {
+        console.log("listarProdutos: ", Error)
     }
 }
 

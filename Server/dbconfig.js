@@ -1,6 +1,6 @@
 var config = {
     user: 'sa',
-    password: 'ola123',
+    password: '1234',
     server: 'localhost',
     database: 'PFSCS',
     options: {

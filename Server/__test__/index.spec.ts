@@ -13,7 +13,8 @@ describe('Autenticacao', () => {
         // Usar toStrictEqual para objetos
         // Usar toBe para variaveis
         // Usar toHaveProperty para verificar que tem um propriedade
-        expect(response.body).toHaveProperty("token")
+        expect(response.status).toBe(200)
+
     });
     it('Autenticacao com credenciais invalidas', async () => {
         const user = {
@@ -25,7 +26,7 @@ describe('Autenticacao', () => {
         
         // Usar toStrictEqual para objetos
         // Usar toBe para variaveis
-        expect(response.body).toBe("Nao possui registo!!")
+        expect(response.status).toBe(404)
     });
 });
 
@@ -81,4 +82,42 @@ describe('Registo', () => {
         expect(response.status).toBe(401)
     })
     ;
+});
+
+describe('Adicionar produto', () => {
+    it('Produto publicado (Tem permissões - token)', async () => {
+        const product = {
+            "name": "bolos",
+            "image": "/imagem/133.png",
+            "quantity": 3,
+            "price": 23.99,
+            "hourRecoMin": "10/10/21",
+            "hourRecoMax": "10/10/21",
+            "lojaId": 1,
+            "subCatProdId": 1,
+            "token": "eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI"
+        } 
+
+        const response = await request(app).post("/produto/publicarProduto").send(product);
+        expect(response.status).toBe(201)
+
+    });
+    it('Produto não publicado (Não tem permissões - token) ', async () => {
+        const product = {
+            "name": "bolos",
+            "image": "/imagem/133.png",
+            "quantity": 3,
+            "price": 23.99,
+            "hourRecoMin": "10/10/21",
+            "hourRecoMax": "10/10/21",
+            "lojaId": 1,
+            "subCatProdId": 1,
+        } 
+
+        const response = await request(app).post("/produto/publicarProduto").send(product);
+        
+        // Usar toStrictEqual para objetos
+        // Usar toBe para variaveis
+        expect(response.status).toBe(403)
+    });
 });

@@ -38,10 +38,10 @@ const login = async(req, res) => {
         console.log(status)
         if (status == true) {
             const accessToken = generateAcessToken(req.body.username)
-            res.json({ token: accessToken })
-        } else res.json("Nao possui registo!!")
-    } catch (error) {
-        res.status(401).send("erro ", error)
+            res.status(200).json({ token: accessToken })
+        } else res.status(404).send("Nao possui registo!!")
+    } catch (Error) {
+        console.log("login: ", Error)
     }
 }
 
@@ -68,8 +68,8 @@ const registeruser = async(request, response) => {
             dboperations.registeruser(user)
             response.status(201).send("Registo efetuado")
         } else response.status(401).send("Ja possui um utilizador com esse email!")
-    } catch (error) {
-        console.log("register user", error);
+    } catch (Error) {
+        console.log("registeruser: ", Error)
     }
 }
 

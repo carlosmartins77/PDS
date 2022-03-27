@@ -5,10 +5,11 @@ const mostrarPerfil = (request, response) => {
     try {
         console.log("mostra", request.body.username)
         dboperations.mostrarPerfil(request.body.username).then(result => {
-            response.status(200).json(result[0]);
+            if (!!result) response.status(200).json(result)
+            else response.status(404).json("Não existe este utilizador!")
         })
-    } catch (error) {
-        console.log(error)
+    } catch (Error) {
+        console.log("mostrarPerfil: ", Error)
     }
 }
 
