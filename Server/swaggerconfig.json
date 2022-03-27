@@ -1,427 +1,420 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "title": "PSF: Portugal Food Sustainability",
-    "description": "API ...",
-    "termsOfService": "http://localhost:5000/terms",
-    "contact": {
-      "name": "18845/... - PDS 2022 - LESI",
-      "url": "https://www.ipca.pt",
-      "email": "a18845@alunos.ipca.pt"
-    },
-    "license": {
-      "name": "Use under IPCA rights",
-      "url": "https://www.ipca.pt/license"
-    },
-    "version": "1.0.0"
-  },
-  "paths": {
-    "/produto/publicarProduto": {
-      "post": {
-        "description": "Publicar um novo Produto",
-        "tags": [
-          "Produtos"
-        ],
-        "operationId": "Produtos_publicarProduto",
-        "security": [
-          {
-            "JWT": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Produto"
-              },
-              "examples": {
-                "Produto": {
-                  "value": {
-                    "name": "bolos",
-                    "image": "/imagem/133.png",
-                    "quantity": 3,
-                    "price": 23.99,
-                    "hourRecoMin": "10/10/21",
-                    "hourRecoMax": "10/10/21",
-                    "lojaId": 1,
-                    "subCatProdId": 1
-                  }
-                }
-              }
-            }
-          }
+    "openapi": "3.0.0",
+    "info": {
+        "title": "PSF: Portugal Food Sustainability",
+        "description": "API ...",
+        "termsOfService": "http://localhost:5000/terms",
+        "contact": {
+            "name": "18845/... - PDS 2022 - LESI",
+            "url": "https://www.ipca.pt",
+            "email": "a18845@alunos.ipca.pt"
         },
-        "responses": {
-          "401": {
-            "description": "Não possui autorização!"
-          },
-          "400": {
-            "description": "Produto ja existe!"
-          },
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/Produto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/produto/editarProduto": {
-      "post": {
-        "description": "Editar um Produto",
-        "tags": [
-          "Produtos"
-        ],
-        "operationId": "Produtos_editarProduto",
-        "security": [
-          {
-            "JWT": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EditarProduto"
-              },
-              "examples": {
-                "Produto": {
-                  "value": {
-                    "name": "bolos",
-                    "image": "/imagem/133.png",
-                    "quantity": 3,
-                    "price": 23.99,
-                    "hourRecoMin": "10/10/21",
-                    "hourRecoMax": "10/10/21",
-                    "lojaId": 1,
-                    "subCatProdId": 1
-                  }
-                }
-              }
-            }
-          }
+        "license": {
+            "name": "Use under IPCA rights",
+            "url": "https://www.ipca.pt/license"
         },
-        "responses": {
-          "401": {
-            "description": "Não possui autorização!"
-          },
-          "400": {
-            "description": "Produto ja existe!"
-          },
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/EditarProduto"
-                }
-              }
-            }
-          }
-        }
-      }
+        "version": "1.0.0"
     },
-    "/listarProdutos": {
-      "post": {
-        "description": "Listar Produtos",
-        "tags": [
-          "Produtos"
-        ],
-        "operationId": "Produtos_listarProduto",
-        "security": [
-          {
-            "JWT": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ListarProduto"
-              },
-              "examples": {
-                "Produto": {
-                  "value": {
-                    "token": "eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "401": {
-            "description": "Não possui autorização!"
-          },
-          "404": {
-            "description": "Não foi encontrado nada"
-          },
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/ListarProduto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/login": {
-      "post": {
-        "description": "Efetuar Login",
-        "tags": [
-          "Security"
-        ],
-        "operationId": "Security_login",
-        "security": [
-          {
-            "JWT": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Produto"
-              },
-              "examples": {
-                "Login": {
-                  "value": {
-                    "username": "name@example.pt",
-                    "password": "123456789"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "401": {
-            "description": "Não possui autorização!"
-          },
-          "400": {
-            "description": "Ja existe esse utilizador!"
-          },
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/Login"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/registeruser": {
-      "post": {
-        "description": "Efetuar um Registo",
-        "tags": [
-          "Security"
-        ],
-        "operationId": "Security_registeruser",
-        "security": [
-          {
-            "JWT": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Registeruser"
-              },
-              "examples": {
-                "Cliente": {
-                  "value": {
-                    "name": "name example",
-                    "password": "123456789",
-                    "email": "name@example.pt",
-                    "contact": "name@example.pt",
-                    "nif": "123456789",
-                    "permission": "3"
-                  }
+    "paths": {
+        "/produto/publicarProduto": {
+            "post": {
+                "description": "Publicar um novo Produto",
+                "tags": [
+                    "Produtos"
+                ],
+                "operationId": "Produtos_publicarProduto",
+                "security": [{
+                    "JWT": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Produto"
+                            },
+                            "examples": {
+                                "Produto": {
+                                    "value": {
+                                        "name": "bolos",
+                                        "image": "/imagem/133.png",
+                                        "quantity": 3,
+                                        "price": 23.99,
+                                        "hourRecoMin": "10/10/21",
+                                        "hourRecoMax": "10/10/21",
+                                        "lojaId": 1,
+                                        "subCatProdId": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
                 },
-                "Loja": {
-                  "value": {
-                    "name": "name example",
-                    "password": "123456789",
-                    "email": "name@example.pt",
-                    "contact": "name@example.pt",
-                    "nif": "123456789",
-                    "permission": "2"
-                  }
-                },
-                "Admin": {
-                  "value": {
-                    "name": "name example",
-                    "password": "123456789",
-                    "email": "name@example.pt",
-                    "contact": "name@example.pt",
-                    "nif": "123456789",
-                    "permission": "1"
-                  }
+                "responses": {
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "401": {
+                        "description": "Não possui autorização!"
+                    },
+                    "400": {
+                        "description": "Produto ja existe!"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Produto"
+                                }
+                            }
+                        }
+                    }
                 }
-              }
             }
-          }
         },
-        "responses": {
-          "401": {
-            "description": "Não possui autorização!"
-          },
-          "400": {
-            "description": "Ja existe esse utilizador!"
-          },
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/Login"
+        "/produto/editarProduto": {
+            "post": {
+                "description": "Editar um Produto",
+                "tags": [
+                    "Produtos"
+                ],
+                "operationId": "Produtos_editarProduto",
+                "security": [{
+                    "JWT": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EditarProduto"
+                            },
+                            "examples": {
+                                "Produto": {
+                                    "value": {
+                                        "name": "bolos",
+                                        "image": "/imagem/133.png",
+                                        "quantity": 3,
+                                        "price": 23.99,
+                                        "hourRecoMin": "10/10/21",
+                                        "hourRecoMax": "10/10/21",
+                                        "lojaId": 1,
+                                        "subCatProdId": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Não possui autorização!"
+                    },
+                    "400": {
+                        "description": "Produto ja existe!"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/EditarProduto"
+                                }
+                            }
+                        }
+                    }
                 }
-              }
             }
-          }
+        },
+        "/listarProdutos": {
+            "post": {
+                "description": "Listar Produtos",
+                "tags": [
+                    "Produtos"
+                ],
+                "operationId": "Produtos_listarProduto",
+                "security": [{
+                    "JWT": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListarProduto"
+                            },
+                            "examples": {
+                                "Produto": {
+                                    "value": {
+                                        "token": "eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Não possui autorização!"
+                    },
+                    "404": {
+                        "description": "Não foi encontrado nada"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/ListarProduto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "Efetuar Login",
+                "tags": [
+                    "Security"
+                ],
+                "operationId": "Security_login",
+                "security": [{
+                    "JWT": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Produto"
+                            },
+                            "examples": {
+                                "Login": {
+                                    "value": {
+                                        "username": "name@example.pt",
+                                        "password": "123456789"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Não possui autorização!"
+                    },
+                    "400": {
+                        "description": "Ja existe esse utilizador!"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Login"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/registeruser": {
+            "post": {
+                "description": "Efetuar um Registo",
+                "tags": [
+                    "Security"
+                ],
+                "operationId": "Security_registeruser",
+                "security": [{
+                    "JWT": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Registeruser"
+                            },
+                            "examples": {
+                                "Cliente": {
+                                    "value": {
+                                        "name": "name example",
+                                        "password": "123456789",
+                                        "email": "name@example.pt",
+                                        "contact": "name@example.pt",
+                                        "nif": "123456789",
+                                        "permission": "3"
+                                    }
+                                },
+                                "Loja": {
+                                    "value": {
+                                        "name": "name example",
+                                        "password": "123456789",
+                                        "email": "name@example.pt",
+                                        "contact": "name@example.pt",
+                                        "nif": "123456789",
+                                        "permission": "2"
+                                    }
+                                },
+                                "Admin": {
+                                    "value": {
+                                        "name": "name example",
+                                        "password": "123456789",
+                                        "email": "name@example.pt",
+                                        "contact": "name@example.pt",
+                                        "nif": "123456789",
+                                        "permission": "1"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Não possui autorização!"
+                    },
+                    "400": {
+                        "description": "Ja existe esse utilizador!"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Login"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
-      }
+    },
+    "components": {
+        "schemas": {
+            "Produto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "type": "integer"
+                    },
+                    "price": {
+                        "type": "number"
+                    },
+                    "hourRecoMin": {
+                        "type": "string"
+                    },
+                    "hourRecoMax": {
+                        "type": "string"
+                    },
+                    "lojaId": {
+                        "type": "integer"
+                    },
+                    "subCatProdId": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "Login": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Registeruser": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "contact": {
+                        "type": "number"
+                    },
+                    "nif": {
+                        "type": "number"
+                    },
+                    "permisson": {
+                        "type": "number"
+                    }
+                }
+            },
+            "EditarProduto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "contact": {
+                        "type": "number"
+                    },
+                    "nif": {
+                        "type": "number"
+                    },
+                    "permisson": {
+                        "type": "number"
+                    }
+                }
+            },
+            "ListarProduto": {
+                "type": "object",
+                "properties": {
+                    "idProduto": {
+                        "type": "integer"
+                    },
+                    "nomeProduto": {
+                        "type": "string"
+                    },
+                    "quantidade": {
+                        "type": "integer"
+                    },
+                    "preco": {
+                        "type": "number"
+                    },
+                    "horaRecolhaMin": {
+                        "type": "string"
+                    },
+                    "horaRecolhaMax": {
+                        "type": "string"
+                    },
+                    "fotoProduto": {
+                        "type": "string"
+                    },
+                    "lojaId": {
+                        "type": "integer"
+                    },
+                    "SubcategoriaProdId": {
+                        "type": "integer"
+                    }
+                }
+            }
+        }
     }
-  },
-  "components": {
-    "schemas": {
-      "Produto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "image": {
-            "type": "string"
-          },
-          "quantity": {
-            "type": "integer"
-          },
-          "price": {
-            "type": "number"
-          },
-          "hourRecoMin": {
-            "type": "string"
-          },
-          "hourRecoMax": {
-            "type": "string"
-          },
-          "lojaId": {
-            "type": "integer"
-          },
-          "subCatProdId": {
-            "type": "integer"
-          }
-        }
-      },
-      "Login": {
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          }
-        }
-      },
-      "Registeruser": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "contact": {
-            "type": "number"
-          },
-          "nif": {
-            "type": "number"
-          },
-          "permisson": {
-            "type": "number"
-          }
-        }
-      },
-      "EditarProduto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "contact": {
-            "type": "number"
-          },
-          "nif": {
-            "type": "number"
-          },
-          "permisson": {
-            "type": "number"
-          }
-        }
-      },
-      "ListarProduto": {
-        "type": "object",
-        "properties": {
-          "idProduto": {
-            "type": "integer"
-          },
-          "nomeProduto": {
-            "type": "string"
-          },
-          "quantidade": {
-            "type": "integer"
-          },
-          "preco": {
-            "type": "number"
-          },
-          "horaRecolhaMin": {
-            "type": "string"
-          },
-          "horaRecolhaMax": {
-            "type": "string"
-          },
-          "fotoProduto": {
-            "type": "string"
-          },
-          "lojaId": {
-            "type": "integer"
-          },
-          "SubcategoriaProdId": {
-            "type": "integer"
-          }
-        }
-      }
-    }
-  }
 }
