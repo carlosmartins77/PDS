@@ -2,12 +2,12 @@
     "openapi": "3.0.0",
     "info": {
         "title": "PSF: Portugal Food Sustainability",
-        "description": "API ...",
+        "description": "API - Desenvolvimento sustentavel",
         "termsOfService": "http://localhost:5000/terms",
         "contact": {
-            "name": "18845/... - PDS 2022 - LESI",
+            "name": "Developers - PDS 2022 - LESI",
             "url": "https://www.ipca.pt",
-            "email": "a18845@alunos.ipca.pt"
+            "email": "codesolutions@gmail.com"
         },
         "license": {
             "name": "Use under IPCA rights",
@@ -23,9 +23,11 @@
                     "Produtos"
                 ],
                 "operationId": "Produtos_publicarProduto",
-                "security": [{
-                    "JWT": []
-                }],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -35,14 +37,15 @@
                             "examples": {
                                 "Produto": {
                                     "value": {
-                                        "name": "bolos",
-                                        "image": "/imagem/133.png",
-                                        "quantity": 3,
-                                        "price": 23.99,
-                                        "hourRecoMin": "10/10/21",
-                                        "hourRecoMax": "10/10/21",
+                                        "name": "oi",
+                                        "image": "alo",
+                                        "quantity": 333,
+                                        "price": 23,
+                                        "hourRecoMin": "10/10/10",
+                                        "hourRecoMax": "10/10/12",
                                         "lojaId": 1,
-                                        "subCatProdId": 1
+                                        "subCatProdId": 1,
+                                        "token": "eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmasasa asNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI"
                                     }
                                 }
                             }
@@ -50,25 +53,14 @@
                     }
                 },
                 "responses": {
+                    "403": {
+                        "description": "Forbidden!"
+                    },
                     "404": {
-                        "description": "Not found"
+                        "description": "Not found!"
                     },
-                    "401": {
-                        "description": "Não possui autorização!"
-                    },
-                    "400": {
-                        "description": "Produto ja existe!"
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "$ref": "#/components/schemas/Produto"
-                                }
-                            }
-                        }
+                    "201": {
+                        "description": "Created Post!"
                     }
                 }
             }
@@ -80,9 +72,11 @@
                     "Produtos"
                 ],
                 "operationId": "Produtos_editarProduto",
-                "security": [{
-                    "JWT": []
-                }],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -92,14 +86,15 @@
                             "examples": {
                                 "Produto": {
                                     "value": {
-                                        "name": "bolos",
-                                        "image": "/imagem/133.png",
-                                        "quantity": 3,
-                                        "price": 23.99,
-                                        "hourRecoMin": "10/10/21",
-                                        "hourRecoMax": "10/10/21",
+                                        "name": "oi",
+                                        "image": "alo",
+                                        "quantity": 333,
+                                        "price": 23,
+                                        "hourRecoMin": "10/10/10",
+                                        "hourRecoMax": "10/10/12",
                                         "lojaId": 1,
-                                        "subCatProdId": 1
+                                        "subCatProdId": 1,
+                                        "token": "eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmasasa asNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI"
                                     }
                                 }
                             }
@@ -107,22 +102,14 @@
                     }
                 },
                 "responses": {
-                    "401": {
-                        "description": "Não possui autorização!"
+                    "403": {
+                        "description": "Forbidden!"
                     },
-                    "400": {
-                        "description": "Produto ja existe!"
+                    "404": {
+                        "description": "Not Found!"
                     },
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "$ref": "#/components/schemas/EditarProduto"
-                                }
-                            }
-                        }
+                    "201": {
+                        "description": "Created Post!"
                     }
                 }
             }
@@ -134,9 +121,11 @@
                     "Produtos"
                 ],
                 "operationId": "Produtos_listarProduto",
-                "security": [{
-                    "JWT": []
-                }],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -154,14 +143,11 @@
                     }
                 },
                 "responses": {
-                    "401": {
-                        "description": "Não possui autorização!"
+                    "403": {
+                        "description": "Forbidden!"
                     },
-                    "404": {
-                        "description": "Não foi encontrado nada"
-                    },
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created Post!",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -181,9 +167,11 @@
                     "Security"
                 ],
                 "operationId": "Security_login",
-                "security": [{
-                    "JWT": []
-                }],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -202,14 +190,11 @@
                     }
                 },
                 "responses": {
-                    "401": {
-                        "description": "Não possui autorização!"
+                    "404": {
+                        "description": "Not Found!"
                     },
-                    "400": {
-                        "description": "Ja existe esse utilizador!"
-                    },
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created Post!",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -229,9 +214,11 @@
                     "Security"
                 ],
                 "operationId": "Security_registeruser",
-                "security": [{
-                    "JWT": []
-                }],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -275,21 +262,49 @@
                 },
                 "responses": {
                     "401": {
-                        "description": "Não possui autorização!"
+                        "description": "Unauthorized!"
                     },
-                    "400": {
-                        "description": "Ja existe esse utilizador!"
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "$ref": "#/components/schemas/Login"
+                    "201": {
+                        "description": "Created Post!"
+                    }
+                }
+            }
+        },
+        "/mostarPerfil": {
+            "post": {
+                "description": "Mostrar Perfil de um Utilizador",
+                "tags": [
+                    "Perfil"
+                ],
+                "operationId": "Security_mostarPerfil",
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MostarPerfil"
+                            },
+                            "examples": {
+                                "Utilizador": {
+                                    "value": {
+                                        "username": "nameexample@code.pt",
+                                        "token": "eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuy5wdA.TEow1rNQRINYiToJ6rjybw"
+                                    }
                                 }
                             }
                         }
+                    }
+                },
+                "responses": {
+                    "404": {
+                        "description": "Not Found!"
+                    },
+                    "201": {
+                        "description": "Created Post!"
                     }
                 }
             }
@@ -297,66 +312,11 @@
     },
     "components": {
         "schemas": {
-            "Produto": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "image": {
-                        "type": "string"
-                    },
-                    "quantity": {
-                        "type": "integer"
-                    },
-                    "price": {
-                        "type": "number"
-                    },
-                    "hourRecoMin": {
-                        "type": "string"
-                    },
-                    "hourRecoMax": {
-                        "type": "string"
-                    },
-                    "lojaId": {
-                        "type": "integer"
-                    },
-                    "subCatProdId": {
-                        "type": "integer"
-                    }
-                }
-            },
             "Login": {
                 "type": "object",
                 "properties": {
-                    "username": {
+                    "token": {
                         "type": "string"
-                    },
-                    "password": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Registeruser": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "password": {
-                        "type": "string"
-                    },
-                    "email": {
-                        "type": "string"
-                    },
-                    "contact": {
-                        "type": "number"
-                    },
-                    "nif": {
-                        "type": "number"
-                    },
-                    "permisson": {
-                        "type": "number"
                     }
                 }
             },
@@ -412,6 +372,20 @@
                     },
                     "SubcategoriaProdId": {
                         "type": "integer"
+                    }
+                }
+            },
+            "MostarPerfil": {
+                "type": "object",
+                "properties": {
+                    "nome": {
+                        "type": "integer"
+                    },
+                    "email": {
+                        "type": "number"
+                    },
+                    "contacto": {
+                        "type": "string"
                     }
                 }
             }

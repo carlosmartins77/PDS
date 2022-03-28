@@ -68,7 +68,7 @@ const listarProdutos = async(request, response) => {
         request.user = await dboperations.finduser(decoded)
         if (request.user[0]) {
             dboperations.listProduct().then(result => {
-                response.status(200).send(result);
+                response.status(201).send(result);
             })
         }
         return
