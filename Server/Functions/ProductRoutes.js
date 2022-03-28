@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 
 // Classes
 const Product = require('../Classes/Product');
-const { decode } = require('jsonwebtoken');
 
 // Para todas as rotas produto
 const produto = async(request, response, next) => {
@@ -36,7 +35,6 @@ const publicarProduto = (request, response) => {
 
         dboperations.newProduct(product).then(result => {
             if (result) response.status(201).send("Publicado com sucesso!")
-            else response.status(404).send("Not Found")
         })
     } catch (Error) {
         console.log("publicarProduto: ", Error)
@@ -46,16 +44,18 @@ const publicarProduto = (request, response) => {
 // Rota editarProduto
 const editarProduto = (request, response) => {
     try {
-        let product = new Order(request.body.id, request.body.name_product, request.body.quantity_product, request.body.image_product)
+        // Name, Quantity, Price, hourRecoMin, HourRecoMax, Image, lojaId, subCatProdId
+        let product = new Product(request.body.name, request.body.quantity, request.body.price, request.body.hourRecoMin, request.body.hourRecoMax,
+            request.body.image, request.body.lojaId, request.body.subCatProdId)
         console.log("Produto a editar", product)
 
-        dboperations.editProduct(product).then(result => {
+        dboperations.editProduct(product, request.body.id).then(result => {
             if (result) {
                 response.status(201).send("Editado com sucesso!")
-            } else response.status(404).send("Not Found")
+            }
         })
     } catch (Error) {
-        console.log("editarProduto: ", Error)
+        response.send(404).send("Not Found")
     }
 }
 

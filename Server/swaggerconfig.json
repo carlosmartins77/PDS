@@ -86,6 +86,7 @@
                             "examples": {
                                 "Produto": {
                                     "value": {
+                                        "id": 1,
                                         "name": "oi",
                                         "image": "alo",
                                         "quantity": 333,
@@ -323,6 +324,9 @@
             "EditarProduto": {
                 "type": "object",
                 "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
                     "name": {
                         "type": "string"
                     },
@@ -333,13 +337,13 @@
                         "type": "string"
                     },
                     "contact": {
-                        "type": "number"
+                        "type": "integer"
                     },
                     "nif": {
-                        "type": "number"
+                        "type": "integer"
                     },
                     "permisson": {
-                        "type": "number"
+                        "type": "integer"
                     }
                 }
             },

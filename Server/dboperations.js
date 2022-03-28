@@ -87,15 +87,20 @@ async function newProduct(product) {
 // Editar um Produto 
 // Input _> Produto
 // Output _> true/erro
-async function editProduct(product) {
+async function editProduct(product, id) {
     try {
         let pool = await sql.connect(config);
         let editProduct = await pool.request()
-            .input('id', sql.Int, product.id)
-            .input('name', sql.VarChar, product.name)
-            .input('quantity', sql.Int, product.quantity)
-            .input('image', sql.VarChar, product.image)
-            .query("update Produtos set id = @id, name_product = @name, image_product = @image, quantity_product =  @quantity WHERE id = @id")
+        .input('id', sql.Int, id)
+        .input('name', sql.VarChar, product.name)
+        .input('quantity', sql.Int, product.quantity)
+        .input('price', sql.Float, product.price)
+        .input('hourRecoMin', sql.DateTime, product.hourRecoMin)
+        .input('hourRecoMax', sql.DateTime, product.hourRecoMax)
+        .input('image', sql.VarChar, product.image)
+        .input('lojaId', sql.Int, product.lojaId)
+        .input('subCatProdId', sql.Int, product.subCatProdId)
+        .query("update Produto set nomeProduto = @name , quantidade = @quantity , preco = @price , horaRecolhaMin = @hourRecoMin, horaRecolhaMax = @hourRecoMax, fotoProduto = @image, lojaId = @lojaId, SubcategoriaProdId = @subCatProdId WHERE idProduto = @id")
         return true;
     } catch (err) {
         throw new Error(err);
