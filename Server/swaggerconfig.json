@@ -309,6 +309,43 @@
                     }
                 }
             }
+        },
+        "/candidaturaLoja": {
+            "post": {
+                "description": "Candidaturas das Lojas",
+                "tags": [
+                    "Candidaturas"
+                ],
+                "operationId": "Candidaturas_candidatura",
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "404": {
+                        "description": "Not Found!"
+                    },
+                    "201": {
+                        "description": "Created Post!"
+                    }
+                }
+            }
         }
     },
     "components": {

@@ -91,16 +91,16 @@ async function editProduct(product, id) {
     try {
         let pool = await sql.connect(config);
         let editProduct = await pool.request()
-        .input('id', sql.Int, id)
-        .input('name', sql.VarChar, product.name)
-        .input('quantity', sql.Int, product.quantity)
-        .input('price', sql.Float, product.price)
-        .input('hourRecoMin', sql.DateTime, product.hourRecoMin)
-        .input('hourRecoMax', sql.DateTime, product.hourRecoMax)
-        .input('image', sql.VarChar, product.image)
-        .input('lojaId', sql.Int, product.lojaId)
-        .input('subCatProdId', sql.Int, product.subCatProdId)
-        .query("update Produto set nomeProduto = @name , quantidade = @quantity , preco = @price , horaRecolhaMin = @hourRecoMin, horaRecolhaMax = @hourRecoMax, fotoProduto = @image, lojaId = @lojaId, SubcategoriaProdId = @subCatProdId WHERE idProduto = @id")
+            .input('id', sql.Int, id)
+            .input('name', sql.VarChar, product.name)
+            .input('quantity', sql.Int, product.quantity)
+            .input('price', sql.Float, product.price)
+            .input('hourRecoMin', sql.DateTime, product.hourRecoMin)
+            .input('hourRecoMax', sql.DateTime, product.hourRecoMax)
+            .input('image', sql.VarChar, product.image)
+            .input('lojaId', sql.Int, product.lojaId)
+            .input('subCatProdId', sql.Int, product.subCatProdId)
+            .query("update Produto set nomeProduto = @name , quantidade = @quantity , preco = @price , horaRecolhaMin = @hourRecoMin, horaRecolhaMax = @hourRecoMax, fotoProduto = @image, lojaId = @lojaId, SubcategoriaProdId = @subCatProdId WHERE idProduto = @id")
         return true;
     } catch (err) {
         throw new Error(err);
@@ -154,6 +154,29 @@ async function mostrarPerfil(email) {
     }
 }
 
+async function newCandidacy(candidacy) {
+    try {
+        let pool = await sql.connect(config);
+        let can = await pool.request()
+            .input('address', sql.VarChar, candidacy.adress)
+            .input('nif', sql.Int, candidacy.nif)
+            .input('idAdmin', sql.Int, candidacy.id)
+            .input('idCategoria', sql.Int, candidacy.category)
+            .query("Insert into Loja (morada, nif, adminlojaId, categoriaId) values (@address, @nif, @idAdmin, @idCategoria);")
+        let idloja = await pool.request()
+            .input('input_parameter', sql.Int, candidacy.nif)
+            .query("select * from Loja where nif = @input_parameter")
+            console.log(idloja.recordset[0])
+        let canloja = await pool.request()
+            .input('pdfExtratoAnoAnterior', sql.VarChar, candidacy.doc)
+            .input('lojaId', sql.Int, idloja.recordset[0].idLoja)
+            .query("Insert into DocumentosLoja (pdfExtratoAnoAnterior, lojaId) values (@pdfExtratoAnoAnterior, @lojaId);")
+        return true
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
 module.exports = {
     //#region Produtos
     newProduct: newProduct,
@@ -168,6 +191,7 @@ module.exports = {
     //#region Lojas
     //#endregion
     //#region Candidaturas
-    mostrarPerfil: mostrarPerfil
-        //#endregion
+    mostrarPerfil: mostrarPerfil,
+    newCandidacy: newCandidacy
+    //#endregion
 }

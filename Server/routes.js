@@ -5,6 +5,7 @@ const router = express.Router();
 const {produto, publicarProduto, editarProduto, listarProdutos} = require('./Functions/ProductRoutes')
 const {verificartoken, login, registeruser, token} = require('./Functions/OAuthRoutes')
 const {mostrarPerfil} = require('./Functions/PerfilRoutes')
+const {uploadimages} = require('./Functions/CandidacyRoutes')
 
 app.use('/', router);
 app.use(express.json());
@@ -25,7 +26,7 @@ router.route('/listarProdutos').post(listarProdutos)
 router.route('/mostarPerfil').post(mostrarPerfil)
 
 // Candidaturas Lojas
-router.route('/candidaturaLoja').post(mostrarPerfil)
+router.route('/candidaturaLoja').post(uploadimages)
 
 /*
 //#region Candidaturas Loja
