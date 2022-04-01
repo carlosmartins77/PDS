@@ -2,10 +2,16 @@ const express = require('express')
 const app = express()
 const dotenv = require('dotenv').config();
 const router = express.Router();
+<<<<<<< Updated upstream
 const {produto, publicarProduto, editarProduto, listarProdutos} = require('./Functions/ProductRoutes')
 const {verificartoken, login, registeruser, token} = require('./Functions/OAuthRoutes')
 const {mostrarPerfil} = require('./Functions/PerfilRoutes')
 const {uploadimages} = require('./Functions/CandidacyRoutes')
+=======
+const { produto, publicarProduto, editarProduto, listarProdutos } = require('./Functions/ProductRoutes')
+const { verificartoken, login, registeruser, token } = require('./Functions/OAuthRoutes')
+const { mostrarPerfil } = require('./Functions/PerfilRoutes')
+>>>>>>> Stashed changes
 
 app.use('/', router);
 app.use(express.json());
