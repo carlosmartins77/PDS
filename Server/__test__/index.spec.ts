@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app = require('../index');
-/*
+
 describe('Autenticacao', () => {
     it('Autenticacao com credenciais validas', async () => {
         const user = {
@@ -121,7 +121,8 @@ describe('Adicionar produto', () => {
         expect(response.status).toBe(403)
     });
 });
-*/
+
+/*
 describe('Editar um produto', () => {
     it('Produto editado com sucesso (Tem permissões - token)', async () => {
         const product = {
@@ -161,7 +162,7 @@ describe('Editar um produto', () => {
         expect(response.status).toBe(403)
     });
 });
-
+*/
 /*
 describe('Listar um produto', () => {
     it('Produto publicado (Tem permissões - token)', async () => {

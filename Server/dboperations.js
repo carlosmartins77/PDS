@@ -127,33 +127,6 @@ async function listProduct() {
 // Publicar uma Candidatura 
 // Input _> Candidatura
 // Output _> true/erro
-
-async function newCandidacy(candidacy) {
-    try {
-        let pool = await sql.connect(config);
-        let newProduct = await pool.request()
-            .input('id', sql.Int, candidacy.id)
-            .input('name', sql.VarChar, candidacy.name)
-            .query("Insert into ... (id, ) values ();")
-        return true;
-    } catch (err) {
-        throw new Error(err);
-    }
-}
-//#endregion
-
-async function mostrarPerfil(email) {
-    try {
-        let pool = await sql.connect(config);
-        let perfil = await pool.request()
-            .input('input_parameter', sql.VarChar, email)
-            .query("select * from Utilizador where email = @input_parameter")
-        return perfil.recordset[0];
-    } catch (err) {
-        throw new Error(err);
-    }
-}
-
 async function newCandidacy(candidacy) {
     try {
         let pool = await sql.connect(config);
@@ -172,6 +145,20 @@ async function newCandidacy(candidacy) {
             .input('lojaId', sql.Int, idloja.recordset[0].idLoja)
             .query("Insert into DocumentosLoja (pdfExtratoAnoAnterior, lojaId) values (@pdfExtratoAnoAnterior, @lojaId);")
         return true
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+//#endregion
+
+async function mostrarPerfil(email) {
+    try {
+        let pool = await sql.connect(config);
+        let perfil = await pool.request()
+            .input('input_parameter', sql.VarChar, email)
+            .query("select * from Utilizador where email = @input_parameter")
+        return perfil.recordset[0];
     } catch (err) {
         throw new Error(err);
     }
