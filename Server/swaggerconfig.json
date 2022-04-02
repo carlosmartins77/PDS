@@ -25,7 +25,7 @@
                 "operationId": "Produtos_publicarProduto",
                 "security": [
                     {
-                        "JWT": []
+                        "bearerAuth": []
                     }
                 ],
                 "requestBody": {
@@ -44,8 +44,7 @@
                                         "hourRecoMin": "10/10/10",
                                         "hourRecoMax": "10/10/12",
                                         "lojaId": 1,
-                                        "subCatProdId": 1,
-                                        "token": "eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmasasa asNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI"
+                                        "subCatProdId": 1
                                     }
                                 }
                             }
@@ -74,7 +73,7 @@
                 "operationId": "Produtos_editarProduto",
                 "security": [
                     {
-                        "JWT": []
+                        "bearerAuth": []
                     }
                 ],
                 "requestBody": {
@@ -94,8 +93,7 @@
                                         "hourRecoMin": "10/10/10",
                                         "hourRecoMax": "10/10/12",
                                         "lojaId": 1,
-                                        "subCatProdId": 1,
-                                        "token": "eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmasasa asNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI"
+                                        "subCatProdId": 1
                                     }
                                 }
                             }
@@ -115,8 +113,8 @@
                 }
             }
         },
-        "/listarProdutos": {
-            "post": {
+        "/produto/listarProdutos": {
+            "get": {
                 "description": "Listar Produtos",
                 "tags": [
                     "Produtos"
@@ -124,31 +122,15 @@
                 "operationId": "Produtos_listarProduto",
                 "security": [
                     {
-                        "JWT": []
+                        "bearerAuth": []
                     }
                 ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ListarProduto"
-                            },
-                            "examples": {
-                                "Produto": {
-                                    "value": {
-                                        "token": "eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "403": {
                         "description": "Forbidden!"
                     },
-                    "201": {
-                        "description": "Created Post!",
+                    "200": {
+                        "description": "OK!",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -170,14 +152,14 @@
                 "operationId": "Security_login",
                 "security": [
                     {
-                        "JWT": []
+                        "bearerAuth": []
                     }
                 ],
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Produto"
+                                "$ref": "#/components/schemas/Login"
                             },
                             "examples": {
                                 "Login": {
@@ -217,7 +199,7 @@
                 "operationId": "Security_registeruser",
                 "security": [
                     {
-                        "JWT": []
+                        "bearerAuth": []
                     }
                 ],
                 "requestBody": {
@@ -280,7 +262,7 @@
                 "operationId": "Security_mostarPerfil",
                 "security": [
                     {
-                        "JWT": []
+                        "bearerAuth": []
                     }
                 ],
                 "requestBody": {
@@ -292,8 +274,7 @@
                             "examples": {
                                 "Utilizador": {
                                     "value": {
-                                        "username": "nameexample@code.pt",
-                                        "token": "eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuy5wdA.TEow1rNQRINYiToJ6rjybw"
+                                        "username": "nameexample@code.pt"
                                     }
                                 }
                             }
@@ -319,7 +300,7 @@
                 "operationId": "Candidaturas_candidatura",
                 "security": [
                     {
-                        "JWT": []
+                        "bearerAuth": []
                     }
                 ],
                 "requestBody": {
@@ -429,6 +410,13 @@
                         "type": "string"
                     }
                 }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
             }
         }
     }

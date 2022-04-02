@@ -2,36 +2,33 @@ const express = require('express')
 const app = express()
 const dotenv = require('dotenv').config();
 const router = express.Router();
-<<<<<<< Updated upstream
 const {produto, publicarProduto, editarProduto, listarProdutos} = require('./Functions/ProductRoutes')
 const {verificartoken, login, registeruser, token} = require('./Functions/OAuthRoutes')
 const {mostrarPerfil} = require('./Functions/PerfilRoutes')
-const {uploadimages} = require('./Functions/CandidacyRoutes')
-=======
-const { produto, publicarProduto, editarProduto, listarProdutos } = require('./Functions/ProductRoutes')
-const { verificartoken, login, registeruser, token } = require('./Functions/OAuthRoutes')
-const { mostrarPerfil } = require('./Functions/PerfilRoutes')
->>>>>>> Stashed changes
+const {uploadimages, novaLoja} = require('./Functions/CandidacyRoutes')
 
 app.use('/', router);
 app.use(express.json());
 
 // Login 
-router.use('/verificartoken', verificartoken) // a dar
+router.use('/verificartoken', verificartoken) 
 router.route('/login').post(login) // a dar
 router.route('/registeruser').post(registeruser) // a dar
 router.route('/verificartoken/token').get(token)
 
 // Produto
 router.use("/produto", produto)
-router.route('/produto/publicarProduto').post(publicarProduto) // a dar
+router.route('/produto/publicarProduto').post(publicarProduto) 
 router.route('/produto/editarProduto').post(editarProduto)
-router.route('/listarProdutos').post(listarProdutos)
+router.route('/produto/listarProdutos').get(listarProdutos)
 
 // Mostrar Perfil
-router.route('/mostarPerfil').post(mostrarPerfil)
+router.route('/mostarPerfil').post(mostrarPerfil) // a dar
 
 // Candidaturas Lojas
+// Uma para dados das lojas
+//router.route('/candidaturaLoja1211').post(novaLoja)
+// Para dados
 router.route('/candidaturaLoja').post(uploadimages)
 
 /*

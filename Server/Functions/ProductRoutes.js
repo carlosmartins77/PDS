@@ -3,16 +3,17 @@ const jwt = require('jsonwebtoken');
 
 // Classes
 const Product = require('../Classes/Product');
+const { reset } = require('nodemon');
 
 // Para todas as rotas produto
-const produto = async(request, response, next) => {
+const produto = async (request, response, next) => {
     try {
-        const token = request.body.token
-            //  Retorna um objeto com os dados do utilizador
-        console.log("email")
+        const token = request.headers.authorization.split(" ")[1]
+        //  Retorna um objeto com os dados do utilizador
+        console.log("Produto: ", token)
         const decoded = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         request.use = await dboperations.finduser(decoded)
-            // verificar se possui a loja onde pretende publicar o produto associado
+        // verificar se possui a loja onde pretende publicar o produto associado
         request.user = await dboperations.compareuser(request.use[0].email)
         if (request.user[0]) {
             if (request.use[0].tipoPermissao == 2) next();
@@ -60,20 +61,13 @@ const editarProduto = (request, response) => {
 }
 
 // Rota listarProdutos
-const listarProdutos = async(request, response) => {
+const listarProdutos = async (request, response) => {
     try {
-        const token = request.body.token
-            //  Retorna um objeto com os dados do utilizador
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-        request.user = await dboperations.finduser(decoded)
-        if (request.user[0]) {
-            dboperations.listProduct().then(result => {
-                response.status(201).send(result);
-            })
-        }
-        return
+        dboperations.listProduct().then(result => {
+            response.status(200).send(result);
+        })
     } catch (Error) {
-        console.log("listarProdutos: ", Error)
+       response.status(403).send()
     }
 }
 

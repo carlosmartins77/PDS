@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 const User = require('../Classes/User')
 
-const verificartoken = async(req, res, next) => {
+const verificartoken = async (req, res, next) => {
     let token
     try {
         token = req.headers.authorization.split(" ")[1]
@@ -30,7 +30,7 @@ const token = (req, res) => {
     res.send(nome)
 }
 
-const login = async(req, res) => {
+const login = async (req, res) => {
     try {
         let user = new User("", req.body.password, req.body.username, 0, 0, 0)
         console.log(user)
@@ -50,26 +50,35 @@ function generateAcessToken(user) {
 }
 
 
-const registeruser = async(request, response) => {
+const registeruser = async (request, response) => {
     try {
-        const salt = await bcrypt.genSalt();
-        const hashedPassword = await bcrypt.hash(request.body.password, salt);
-        console.log("Salt: " + salt);
-        console.log("Password: " + hashedPassword);
+        const token = request.headers.authorization.split(" ")[1]
 
-        // Name, Password, Email, Contact, Nif, Permission
-        let user = new User(request.body.name, hashedPassword, request.body.email, request.body.contact, request.body.nif, request.body.permission)
-        console.log("registaruser: ", user)
+        //  Retorna um objeto com os dados do utilizador
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
 
-        // Verificar se ja existe alguem com esse mail
-        let newuser = await dboperations.finduser(request.body.email)
-        console.log("novo: ", newuser)
-        if (newuser.length == 0) {
-            dboperations.registeruser(user)
-            response.status(201).send("Registo efetuado")
-        } else response.status(401).send("Ja possui um utilizador com esse email!")
+        request.user = await dboperations.finduser(decoded)
+        if (request.user[0]) {
+            const salt = await bcrypt.genSalt();
+            const hashedPassword = await bcrypt.hash(request.body.password, salt);
+            console.log("Salt: " + salt);
+            console.log("Password: " + hashedPassword);
+
+            // Name, Password, Email, Contact, Nif, Permission
+            let user = new User(request.body.name, hashedPassword, request.body.email, request.body.contact, request.body.nif, request.body.permission)
+            console.log("registaruser: ", user)
+
+            // Verificar se ja existe alguem com esse mail
+            let newuser = await dboperations.finduser(request.body.email)
+            console.log("novo: ", newuser)
+            if (newuser.length == 0) {
+                dboperations.registeruser(user)
+                response.status(201).send("Registo efetuado")
+            } else response.status(401).send("Ja possui um utilizador com esse email!")
+
+        }
     } catch (Error) {
-        console.log("registeruser: ", Error)
+        response.status(404).send()
     }
 }
 
