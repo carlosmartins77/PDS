@@ -13,17 +13,13 @@ const mostrarPerfil = async (request, response) => {
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
 
         request.user = await dboperations.finduser(decoded)
+        console.log(request.user)
         if (request.user[0]) {
-                dboperations.mostrarPerfil(request.body.username).then(result => {
-                    if (!!result) {
-                        const newPerfil = new Perfil(result.nome, result.email, result.contacto)
-                        response.status(201).json(newPerfil)
-                    }
-                    else response.status(404).json("Não existe este utilizador!")
-                })
-            } else response.status(404).json("Não existe este utilizador!")
+            const newPerfil = new Perfil(request.user[0].nome, request.user[0].email, request.user[0].contacto)
+            response.status(201).json(newPerfil)
+        } else response.status(404).json("Não existe este utilizador!")
     } catch (Error) {
-       response.status(404).send()
+        response.status(404).send({ message: "Nao autorizado" })
     }
 }
 

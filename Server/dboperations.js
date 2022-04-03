@@ -127,24 +127,24 @@ async function listProduct() {
 // Publicar uma Candidatura 
 // Input _> Candidatura
 // Output _> true/erro
-async function newCandidacy(candidacy) {
+async function newCandidacy(candidacy, token) {
     try {
         let pool = await sql.connect(config);
         let can = await pool.request()
-            .input('address', sql.VarChar, candidacy.adress)
-            .input('nif', sql.Int, candidacy.nif)
-            .input('idAdmin', sql.Int, candidacy.id)
-            .input('idCategoria', sql.Int, candidacy.category)
-            .query("Insert into Loja (morada, nif, adminlojaId, categoriaId) values (@address, @nif, @idAdmin, @idCategoria);")
+        .input('address', sql.VarChar, candidacy.adress)
+        .input('nif', sql.Int, candidacy.nif)
+        .input('idAdmin', sql.Int, candidacy.id)
+        .input('idCategoria', sql.Int, candidacy.category)
+        .query("Insert into Loja (morada, nif, adminlojaId, categoriaId) values (@address, @nif, @idAdmin, @idCategoria);")
         let idloja = await pool.request()
-            .input('input_parameter', sql.Int, candidacy.nif)
-            .query("select * from Loja where nif = @input_parameter")
-            console.log(idloja.recordset[0])
+        .input('input_parameter', sql.Int, candidacy.nif)
+        .query("select * from Loja where nif = @input_parameter")
+        filename = (token + '--' + idloja.recordset[0].idLoja + '--' + candidacy.doc).toString()
         let canloja = await pool.request()
-            .input('pdfExtratoAnoAnterior', sql.VarChar, candidacy.doc)
-            .input('lojaId', sql.Int, idloja.recordset[0].idLoja)
-            .query("Insert into DocumentosLoja (pdfExtratoAnoAnterior, lojaId) values (@pdfExtratoAnoAnterior, @lojaId);")
-        return true
+        .input('pdfExtratoAnoAnterior', sql.VarChar, filename)
+        .input('lojaId', sql.Int, idloja.recordset[0].idLoja)
+        .query("Insert into DocumentosLoja (pdfExtratoAnoAnterior, lojaId) values (@pdfExtratoAnoAnterior, @lojaId);")
+        return idloja.recordset[0].idLoja
     } catch (err) {
         throw new Error(err);
     }

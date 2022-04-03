@@ -30,12 +30,12 @@ const produto = async (request, response, next) => {
 const publicarProduto = (request, response) => {
     try {
         // Name, Quantity, Price, hourRecoMin, HourRecoMax, Image, lojaId, subCatProdId
-        let product = new Product(request.body.name, request.body.quantity, request.body.price, request.body.hourRecoMin, request.body.hourRecoMax,
+        let product = new Product(0, request.body.name, request.body.quantity, request.body.price, request.body.hourRecoMin, request.body.hourRecoMax,
             request.body.image, request.body.lojaId, request.body.subCatProdId)
         console.log("Produto a publicar", product)
 
         dboperations.newProduct(product).then(result => {
-            if (result) response.status(201).send("Publicado com sucesso!")
+            if (result) response.status(201).send(product)
         })
     } catch (Error) {
         console.log("publicarProduto: ", Error)
@@ -46,13 +46,13 @@ const publicarProduto = (request, response) => {
 const editarProduto = (request, response) => {
     try {
         // Name, Quantity, Price, hourRecoMin, HourRecoMax, Image, lojaId, subCatProdId
-        let product = new Product(request.body.name, request.body.quantity, request.body.price, request.body.hourRecoMin, request.body.hourRecoMax,
+        let product = new Product(request.body.id, request.body.name, request.body.quantity, request.body.price, request.body.hourRecoMin, request.body.hourRecoMax,
             request.body.image, request.body.lojaId, request.body.subCatProdId)
         console.log("Produto a editar", product)
 
         dboperations.editProduct(product, request.body.id).then(result => {
             if (result) {
-                response.status(201).send("Editado com sucesso!")
+                response.status(201).send(product)
             }
         })
     } catch (Error) {

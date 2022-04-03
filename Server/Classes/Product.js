@@ -1,5 +1,6 @@
 class Produtc{
-        constructor(Name, Quantity, Price, HourRecoMin, HourRecoMax, Image, lojaId, subCatProdId){
+        constructor(Id,Name, Quantity, Price, HourRecoMin, HourRecoMax, Image, lojaId, subCatProdId){
+        this.id = Id; 
         this.name = Name; 
         this.quantity = Quantity;
         this.price = Price;

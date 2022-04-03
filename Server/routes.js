@@ -26,10 +26,10 @@ router.route('/produto/listarProdutos').get(listarProdutos)
 router.route('/mostarPerfil').post(mostrarPerfil) // a dar
 
 // Candidaturas Lojas
-// Uma para dados das lojas
-//router.route('/candidaturaLoja1211').post(novaLoja)
 // Para dados
-router.route('/candidaturaLoja').post(uploadimages)
+router.route('/candidaturaLoja').post(novaLoja)
+
+router.route('/candidaturaLojaFicheiro/:id').post(uploadimages)
 
 /*
 //#region Candidaturas Loja

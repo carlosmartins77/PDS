@@ -22,6 +22,7 @@
                 "tags": [
                     "Produtos"
                 ],
+                "summary": "publicar um produto",
                 "operationId": "Produtos_publicarProduto",
                 "security": [
                     {
@@ -59,7 +60,15 @@
                         "description": "Not found!"
                     },
                     "201": {
-                        "description": "Created Post!"
+                        "description": "Created Post!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Produto"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -70,6 +79,7 @@
                 "tags": [
                     "Produtos"
                 ],
+                "summary": "editar um produto",
                 "operationId": "Produtos_editarProduto",
                 "security": [
                     {
@@ -108,7 +118,15 @@
                         "description": "Not Found!"
                     },
                     "201": {
-                        "description": "Created Post!"
+                        "description": "Created Post!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/EditarProduto"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -119,6 +137,7 @@
                 "tags": [
                     "Produtos"
                 ],
+                "summary": "listar todos os produtos",
                 "operationId": "Produtos_listarProduto",
                 "security": [
                     {
@@ -149,6 +168,7 @@
                 "tags": [
                     "Security"
                 ],
+                "summary": "efetuar o login",
                 "operationId": "Security_login",
                 "security": [
                     {
@@ -164,8 +184,8 @@
                             "examples": {
                                 "Login": {
                                     "value": {
-                                        "username": "name@example.pt",
-                                        "password": "123456789"
+                                        "username": "silva.pastelaria@outlook.com",
+                                        "password": "pastelaria1774"
                                     }
                                 }
                             }
@@ -196,6 +216,7 @@
                 "tags": [
                     "Security"
                 ],
+                "summary": "registar um utilizador",
                 "operationId": "Security_registeruser",
                 "security": [
                     {
@@ -214,7 +235,7 @@
                                         "name": "name example",
                                         "password": "123456789",
                                         "email": "name@example.pt",
-                                        "contact": "name@example.pt",
+                                        "contact": "965321456",
                                         "nif": "123456789",
                                         "permission": "3"
                                     }
@@ -259,6 +280,7 @@
                 "tags": [
                     "Perfil"
                 ],
+                "summary": "mostrar o perfil do utilizador",
                 "operationId": "Security_mostarPerfil",
                 "security": [
                     {
@@ -274,7 +296,7 @@
                             "examples": {
                                 "Utilizador": {
                                     "value": {
-                                        "username": "nameexample@code.pt"
+                                        "username": "silva.pastelaria@outlook.com"
                                     }
                                 }
                             }
@@ -297,10 +319,80 @@
                 "tags": [
                     "Candidaturas"
                 ],
+                "summary": "candidatura de uma loja",
                 "operationId": "Candidaturas_candidatura",
                 "security": [
                     {
                         "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "morada": {
+                                        "type": "string"
+                                    },
+                                    "nif": {
+                                        "type": "integer"
+                                    },
+                                    "adminloja": {
+                                        "type": "integer"
+                                    },
+                                    "categoria": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "404": {
+                        "description": "Not Found!"
+                    },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
+                    "201": {
+                        "description": "Created Post!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Candidatura"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/candidaturaLojaFicheiro/{id}": {
+            "post": {
+                "description": "Candidaturas das Lojas com  Ficheiros",
+                "tags": [
+                    "Candidaturas"
+                ],
+                "summary": "enviar ficheiros para a candidatura de uma loja",
+                "operationId": "Candidaturas_candidaturaLojaFicheiro",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "x-nullable": false
                     }
                 ],
                 "requestBody": {
@@ -322,8 +414,19 @@
                     "404": {
                         "description": "Not Found!"
                     },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
                     "201": {
-                        "description": "Created Post!"
+                        "description": "Created Post!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/CandidaturaFicheiro"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -339,28 +442,66 @@
                     }
                 }
             },
+            "Produto": {
+                "type": "object",
+                "properties": {
+                    "idProduto": {
+                        "type": "integer"
+                    },
+                    "nomeProduto": {
+                        "type": "string"
+                    },
+                    "quantidade": {
+                        "type": "integer"
+                    },
+                    "preco": {
+                        "type": "number"
+                    },
+                    "horaRecolhaMin": {
+                        "type": "string"
+                    },
+                    "horaRecolhaMax": {
+                        "type": "string"
+                    },
+                    "fotoProduto": {
+                        "type": "string"
+                    },
+                    "lojaId": {
+                        "type": "integer"
+                    },
+                    "SubcategoriaProdId": {
+                        "type": "integer"
+                    }
+                }
+            },
             "EditarProduto": {
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "idProduto": {
                         "type": "integer"
                     },
-                    "name": {
+                    "nomeProduto": {
                         "type": "string"
                     },
-                    "password": {
-                        "type": "string"
-                    },
-                    "email": {
-                        "type": "string"
-                    },
-                    "contact": {
+                    "quantidade": {
                         "type": "integer"
                     },
-                    "nif": {
+                    "preco": {
+                        "type": "number"
+                    },
+                    "horaRecolhaMin": {
+                        "type": "string"
+                    },
+                    "horaRecolhaMax": {
+                        "type": "string"
+                    },
+                    "fotoProduto": {
+                        "type": "string"
+                    },
+                    "lojaId": {
                         "type": "integer"
                     },
-                    "permisson": {
+                    "SubcategoriaProdId": {
                         "type": "integer"
                     }
                 }
@@ -408,6 +549,37 @@
                     },
                     "contacto": {
                         "type": "string"
+                    }
+                }
+            },
+            "CandidaturaFicheiro": {
+                "type": "object",
+                "properties": {
+                    "documento": {
+                        "type": "string"
+                    },
+                    "lojaid": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "Candidatura": {
+                "type": "object",
+                "properties": {
+                    "idLoja": {
+                        "type": "integer"
+                    },
+                    "morada": {
+                        "type": "string"
+                    },
+                    "nif": {
+                        "type": "integer"
+                    },
+                    "adminloja": {
+                        "type": "integer"
+                    },
+                    "categoria": {
+                        "type": "integer"
                     }
                 }
             }
