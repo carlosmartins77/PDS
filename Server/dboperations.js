@@ -12,7 +12,7 @@ async function loginUser(user) {
         console.log("dentro", logUser.recordset[0])
         return !!logUser.recordset[0]
     } catch (err) {
-        throw new Error(err);
+        return Error(err)
     }
 }
 
@@ -29,7 +29,7 @@ async function registeruser(user) {
             .query("INSERT INTO Utilizador (password, nome, email, contacto, nif, tipoPermissao) VALUES (@password, @nome, @email, @contacto, @nif, @tipoPermissao)")
         return true
     } catch (err) {
-        throw new Error(err);
+        return Error(err)
     }
 }
 
@@ -41,7 +41,7 @@ async function finduser(useremail) {
             .query("SELECT * FROM Utilizador where email = @email;")
         return user.recordset
     } catch (err) {
-        throw new Error(err);
+        return Error(err)
     }
 }
 
@@ -54,7 +54,7 @@ async function compareuser(useremail) {
             .query("SELECT * FROM AdminLoja INNER JOIN Loja ON AdminLoja.idAdminLoja = Loja.adminlojaId INNER JOIN Utilizador ON AdminLoja.utilizadorId = Utilizador.idUtilizador where Utilizador.email = @email")
         return user.recordset
     } catch (err) {
-        throw new Error(err);
+        return Error(err)
     }
 }
 //#endregion
@@ -80,7 +80,7 @@ async function newProduct(product) {
             .query("Insert into Produto (nomeProduto, quantidade, preco, horaRecolhaMin, horaRecolhaMax, fotoProduto, lojaId, SubcategoriaProdId) values (@name, @quantity, @price, @hourRecoMin,@hourRecoMax, @image,@lojaId, @subCatProdId);")
         return true;
     } catch (err) {
-        throw new Error(err);
+        return Error(err)
     }
 }
 
@@ -103,7 +103,7 @@ async function editProduct(product, id) {
             .query("update Produto set nomeProduto = @name , quantidade = @quantity , preco = @price , horaRecolhaMin = @hourRecoMin, horaRecolhaMax = @hourRecoMax, fotoProduto = @image, lojaId = @lojaId, SubcategoriaProdId = @subCatProdId WHERE idProduto = @id")
         return true;
     } catch (err) {
-        throw new Error(err);
+        return Error(err)
     }
 }
 
@@ -118,7 +118,7 @@ async function listProduct() {
         console.log(editProduct.recordset)
         return editProduct.recordset;
     } catch (err) {
-        throw new Error(err);
+        return Error(err)
     }
 }
 //#endregion
@@ -146,7 +146,7 @@ async function newCandidacy(candidacy, token) {
         .query("Insert into DocumentosLoja (pdfExtratoAnoAnterior, lojaId) values (@pdfExtratoAnoAnterior, @lojaId);")
         return idloja.recordset[0].idLoja
     } catch (err) {
-        throw new Error(err);
+        return Error(err)
     }
 }
 
@@ -160,7 +160,32 @@ async function mostrarPerfil(email) {
             .query("select * from Utilizador where email = @input_parameter")
         return perfil.recordset[0];
     } catch (err) {
-        throw new Error(err);
+        return Error(err)
+    }
+}
+
+async function approvestore(id, approve) {
+    try {
+        let pool = await sql.connect(config);
+        let store = await pool.request()
+            .input('input_parameter_id', sql.Int, id)
+            .input('input_parameter_approve', sql.Int, approve)
+            .query("update Loja set aprovacao =@input_parameter_approve where idLoja = @input_parameter_id")
+        return approve;
+    } catch (err) {
+        return Error(err)
+    }
+}
+
+async function dowloadfiles(id){
+    try {
+        let pool = await sql.connect(config);
+        let file = await pool.request()
+            .input('input_parameter_id', sql.Int, id)
+            .query("select pdfExtratoAnoAnterior from DocumentosLoja where lojaid = @input_parameter_id")
+        return file.recordset[0].pdfExtratoAnoAnterior;
+    } catch (err) {
+        return Error(err)
     }
 }
 
@@ -179,6 +204,8 @@ module.exports = {
     //#endregion
     //#region Candidaturas
     mostrarPerfil: mostrarPerfil,
-    newCandidacy: newCandidacy
+    newCandidacy: newCandidacy,
     //#endregion
+    approvestore:approvestore,
+    dowloadfiles: dowloadfiles
 }

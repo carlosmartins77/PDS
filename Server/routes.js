@@ -5,7 +5,7 @@ const router = express.Router();
 const {produto, publicarProduto, editarProduto, listarProdutos} = require('./Functions/ProductRoutes')
 const {verificartoken, login, registeruser, token} = require('./Functions/OAuthRoutes')
 const {mostrarPerfil} = require('./Functions/PerfilRoutes')
-const {uploadimages, novaLoja} = require('./Functions/CandidacyRoutes')
+const {uploadimages, novaLoja, approvestore, dowloadfiles} = require('./Functions/CandidacyRoutes')
 
 app.use('/', router);
 app.use(express.json());
@@ -14,7 +14,7 @@ app.use(express.json());
 router.use('/verificartoken', verificartoken) 
 router.route('/login').post(login) // a dar
 router.route('/registeruser').post(registeruser) // a dar
-router.route('/verificartoken/token').get(token)
+//router.route('/verificartoken/token').get(token)
 
 // Produto
 router.use("/produto", produto)
@@ -28,40 +28,9 @@ router.route('/mostarPerfil').post(mostrarPerfil) // a dar
 // Candidaturas Lojas
 // Para dados
 router.route('/candidaturaLoja').post(novaLoja)
-
 router.route('/candidaturaLojaFicheiro/:id').post(uploadimages)
 
-/*
-//#region Candidaturas Loja
-  // Rota candidaturas
-  router.use("/candidaturas", (request, response, next) => {
-    console.log('midlleware das candidaturas das lojas');
-    next();
-  })
-
-// Rota submeterCandidaturas
-router.route('/candidaturas/submeterCandidaturas').post((request, response) => {
-  let candidacy = new Candidacy(request.body.id, request.body.name_candidacy, request.body.address, request.body.nif, request.body.category, request.body.approval, request.body.doc)
-  console.log("Inicio", candidacy)
-
-  dboperations.addOrder(candidacy).then(result => {
-    response.status(201).json(result);
-  })
-})
-//#endregion 
-
-//#region Perfil
-// Rota perfil
-router.use("/perfil", (request, response, next) => {
-  console.log('midlleware do pefil');
-  next();
-})
-
-// Rota mostrarPerfil
-router.route('/perfil/mostrarPerfil').get((request, response) => {
-})
-
-//#endregion 
-*/
+router.route('/aprovacaoLoja').post(approvestore)
+router.route('/aprovacaoLojaFicheiro').post(dowloadfiles)
 
 module.exports = router

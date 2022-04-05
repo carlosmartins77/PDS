@@ -184,8 +184,8 @@
                             "examples": {
                                 "Login": {
                                     "value": {
-                                        "username": "silva.pastelaria@outlook.com",
-                                        "password": "pastelaria1774"
+                                        "username": "joao.fernandes@codesolutions.pt",
+                                        "password": "PFS2000"
                                     }
                                 }
                             }
@@ -430,6 +430,97 @@
                     }
                 }
             }
+        },
+        "/aprovacaoLoja": {
+            "post": {
+                "description": "Candidaturas das Lojas com  Ficheiros",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "enviar ficheiros para a candidatura de uma loja",
+                "operationId": "Admin_aprovacaoLoja",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idLoja": {
+                                        "type": "integer"
+                                    },
+                                    "aprovacao": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "404": {
+                        "description": "Not Found!"
+                    },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
+                    "201": {
+                        "description": "Created Post!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/AprovacaoLoja"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/aprovacaoLojaFicheiro": {
+            "post": {
+                "description": "Candidaturas das Lojas com  Ficheiros",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "enviar ficheiros para a candidatura de uma loja",
+                "operationId": "Admin_aprovacaoLojaFicheiro",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idLoja": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "404": {
+                        "description": "Not Found!"
+                    },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
+                    "201": {
+                        "description": "Created Post!"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -580,6 +671,17 @@
                     },
                     "categoria": {
                         "type": "integer"
+                    }
+                }
+            },
+            "AprovacaoLoja": {
+                "type": "object",
+                "properties": {
+                    "idLoja": {
+                        "type": "integer"
+                    },
+                    "aprovacao": {
+                        "type": "string"
                     }
                 }
             }

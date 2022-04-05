@@ -1,6 +1,7 @@
 const multer = require('multer')
 const jwt = require('jsonwebtoken');
 const dboperations = require('../dboperations');
+const path = require('path')
 
 const Candidacy = require('../Classes/Candidacy');
 const { Parser } = require('tedious/lib/token/token-stream-parser');
@@ -55,7 +56,56 @@ const novaLoja = async (req, res) => {
                     morada: cand.adress,
                     nif: cand.nif,
                     adminloja: cand.id,
-                    categoria: cand.category})
+                    categoria: cand.category
+                })
+            })
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
+const approvestore = async (req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1]
+        //  Retorna um objeto com os dados do utilizador
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao == 1) {
+            // Id da loja se aprova ou nao
+            console.log(req.body.idLoja, req.body.aprovacao)
+            dboperations.approvestore(req.body.idLoja, req.body.aprovacao).then(result => {
+                console.log(result)
+                // 1 PARA APROVADO
+                // 2 PARA NAO APROVADO
+                let approve = "aprovado"
+                if (result == 2) approve = "nao foi  aprovado"
+                res.status(200).send({
+                    idLoja: 0,
+                    aprovacao: result
+                });
+            })
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
+const dowloadfiles = async (req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1]
+        //  Retorna um objeto com os dados do utilizador
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao == 1) {
+            // id loja
+            dboperations.dowloadfiles(req.body.idLoja).then(result => {
+                try {
+                    let filePath = path.join(__dirname, "../Documents/Documents_store/" + result);
+                    res.download(filePath);
+                } catch (error) {
+                    res.status(403).send("Nao autorizado!")
+                }
             })
         }
     } catch (error) {
@@ -65,5 +115,8 @@ const novaLoja = async (req, res) => {
 
 module.exports = {
     uploadimages: uploadimages,
-    novaLoja: novaLoja
+    novaLoja: novaLoja,
+    dowloadfiles: dowloadfiles,
+    approvestore: approvestore
+
 }
