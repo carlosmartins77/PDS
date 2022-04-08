@@ -115,12 +115,11 @@ const dowloadfiles = async(req, res) => {
 
 const removerCategoria = async(req, res) => {
     try {
-        const token = req.headers.authorization //.split(" ")[1]
+        const token = req.headers.authorization.split(" ")[1]
             //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-
         req.user = await dboperations.finduser(decoded)
-        if (req.user[0].tipoPermissao == 2) {
+        if (req.user[0].tipoPermissao == 1) {
             dboperations.removerCategoria(req.body.nome).then(result => {
                 if (result == true) {
                     res.status(200).send()
