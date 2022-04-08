@@ -2,10 +2,10 @@ const express = require('express')
 const app = express()
 const dotenv = require('dotenv').config();
 const router = express.Router();
-const {produto, publicarProduto, editarProduto, listarProdutos} = require('./Functions/ProductRoutes')
+const {produto, publicarProduto, editarProduto, listarProdutos, removerCategoriaProduto} = require('./Functions/ProductRoutes')
 const {verificartoken, login, registeruser, token} = require('./Functions/OAuthRoutes')
 const {mostrarPerfil} = require('./Functions/PerfilRoutes')
-const {uploadimages, novaLoja, approvestore, dowloadfiles} = require('./Functions/CandidacyRoutes')
+const {uploadimages, novaLoja, approvestore, dowloadfiles, removerCategoria} = require('./Functions/CandidacyRoutes')
 
 app.use('/', router);
 app.use(express.json());
@@ -21,6 +21,7 @@ router.use("/produto", produto)
 router.route('/produto/publicarProduto').post(publicarProduto) 
 router.route('/produto/editarProduto').post(editarProduto)
 router.route('/produto/listarProdutos').get(listarProdutos)
+router.route('/produto/removerCategoriaProduto').post(removerCategoriaProduto)
 
 // Mostrar Perfil
 router.route('/mostarPerfil').post(mostrarPerfil) // a dar
@@ -32,5 +33,7 @@ router.route('/candidaturaLojaFicheiro/:id').post(uploadimages)
 
 router.route('/aprovacaoLoja').post(approvestore)
 router.route('/aprovacaoLojaFicheiro').post(dowloadfiles)
+
+router.route('/removercategoria').post(removerCategoria)
 
 module.exports = router

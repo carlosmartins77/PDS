@@ -189,11 +189,47 @@ async function dowloadfiles(id){
     }
 }
 
+async function removerCategoria(nome) {
+    try {
+        let pool = await sql.connect(config);
+        let categoria = await pool.request()
+            .input('nome', sql.VarChar, nome)
+            .query("DELETE from Categoria WHERE nome = @nome")
+        if (categoria.rowsAffected == 0){
+            return categoria.Error
+        } else {
+            return true
+        }
+
+    } catch (err) {
+        return Error(err)
+    }
+}
+
+async function removerCategoriaProduto(nome) {
+    try {
+        let pool = await sql.connect(config);
+        let categoria = await pool.request()
+            .input('nome', sql.VarChar, nome)
+            .query("DELETE from CategoriaProduto WHERE nome = @nome")
+        //console.log(categoria)
+        if (categoria.rowsAffected == 0){
+            return categoria.Error
+        } else {
+            return true
+        }
+    } catch (err) {
+        //console.log(err)
+        return Error(err)
+    }
+}
+
 module.exports = {
     //#region Produtos
     newProduct: newProduct,
     editProduct: editProduct,
     listProduct: listProduct,
+    removerCategoriaProduto: removerCategoriaProduto,
 
     loginUser: loginUser,
     finduser: finduser,
@@ -207,5 +243,6 @@ module.exports = {
     newCandidacy: newCandidacy,
     //#endregion
     approvestore:approvestore,
-    dowloadfiles: dowloadfiles
+    dowloadfiles: dowloadfiles,
+    removerCategoria: removerCategoria
 }

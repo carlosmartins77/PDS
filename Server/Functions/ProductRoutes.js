@@ -8,7 +8,7 @@ const { reset } = require('nodemon');
 // Para todas as rotas produto
 const produto = async (request, response, next) => {
     try {
-        const token = request.headers.authorization.split(" ")[1]
+        const token = request.headers.authorization//.split(" ")[1]
         //  Retorna um objeto com os dados do utilizador
         console.log("Produto: ", token)
         const decoded = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
@@ -71,9 +71,27 @@ const listarProdutos = async (request, response) => {
     }
 }
 
+const removerCategoriaProduto = async (req, res) => {
+    try {
+        //console.log(req.body.nome)
+        dboperations.removerCategoriaProduto(req.body.nome).then(result => {
+            //console.log("result: " + result)
+            if (result == true) {
+                res.status(200).send()
+            }
+            else {
+                res.status(405).send(String(result))
+            }
+        })
+    } catch (error) {
+        response.status(403).send()
+    }
+}
+
 module.exports = {
     produto: produto,
     publicarProduto: publicarProduto,
     editarProduto: editarProduto,
-    listarProdutos: listarProdutos
+    listarProdutos: listarProdutos,
+    removerCategoriaProduto: removerCategoriaProduto
 }
