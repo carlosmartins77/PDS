@@ -24,11 +24,9 @@
                 ],
                 "summary": "publicar um produto",
                 "operationId": "Produtos_publicarProduto",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -81,11 +79,9 @@
                 ],
                 "summary": "editar um produto",
                 "operationId": "Produtos_editarProduto",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -139,11 +135,9 @@
                 ],
                 "summary": "listar todos os produtos",
                 "operationId": "Produtos_listarProduto",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "responses": {
                     "403": {
                         "description": "Forbidden!"
@@ -170,11 +164,9 @@
                 ],
                 "summary": "efetuar o login",
                 "operationId": "Security_login",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -218,11 +210,9 @@
                 ],
                 "summary": "registar um utilizador",
                 "operationId": "Security_registeruser",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -282,11 +272,9 @@
                 ],
                 "summary": "mostrar o perfil do utilizador",
                 "operationId": "Security_mostarPerfil",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -321,11 +309,9 @@
                 ],
                 "summary": "candidatura de uma loja",
                 "operationId": "Candidaturas_candidatura",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -378,23 +364,19 @@
                 ],
                 "summary": "enviar ficheiros para a candidatura de uma loja",
                 "operationId": "Candidaturas_candidaturaLojaFicheiro",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "schema": {
-                            "type": "integer",
-                            "format": "int32"
-                        },
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "x-nullable": false
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "parameters": [{
+                    "schema": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "x-nullable": false
+                }],
                 "requestBody": {
                     "content": {
                         "multipart/form-data": {
@@ -439,11 +421,9 @@
                 ],
                 "summary": "enviar ficheiros para a candidatura de uma loja",
                 "operationId": "Admin_aprovacaoLoja",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -490,11 +470,9 @@
                 ],
                 "summary": "enviar ficheiros para a candidatura de uma loja",
                 "operationId": "Admin_aprovacaoLojaFicheiro",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -521,8 +499,126 @@
                     }
                 }
             }
+        },
+        "/loja/criarCategoriaLoja": {
+            "post": {
+                "description": "Criação de Categorias de Loja",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Criar uma nova categoria de Loja",
+                "operationId": "Admin_CriarCategoriaLoja",
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "categoria": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "403": {
+                        "description": "Unauthorized!"
+                    },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
+                    "201": {
+                        "description": "Created Category!"
+                    }
+                }
+            }
+        },
+        "/criarCategoriaProduto": {
+            "post": {
+                "description": "Criação de Categorias de Produto",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Criar uma nova categoria de produto",
+                "operationId": "Admin_CriarCategoriaProduto",
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "categoria": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "403": {
+                        "description": "Unauthorized!"
+                    },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
+                    "201": {
+                        "description": "Created Category!"
+                    }
+                }
+            }
+        },
+        "/criarSubCategoriaProduto": {
+            "post": {
+                "description": "Criação de SubCategorias de Produto",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Criar uma nova categoria de produto",
+                "operationId": "Admin_CriarSubCategoriaProduto",
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "categoria": {
+                                        "type": "string"
+                                    },
+                                    "subcategoria": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "403": {
+                        "description": "Unauthorized!"
+                    },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
+                    "201": {
+                        "description": "Created Category!"
+                    }
+                }
+            }
         }
     },
+
     "components": {
         "schemas": {
             "Login": {

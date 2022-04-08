@@ -3,17 +3,22 @@ const jwt = require('jsonwebtoken');
 
 // Classes
 const Product = require('../Classes/Product');
-const { reset } = require('nodemon');
+const Category = require('../Classes/Category');
+const SubCategory = require('../Classes/SubCategory');
+
+const { reset, restart } = require('nodemon');
+
 
 // Para todas as rotas produto
-const produto = async (request, response, next) => {
+const produto = async(request, response, next) => {
     try {
-        const token = request.headers.authorization//.split(" ")[1]
-        //  Retorna um objeto com os dados do utilizador
+        const token = request.headers.authorization.split(" ")[1]
+            //  Retorna um objeto com os dados do utilizador
         console.log("Produto: ", token)
+            //  Retorna um objeto com os dados do utilizador
         const decoded = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         request.use = await dboperations.finduser(decoded)
-        // verificar se possui a loja onde pretende publicar o produto associado
+            // verificar se possui a loja onde pretende publicar o produto associado
         request.user = await dboperations.compareuser(request.use[0].email)
         if (request.user[0]) {
             if (request.use[0].tipoPermissao == 2) next();
@@ -61,25 +66,82 @@ const editarProduto = (request, response) => {
 }
 
 // Rota listarProdutos
-const listarProdutos = async (request, response) => {
+const listarProdutos = async(request, response) => {
     try {
         dboperations.listProduct().then(result => {
             response.status(200).send(result);
         })
     } catch (Error) {
-       response.status(403).send()
+        response.status(403).send()
     }
 }
 
-const removerCategoriaProduto = async (req, res) => {
+const novaCategoriaProduto = async(req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1]
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao == 1) {
+            const cat = new Category(req.body.categoria)
+
+            dboperations.novaCategoriaProduto(cat).then(result => {
+                if (result == true) {
+
+                    res.status(200).send({
+                        idCategoria: 0,
+                        categoria: cat.categoria
+                    })
+                } else {
+                    res.status(401).send({
+                        message: "Erro ao inserir categoria"
+                    })
+                }
+
+            })
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
+const novaSubCategoriaProduto = async(req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1]
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao == 1) {
+
+            const cat = new SubCategory(req.body.subcategoria, req.body.categoria)
+                //console.log(cat)
+
+            dboperations.novaSubCategoriaProduto(cat).then(result => {
+                if (result == true) {
+
+                    res.status(200).send({
+                        idSubCategoria: 0,
+                        subcategoria: cat.subcategoria,
+                        categoria: cat.categoria
+                    })
+                } else {
+                    res.status(401).send({
+                        message: "Erro ao inserir subcategoria"
+                    })
+                }
+            })
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
+const removerCategoriaProduto = async(req, res) => {
     try {
         //console.log(req.body.nome)
         dboperations.removerCategoriaProduto(req.body.nome).then(result => {
             //console.log("result: " + result)
             if (result == true) {
                 res.status(200).send()
-            }
-            else {
+            } else {
                 res.status(405).send(String(result))
             }
         })
@@ -93,5 +155,7 @@ module.exports = {
     publicarProduto: publicarProduto,
     editarProduto: editarProduto,
     listarProdutos: listarProdutos,
-    removerCategoriaProduto: removerCategoriaProduto
+    removerCategoriaProduto: removerCategoriaProduto,
+    novaCategoriaProduto: novaCategoriaProduto,
+    novaSubCategoriaProduto: novaSubCategoriaProduto
 }

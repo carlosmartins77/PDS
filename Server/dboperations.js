@@ -1,5 +1,6 @@
 var config = require('./dbconfig');
 const sql = require('mssql');
+const Int = require('tedious/lib/data-types/int');
 
 //#region Login 
 async function loginUser(user) {
@@ -131,19 +132,19 @@ async function newCandidacy(candidacy, token) {
     try {
         let pool = await sql.connect(config);
         let can = await pool.request()
-        .input('address', sql.VarChar, candidacy.adress)
-        .input('nif', sql.Int, candidacy.nif)
-        .input('idAdmin', sql.Int, candidacy.id)
-        .input('idCategoria', sql.Int, candidacy.category)
-        .query("Insert into Loja (morada, nif, adminlojaId, categoriaId) values (@address, @nif, @idAdmin, @idCategoria);")
+            .input('address', sql.VarChar, candidacy.adress)
+            .input('nif', sql.Int, candidacy.nif)
+            .input('idAdmin', sql.Int, candidacy.id)
+            .input('idCategoria', sql.Int, candidacy.category)
+            .query("Insert into Loja (morada, nif, adminlojaId, categoriaId) values (@address, @nif, @idAdmin, @idCategoria);")
         let idloja = await pool.request()
-        .input('input_parameter', sql.Int, candidacy.nif)
-        .query("select * from Loja where nif = @input_parameter")
+            .input('input_parameter', sql.Int, candidacy.nif)
+            .query("select * from Loja where nif = @input_parameter")
         filename = (token + '--' + idloja.recordset[0].idLoja + '--' + candidacy.doc).toString()
         let canloja = await pool.request()
-        .input('pdfExtratoAnoAnterior', sql.VarChar, filename)
-        .input('lojaId', sql.Int, idloja.recordset[0].idLoja)
-        .query("Insert into DocumentosLoja (pdfExtratoAnoAnterior, lojaId) values (@pdfExtratoAnoAnterior, @lojaId);")
+            .input('pdfExtratoAnoAnterior', sql.VarChar, filename)
+            .input('lojaId', sql.Int, idloja.recordset[0].idLoja)
+            .query("Insert into DocumentosLoja (pdfExtratoAnoAnterior, lojaId) values (@pdfExtratoAnoAnterior, @lojaId);")
         return idloja.recordset[0].idLoja
     } catch (err) {
         return Error(err)
@@ -171,13 +172,17 @@ async function approvestore(id, approve) {
             .input('input_parameter_id', sql.Int, id)
             .input('input_parameter_approve', sql.Int, approve)
             .query("update Loja set aprovacao =@input_parameter_approve where idLoja = @input_parameter_id")
-        return approve;
+        let objectstore = {
+            idLoja: id,
+            aprovacao: approve
+        }
+        return objectstore;
     } catch (err) {
         return Error(err)
     }
 }
 
-async function dowloadfiles(id){
+async function dowloadfiles(id) {
     try {
         let pool = await sql.connect(config);
         let file = await pool.request()
@@ -189,18 +194,42 @@ async function dowloadfiles(id){
     }
 }
 
+
 async function removerCategoria(nome) {
     try {
         let pool = await sql.connect(config);
         let categoria = await pool.request()
             .input('nome', sql.VarChar, nome)
             .query("DELETE from Categoria WHERE nome = @nome")
-        if (categoria.rowsAffected == 0){
+        if (categoria.rowsAffected == 0) {
             return categoria.Error
         } else {
             return true
         }
+    } catch (err) {
+        return Error(err)
+    }
+}
 
+async function novaCategoriaLoja(category) {
+    try {
+        let pool = await sql.connect(config);
+        let registerCategory = await pool.request()
+            .input('nomeCategoria', sql.VarChar, category.categoria)
+            .query("INSERT INTO Categoria (Nome) VALUES (@nomeCategoria);")
+        return true
+    } catch (err) {
+        return Error(err)
+    }
+}
+
+async function novaCategoriaProduto(category) {
+    try {
+        let pool = await sql.connect(config);
+        let registerCategory = await pool.request()
+            .input('nomeCategoria', sql.VarChar, category.categoria)
+            .query("INSERT INTO CategoriaProduto (Nome) VALUES (@nomeCategoria);")
+        return true
     } catch (err) {
         return Error(err)
     }
@@ -212,14 +241,44 @@ async function removerCategoriaProduto(nome) {
         let categoria = await pool.request()
             .input('nome', sql.VarChar, nome)
             .query("DELETE from CategoriaProduto WHERE nome = @nome")
-        //console.log(categoria)
-        if (categoria.rowsAffected == 0){
+            //console.log(categoria)
+        if (categoria.rowsAffected == 0) {
             return categoria.Error
         } else {
             return true
         }
     } catch (err) {
         //console.log(err)
+    }
+}
+
+async function novaSubCategoriaProduto(subcategory) {
+    try {
+
+        let pool = await sql.connect(config);
+
+        let findCategory = await pool.request()
+            .input('nomeCategoria', sql.VarChar, subcategory.categoria)
+            .query("SELECT COUNT(*) as ContaLinhas FROM CategoriaProduto WHERE nome = @nomeCategoria")
+        var nRegistos = findCategory.recordset[0].ContaLinhas
+
+        let findIdCategory = await pool.request()
+            .input('idnomeCategoria', sql.VarChar, subcategory.categoria)
+            .query("SELECT idCategoriaProd as idCategoria FROM CategoriaProduto WHERE nome = @idnomeCategoria")
+
+        var id = findIdCategory.recordset[0].idCategoria
+
+        if (nRegistos == 1) {
+            let registerSubCategory = await pool.request()
+                .input('nomeSubCategoria', sql.VarChar, subcategory.subcategoria)
+                .input('idCategoria', sql.Int, id)
+                .query("INSERT INTO SubCategoriaProduto (Nome, categoria) VALUES (@nomeSubCategoria, @idCategoria);")
+
+            return true
+        }
+        return false;
+
+    } catch (err) {
         return Error(err)
     }
 }
@@ -230,19 +289,23 @@ module.exports = {
     editProduct: editProduct,
     listProduct: listProduct,
     removerCategoriaProduto: removerCategoriaProduto,
-
+    novaCategoriaProduto: novaCategoriaProduto,
+    novaSubCategoriaProduto: novaSubCategoriaProduto,
     loginUser: loginUser,
     finduser: finduser,
     registeruser: registeruser,
     compareuser: compareuser,
     //#endregion
     //#region Lojas
+    novaCategoriaLoja: novaCategoriaLoja,
     //#endregion
     //#region Candidaturas
     mostrarPerfil: mostrarPerfil,
     newCandidacy: newCandidacy,
     //#endregion
-    approvestore:approvestore,
+    approvestore: approvestore,
     dowloadfiles: dowloadfiles,
-    removerCategoria: removerCategoria
+    removerCategoria: removerCategoria,
+    approvestore: approvestore,
+    dowloadfiles: dowloadfiles
 }

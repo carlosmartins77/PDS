@@ -4,29 +4,32 @@ const dboperations = require('../dboperations');
 const path = require('path')
 
 const Candidacy = require('../Classes/Candidacy');
+const Category = require('../Classes/Category');
 const { Parser } = require('tedious/lib/token/token-stream-parser');
+const { criarCategoriaLoja } = require('../dboperations');
 
-const uploadimages = async (req, res) => {
+
+const uploadimages = async(req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
-        //  Retorna um objeto com os dados do utilizador
+            //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         let idstore = req.params.id
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao == 2) {
             let filename = '';
             let storage = multer.diskStorage({
-                destination: function (req, file, cb) {
+                destination: function(req, file, cb) {
                     cb(null, './Documents/Documents_store')
                 },
-                filename: function (req, file, cb) {
+                filename: function(req, file, cb) {
                     filename = file.originalname
                     cb(null, token + '--' + idstore + '--' + filename)
                 }
             })
             const upload = multer({ storage: storage }).single('file')
 
-            upload(req, res, function (err) {
+            upload(req, res, function(err) {
                 if (err instanceof multer.MulterError) {
                     return res.status(500).json(err)
                 } else if (err) {
@@ -40,10 +43,10 @@ const uploadimages = async (req, res) => {
     }
 }
 
-const novaLoja = async (req, res) => {
+const novaLoja = async(req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
-        //  Retorna um objeto com os dados do utilizador
+            //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao == 2) {
@@ -65,10 +68,10 @@ const novaLoja = async (req, res) => {
     }
 }
 
-const approvestore = async (req, res) => {
+const approvestore = async(req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
-        //  Retorna um objeto com os dados do utilizador
+            //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao == 1) {
@@ -76,14 +79,11 @@ const approvestore = async (req, res) => {
             console.log(req.body.idLoja, req.body.aprovacao)
             dboperations.approvestore(req.body.idLoja, req.body.aprovacao).then(result => {
                 console.log(result)
-                // 1 PARA APROVADO
-                // 2 PARA NAO APROVADO
+                    // 1 PARA APROVADO
+                    // 2 PARA NAO APROVADO
                 let approve = "aprovado"
                 if (result == 2) approve = "nao foi  aprovado"
-                res.status(200).send({
-                    idLoja: 0,
-                    aprovacao: result
-                });
+                res.status(200).send(result);
             })
         }
     } catch (error) {
@@ -91,10 +91,10 @@ const approvestore = async (req, res) => {
     }
 }
 
-const dowloadfiles = async (req, res) => {
+const dowloadfiles = async(req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
-        //  Retorna um objeto com os dados do utilizador
+            //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao == 1) {
@@ -113,21 +113,40 @@ const dowloadfiles = async (req, res) => {
     }
 }
 
-const removerCategoria = async (req, res) => {
+const removerCategoria = async(req, res) => {
     try {
-        const token = req.headers.authorization//.split(" ")[1]
-        //  Retorna um objeto com os dados do utilizador
+        const token = req.headers.authorization //.split(" ")[1]
+            //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
 
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao == 2) {
             dboperations.removerCategoria(req.body.nome).then(result => {
-                if(result == true){
+                if (result == true) {
                     res.status(200).send()
-                }
-                else{
+                } else {
                     res.status(404).send()
                 }
+            });
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
+
+const novaCategoriaLoja = async(req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1]
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao == 1) {
+            const cat = new Category(req.body.categoria)
+            dboperations.novaCategoriaLoja(cat).then(result => {
+                res.status(200).send({
+                    idCategoria: 0,
+                    categoria: cat.categoria
+                })
             })
         }
     } catch (error) {
@@ -140,5 +159,6 @@ module.exports = {
     novaLoja: novaLoja,
     dowloadfiles: dowloadfiles,
     approvestore: approvestore,
-    removerCategoria: removerCategoria
+    removerCategoria: removerCategoria,
+    novaCategoriaLoja: novaCategoriaLoja
 }
