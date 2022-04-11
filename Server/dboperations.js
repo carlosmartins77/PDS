@@ -332,6 +332,70 @@ async function listarCarrinho(id) {
     }
 }
 
+//#region Admin
+
+async function compareuser(useremail) {
+    try {
+        const pool = await sql.connect(config);
+        const user = await pool.request()
+            .input('email', sql.VarChar, useremail)
+            .query("SELECT * FROM AdminLoja INNER JOIN Loja ON AdminLoja.idAdminLoja = Loja.adminlojaId INNER JOIN Utilizador ON AdminLoja.utilizadorId = Utilizador.idUtilizador where Utilizador.email = @email")
+        return user.recordset
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+async function getStoreFromAdmin(email, idloja) {
+    try {
+        const pool = await sql.connect(config);
+        console.log("getstore1")
+        const admin = await pool.request()
+            .input('email', sql.VarChar, email)
+            .input('idloja', sql.SmallInt, idloja)
+            .query("SELECT * FROM AdminLoja INNER JOIN Loja ON Loja.idLoja = @idloja INNER JOIN Utilizador ON AdminLoja.utilizadorId = Utilizador.idUtilizador where Utilizador.email = @email")
+            /* SELECT * FROM AdminLoja 
+                INNER JOIN Loja ON AdminLoja.idAdminLoja = 1
+                WHERE Loja.idLoja = 2*/
+                console.log("getstore2")
+        return admin.recordset
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+async function deleteStore(id) {
+    try {
+        let pool = await sql.connect(config);
+        let store = await pool.request()
+            .input('id', sql.SmallInt, id)            
+            .query("UPDATE Loja SET deleted = 1 WHERE idLoja = @id;")
+            //.query("UPDATE Utilizador SET (estado) VALUES (@estado) where id = @id;") // rever query(talvez seja preciso criar campo estado em vez de apagar)
+            // a apagar realmente - nao vale a pena:
+            /*.query("DELETE FROM LinhaEncomenda WHERE idUtilizador = @id")
+            .query("DELETE FROM  WHERE idUtilizador = @id")
+            .query("DELETE FROM Utilizador WHERE idUtilizador = @id")
+            .query("DELETE FROM Utilizador WHERE idUtilizador = @id")
+            .query("DELETE FROM Utilizador WHERE idUtilizador = @id")
+            .query("DELETE FROM Utilizador WHERE idUtilizador = @id")*/
+        /*
+            DELETE FROM table WHERE condition
+            tabelas onde apagar:
+            LinhaEncomenda
+            encomenda
+            documentos da loja
+            adminloja
+            estafeta/loja
+            utilizador
+        */  
+        return true;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+//#endregion
+
 module.exports = {
     //#region Produtos
     newProduct: newProduct,
@@ -361,6 +425,12 @@ module.exports = {
     listarProdutosClientes:listarProdutosClientes,
     adicionarCarrinho: adicionarCarrinho,
     removerCarrinho: removerCarrinho,
-    listarCarrinho: listarCarrinho
+    listarCarrinho: listarCarrinho,
+    //#endregion
+
+    //#region admin
+    getStoreFromAdmin: getStoreFromAdmin,
+    deleteStore: deleteStore
+    //#endregion
     //#endregion
 }

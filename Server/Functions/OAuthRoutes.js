@@ -32,6 +32,7 @@ const token = (req, res) => {
 
 const login = async (req, res) => {
     try {
+        console.log("->", req)
         let user = new User("", req.body.password, req.body.username, 0, 0, 0)
         console.log(user)
         const status = await dboperations.loginUser(user)
