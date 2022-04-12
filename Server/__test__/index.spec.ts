@@ -352,11 +352,10 @@ describe('Apagar Loja', () => {
     it('Loja apagada (Tem permissões - token)', async () => {
         const store = {
             "email": "silva.pastelaria@outlook.com",
-            "idloja": 2,
-            "token": "eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI"
+            "idloja": 2
         }
 
-        const response = await request(app).post("/admin/delete/store").send(store);
+        const response = await request(app).post("/admin/delete/store").set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI').send(store);
         expect(response.status).toBe(201)
 
     });
@@ -367,9 +366,6 @@ describe('Apagar Loja', () => {
         }
 
         const response = await request(app).post("/admin/delete/store").send(store);
-
-        // Usar toStrictEqual para objetos
-        // Usar toBe para variaveis
         expect(response.status).toBe(403)
     });
 });

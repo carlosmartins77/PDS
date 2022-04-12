@@ -1,14 +1,14 @@
 const { response } = require("express")
 const { request } = require("express")
 const dboperations = require("../dboperations")
+const jwt = require('jsonwebtoken');
 
 const admin = async (request, response, next) => {
     try {
-        //const token = request.headers.authorization.split(" ")[1]
+        const token = request.headers.authorization.split(" ")[1]
         //  Retorna um objeto com os dados do admin
-        //const decoded = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        const decoded = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         //request.use = await dboperations.finduser(decoded)
-        
         // verificar se possui a loja onde pretende publicar o produto associado
         request.admin = await dboperations.getStoreFromAdmin(request.body.email, request.body.idloja)
         console.log("admin", request.body.email, request.body.idloja)
@@ -20,6 +20,7 @@ const admin = async (request, response, next) => {
             response.status(403).send("A loja nao existe")
         }
     } catch (Error) {
+        console.log("error: ", Error)
         response.status(403).send("Nao possui autorizacao2")
     }
 }
