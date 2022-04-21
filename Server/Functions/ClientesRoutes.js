@@ -86,8 +86,32 @@ const removerCarrinho = async (req, res) => {
     }
 }
 
+const listarCarrinho = async (req, res) => {
+    try {
+        console.log('listarCarrinho')
+        token = req.headers.authorization.split(" ")[1]
+
+        //  Retorna um objeto com os dados do utilizador
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao === 3) {
+            dboperations.listarCarrinho(req.body.idCarrinhoDeCompras).then(result => {
+                console.log(result)
+                res.status(200).send(result)
+            })
+        }
+        else 
+        {
+            res.status(403).send("Nao autorizado!")
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
 module.exports = {
     listarProdutosClientes: listarProdutosClientes,
     adicionarCarrinho: adicionarCarrinho,
-    removerCarrinho: removerCarrinho
+    removerCarrinho: removerCarrinho,
+    listarCarrinho: listarCarrinho
 }

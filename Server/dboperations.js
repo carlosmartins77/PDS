@@ -319,6 +319,19 @@ async function removerCarrinho(id) {
     }
 }
 
+async function listarCarrinho(id) {
+    try {
+        let pool = await sql.connect(config);
+        let product = await pool.request()
+            .input('id', sql.Int,id)
+            .query("SELECT * from CarrinhoDeCompras WHERE clienteId = @id")
+            console.log("n pode")
+        return product.recordset;
+    } catch (err) {
+        return Error(err)
+    }
+}
+
 module.exports = {
     //#region Produtos
     newProduct: newProduct,
@@ -347,6 +360,7 @@ module.exports = {
     //#region Clientes
     listarProdutosClientes:listarProdutosClientes,
     adicionarCarrinho: adicionarCarrinho,
-    removerCarrinho: removerCarrinho
+    removerCarrinho: removerCarrinho,
+    listarCarrinho: listarCarrinho
     //#endregion
 }

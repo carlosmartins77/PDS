@@ -6,7 +6,7 @@ const { produto, publicarProduto, editarProduto, listarProdutos, novaCategoriaPr
 const { verificartoken, login, registeruser, token } = require('./Functions/OAuthRoutes')
 const { mostrarPerfil } = require('./Functions/PerfilRoutes')
 const { uploadimages, novaLoja, approvestore, dowloadfiles, novaCategoriaLoja, removerCategoria} = require('./Functions/CandidacyRoutes')
-const {listarProdutosClientes, adicionarCarrinho, removerCarrinho} = require('./Functions/ClientesRoutes')
+const {listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho} = require('./Functions/ClientesRoutes')
 
 app.use('/', router);
 app.use(express.json());
@@ -15,6 +15,7 @@ app.use(express.json());
 router.route('/cliente/listarProdutos').get(listarProdutosClientes) 
 router.route('/cliente/adicionarCarrinho').post(adicionarCarrinho) 
 router.route('/cliente/removerCarrinho').post(removerCarrinho) 
+router.route('/cliente/listarCarrinho').get(listarCarrinho) 
 
 // Login 
 router.use('/verificartoken', verificartoken)
