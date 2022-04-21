@@ -1,6 +1,112 @@
 const request = require("supertest");
 const app = require('../index');
 
+
+describe('Carrinho de Compras - Clientes', () => {
+    it('Adicionar um Produto ao Carrinho válida - token com permissão', async () => {
+        const user = {
+            "clienteId": 1
+        }
+
+        const response = await request(app)
+            .post("/cliente/adicionarCarrinho")
+            .set('Authorization', 'Bearer: eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(user);
+
+        expect(response.status).toBe(201)
+
+    });
+
+    it('Adicionar um Produto ao Carrinho inválida  - token sem permissao', async () => {
+        const user = {
+            "clienteId": 1
+        }
+
+        const response = await request(app)
+            .post("/cliente/adicionarCarrinho")
+            .set('Authorization', 'Bearer: eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlrWlsdfdfgvnV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(user);
+
+        expect(response.status).toBe(403)
+
+    });
+    it('Remover um Produto do Carrinho válida  - token com permissão', async () => {
+        const user = {
+            "idCarrinhoDeCompras": 16
+        }
+
+        const response = await request(app)
+            .post("/cliente/removerCarrinho")
+            .set('Authorization', 'Bearer: eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(user);
+
+        expect(response.status).toBe(201)
+
+    });
+    it('Remover um Produto do Carrinho inválida  - token sem permissao', async () => {
+        const user = {
+            "idCarrinhoDeCompras": 16
+        }
+
+        const response = await request(app)
+            .post("/cliente/removerCarrinho")
+            .set('Authorization', 'Bearer: eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlrWlsdfdfgvnV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(user);
+
+        expect(response.status).toBe(403)
+
+    });
+
+});
+
+describe('Aprovação de Lojas - Admin', () => {
+    it('Aprovação válida - token com permissão', async () => {
+        const user = {
+            "idLoja": 1,
+            "aprovacao": 0
+        }
+
+        const response = await request(app)
+            .post("/aprovacaoLoja")
+            .set('Authorization', 'Bearer: eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0aW9ucy5wdA.TEow1rNQRINYiToJ6z5MaR6nOyoBMXve3gsnsPrjybw')
+            .send(user);
+
+        expect(response.status).toBe(200)
+
+    });
+
+    it('Aprovação inválida - token sem permissao', async () => {
+        const user = {
+            "idLoja": 1,
+            "aprovacao": 0
+        }
+
+        const response = await request(app)
+            .post("/aprovacaoLoja")
+            .set('Authorization', 'Bearer: eyJhbGc9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0aW9ucy5wdA.TEow1rNQRINYiToJ6z5MaR6nOyoBMXve3gsnsPrjybw')
+            .send(user);
+
+        expect(response.status).toBe(403)
+
+    });
+
+    it('Aprovação inválida de ficheiros - token inválido', async () => {
+        const user = {
+            "idLoja": 1,
+        }
+
+        const response = await request(app)
+            .post("/aprovacaoLoja")
+            .set('Authorization', 'Bearer: eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAy5wdA.TEow1rNQRINYiToJ6z5MaR6nOyoBMXve3gsnsPrjybw')
+            .send(user);
+
+        expect(response.status).toBe(403)
+
+    });
+
+});
+
+/*
 describe('Autenticacao', () => {
     it('Autenticacao com credenciais validas', async () => {
         const user = {

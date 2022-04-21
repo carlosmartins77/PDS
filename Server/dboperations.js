@@ -283,6 +283,42 @@ async function novaSubCategoriaProduto(subcategory) {
     }
 }
 
+async function listarProdutosClientes() {
+    try {
+        let pool = await sql.connect(config);
+        let product = await pool.request()
+            .query("SELECT * from Produto")
+            console.log("n pode")
+        return product.recordset;
+    } catch (err) {
+        return Error(err)
+    }
+}
+
+async function adicionarCarrinho(id) {
+    try {
+        let pool = await sql.connect(config);
+        let car = await pool.request()
+            .input('id', sql.Int,id)
+            .query("insert into CarrinhoDeCompras (clienteId) values(@id)")
+        return true;
+    } catch (err) {
+        return Error(err)
+    }
+}
+
+async function removerCarrinho(id) {
+    try {
+        let pool = await sql.connect(config);
+        let car = await pool.request()
+            .input('id', sql.Int,id)
+            .query("delete from CarrinhoDeCompras where idCarrinhoDeCompras = @id ")
+        return true;
+    } catch (err) {
+        return Error(err)
+    }
+}
+
 module.exports = {
     //#region Produtos
     newProduct: newProduct,
@@ -307,5 +343,10 @@ module.exports = {
     dowloadfiles: dowloadfiles,
     removerCategoria: removerCategoria,
     approvestore: approvestore,
-    dowloadfiles: dowloadfiles
+    dowloadfiles: dowloadfiles,
+    //#region Clientes
+    listarProdutosClientes:listarProdutosClientes,
+    adicionarCarrinho: adicionarCarrinho,
+    removerCarrinho: removerCarrinho
+    //#endregion
 }
