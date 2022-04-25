@@ -348,7 +348,7 @@ describe('Mostrar um Perfil', () => {
 
 */
 
-describe('Apagar Loja', () => {
+describe('Apagar - Admin', () => {
     it('Loja apagada (Tem permissões - token)', async () => {
         const store = {
             "email": "silva.pastelaria@outlook.com",
@@ -368,25 +368,22 @@ describe('Apagar Loja', () => {
         const response = await request(app).post("/admin/store/delete").send(store);
         expect(response.status).toBe(403)
     });
-});
-
-describe('Apagar Estafeta', () => {
     it('Estafeta apagado (Tem permissões - token)', async () => {
-        const store = {
+        const courier = {
             "idloja": 2
         }
 
-        const response = await request(app).post("/admin/store/delete").set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI').send(store);
+        const response = await request(app).post("/admin/courier/delete").set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI').send(courier);
         expect(response.status).toBe(201)
 
     });
     it('Estafeta não apagado (Não tem permissões - token) ', async () => {
-        const store = {
+        const courier = {
             "email": "silva.pastelaria@outlook.com",
             "idloja": 2
         }
 
-        const response = await request(app).post("/admin/store/delete").send(store);
+        const response = await request(app).post("/admin/courier/delete").send(courier);
         expect(response.status).toBe(403)
     });
 });
