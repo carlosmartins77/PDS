@@ -358,24 +358,18 @@ async function deleteStore(id) {
         let store = await pool.request()
             .input('id', sql.SmallInt, id)            
             .query("UPDATE Loja SET deleted = 1 WHERE idLoja = @id;")
-            //.query("UPDATE Utilizador SET (estado) VALUES (@estado) where id = @id;") // rever query(talvez seja preciso criar campo estado em vez de apagar)
-            // a apagar realmente - nao vale a pena:
-            /*.query("DELETE FROM LinhaEncomenda WHERE idUtilizador = @id")
-            .query("DELETE FROM  WHERE idUtilizador = @id")
-            .query("DELETE FROM Utilizador WHERE idUtilizador = @id")
-            .query("DELETE FROM Utilizador WHERE idUtilizador = @id")
-            .query("DELETE FROM Utilizador WHERE idUtilizador = @id")
-            .query("DELETE FROM Utilizador WHERE idUtilizador = @id")*/
-        /*
-            DELETE FROM table WHERE condition
-            tabelas onde apagar:
-            LinhaEncomenda
-            encomenda
-            documentos da loja
-            adminloja
-            estafeta/loja
-            utilizador
-        */  
+        return true;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+async function deleteCourier(id) {
+    try {
+        let pool = await sql.connect(config);
+        let store = await pool.request()
+            .input('id', sql.SmallInt, id)            
+            .query("UPDATE Estafeta SET deleted = 1 WHERE idEstafeta = @id;")
         return true;
     } catch (err) {
         throw new Error(err);
@@ -418,7 +412,8 @@ module.exports = {
 
     //#region admin
     getStoreFromAdmin: getStoreFromAdmin,
-    deleteStore: deleteStore
+    deleteStore: deleteStore,
+    deleteCourier: deleteCourier
     //#endregion
     //#endregion
 }

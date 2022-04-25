@@ -355,7 +355,7 @@ describe('Apagar Loja', () => {
             "idloja": 2
         }
 
-        const response = await request(app).post("/admin/delete/store").set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI').send(store);
+        const response = await request(app).post("/admin/store/delete").set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI').send(store);
         expect(response.status).toBe(201)
 
     });
@@ -365,7 +365,28 @@ describe('Apagar Loja', () => {
             "idloja": 2
         }
 
-        const response = await request(app).post("/admin/delete/store").send(store);
+        const response = await request(app).post("/admin/store/delete").send(store);
+        expect(response.status).toBe(403)
+    });
+});
+
+describe('Apagar Estafeta', () => {
+    it('Estafeta apagado (Tem permissões - token)', async () => {
+        const store = {
+            "idloja": 2
+        }
+
+        const response = await request(app).post("/admin/store/delete").set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI').send(store);
+        expect(response.status).toBe(201)
+
+    });
+    it('Estafeta não apagado (Não tem permissões - token) ', async () => {
+        const store = {
+            "email": "silva.pastelaria@outlook.com",
+            "idloja": 2
+        }
+
+        const response = await request(app).post("/admin/store/delete").send(store);
         expect(response.status).toBe(403)
     });
 });
