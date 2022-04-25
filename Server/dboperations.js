@@ -332,6 +332,52 @@ async function listarCarrinho(id) {
     }
 }
 
+//#region Admin
+
+async function getStoreFromAdmin(email, idloja) {
+    try {
+        const pool = await sql.connect(config);
+        console.log("getstore1")
+        const admin = await pool.request()
+            .input('email', sql.VarChar, email)
+            .input('idloja', sql.SmallInt, idloja)
+            .query("SELECT * FROM AdminLoja INNER JOIN Loja ON Loja.idLoja = @idloja INNER JOIN Utilizador ON AdminLoja.utilizadorId = Utilizador.idUtilizador where Utilizador.email = @email")
+            /* SELECT * FROM AdminLoja 
+                INNER JOIN Loja ON AdminLoja.idAdminLoja = 1
+                WHERE Loja.idLoja = 2*/
+                console.log("getstore2")
+        return admin.recordset
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+async function deleteStore(id) {
+    try {
+        let pool = await sql.connect(config);
+        let store = await pool.request()
+            .input('id', sql.SmallInt, id)            
+            .query("UPDATE Loja SET deleted = 1 WHERE idLoja = @id;")
+        return true;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+async function deleteCourier(id) {
+    try {
+        let pool = await sql.connect(config);
+        let store = await pool.request()
+            .input('id', sql.SmallInt, id)            
+            .query("UPDATE Estafeta SET deleted = 1 WHERE idEstafeta = @id;")
+        return true;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+//#endregion
+
 module.exports = {
     //#region Produtos
     newProduct: newProduct,
@@ -361,6 +407,13 @@ module.exports = {
     listarProdutosClientes:listarProdutosClientes,
     adicionarCarrinho: adicionarCarrinho,
     removerCarrinho: removerCarrinho,
-    listarCarrinho: listarCarrinho
+    listarCarrinho: listarCarrinho,
+    //#endregion
+
+    //#region admin
+    getStoreFromAdmin: getStoreFromAdmin,
+    deleteStore: deleteStore,
+    deleteCourier: deleteCourier
+    //#endregion
     //#endregion
 }

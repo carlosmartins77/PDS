@@ -7,6 +7,7 @@ const { verificartoken, login, registeruser, token } = require('./Functions/OAut
 const { mostrarPerfil } = require('./Functions/PerfilRoutes')
 const { uploadimages, novaLoja, approvestore, dowloadfiles, novaCategoriaLoja, removerCategoria} = require('./Functions/CandidacyRoutes')
 const {listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho} = require('./Functions/ClientesRoutes')
+const {adminStore, adminCourier, deleteStore, deleteCourier} = require('./Functions/AdminRoutes')
 
 app.use('/', router);
 app.use(express.json());
@@ -43,6 +44,12 @@ router.route('/mostarPerfil').post(mostrarPerfil) // a dar
 // Para dados
 router.route('/candidaturaLoja').post(novaLoja) // a dar
 router.route('/candidaturaLojaFicheiro/:id').post(uploadimages) // a dar
+
+// Admin
+router.use("/admin/store", adminStore)
+router.use("/admin/courier", adminCourier)
+router.route('/admin/store/delete').post(deleteStore)
+router.route('/admin/courier/delete').post(deleteCourier)
 
 router.route('/aprovacaoLoja').post(approvestore) // a dar
 router.route('/aprovacaoLojaFicheiro').post(dowloadfiles) // a dar
