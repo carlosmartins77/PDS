@@ -182,6 +182,24 @@ async function approvestore(id, approve) {
     }
 }
 
+async function approvecourier(id, approve) {
+    try {
+        let pool = await sql.connect(config);
+        let courier = await pool.request()
+            .input('input_parameter_id', sql.Int, id)
+            .input('input_parameter_approve', sql.Int, approve)
+            .query("update Estafeta set aprovacao =@input_parameter_approve where idEstafeta = @input_parameter_id")
+        let objectcourier = {
+            idEstafeta: id,
+            aprovacao: approve
+        }
+        return objectcourier;
+    } catch (err) {
+        return Error(err)
+    }
+}
+
+
 async function dowloadfiles(id) {
     try {
         let pool = await sql.connect(config);
@@ -398,11 +416,14 @@ module.exports = {
     mostrarPerfil: mostrarPerfil,
     newCandidacy: newCandidacy,
     //#endregion
+    //#region Aprovacao
     approvestore: approvestore,
+    approvecourier: approvecourier,
     dowloadfiles: dowloadfiles,
     removerCategoria: removerCategoria,
     approvestore: approvestore,
     dowloadfiles: dowloadfiles,
+    //#endregion
     //#region Clientes
     listarProdutosClientes:listarProdutosClientes,
     adicionarCarrinho: adicionarCarrinho,

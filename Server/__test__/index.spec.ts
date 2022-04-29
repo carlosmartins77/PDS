@@ -136,6 +136,54 @@ describe('Autenticacao', () => {
     });
 });
 
+/*
+describe('Aprovação de Estafetas - Admin', () => {
+    it('Aprovação válida - token com permissão', async () => {
+        const user = {
+            "idEstafeta": 1,
+            "aprovacao": 0
+        }
+
+        const response = await request(app)
+            .post("/aprovacaoEstafeta")
+            .set('Authorization', 'Bearer: eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0aW9ucy5wdA.TEow1rNQRINYiToJ6z5MaR6nOyoBMXve3gsnsPrjybw')
+            .send(user);
+
+        expect(response.status).toBe(200)
+
+    });
+
+    it('Aprovação inválida - token sem permissao', async () => {
+        const user = {
+            "idEstafeta": 1,
+            "aprovacao": 0
+        }
+
+        const response = await request(app)
+            .post("/aprovacaoEstafeta")
+            .set('Authorization', 'Bearer: eyJhbGc9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0aW9ucy5wdA.TEow1rNQRINYiToJ6z5MaR6nOyoBMXve3gsnsPrjybw')
+            .send(user);
+
+        expect(response.status).toBe(403)
+
+    });
+
+    it('Aprovação inválida de ficheiros - token inválido', async () => {
+        const user = {
+            "idEstafeta": 1,
+        }
+
+        const response = await request(app)
+            .post("/aprovacaoEstafeta")
+            .set('Authorization', 'Bearer: eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAy5wdA.TEow1rNQRINYiToJ6z5MaR6nOyoBMXve3gsnsPrjybw')
+            .send(user);
+
+        expect(response.status).toBe(403)
+
+    });
+
+});
+
 describe('Registo', () => {
     it('Registo com parametros válidos', async () => {
         const user = {
@@ -346,7 +394,42 @@ describe('Mostrar um Perfil', () => {
     });
 });
 
+/*describe('Candidatura Lojas', () => {
+    it('Candidatura submetida (Tem permissões - token)', async () => {
+        const candidacy = {
+            "lojaId": 1,
+            "name": "Silva Pastelaria",
+            "adress": "Rua 24 de junho",
+            "nif"; "530304052",
+            "approval": "Aprovado"
+            "doc": "docsCertficado.pdf",
+            "token": "eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI"
+        }
+
+        const response = await request(app).post("/aprovacaoLoja").send(candidacy);
+        expect(response.status).toBe(201)
+
+    });
+    it('Candidatura não submetida (Não tem permissões - token) ', async () => {
+        const candidacy = {
+            "lojaId": 1,
+            "name": "Silva Pastelaria",
+            "adress": "Rua 24 de junho",
+            "nif": "530304052",
+            "approval": "Não Aprovado"
+            "doc": "docsCertficado.pdf",
+        }
+
+        const response = await request(app).post("/aprovacaoLoja").send(candidacy);
+
+        // Usar toStrictEqual para objetos
+        // Usar toBe para variaveis
+        expect(response.status).toBe(403)
+    });
+}); 
+
 */
+
 
 describe('Apagar - Admin', () => {
     it('Loja apagada (Tem permissões - token)', async () => {

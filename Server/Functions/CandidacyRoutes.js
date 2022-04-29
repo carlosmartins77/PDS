@@ -91,6 +91,30 @@ const approvestore = async(req, res) => {
     }
 }
 
+const approvecourier = async(req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1]
+            //  Retorna um objeto com os dados do utilizador
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao == 1) {
+            // Id do Estafeta se aprova ou nao
+            console.log(req.body.idEstafeta, req.body.aprovacao)
+            dboperations.approvestore(req.body.idEstafeta, req.body.aprovacao).then(result => {
+                console.log(result)
+                    // 1 PARA APROVADO
+                    // 2 PARA NAO APROVADO
+                let approve = "aprovado"
+                if (result == 2) approve = "nao foi aprovado"
+                res.status(200).send(result);
+            })
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
+
 const dowloadfiles = async(req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]

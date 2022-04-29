@@ -5,7 +5,7 @@ const router = express.Router();
 const { produto, publicarProduto, editarProduto, listarProdutos, novaCategoriaProduto, novaSubCategoriaProduto, removerCategoriaProduto} = require('./Functions/ProductRoutes')
 const { verificartoken, login, registeruser, token } = require('./Functions/OAuthRoutes')
 const { mostrarPerfil } = require('./Functions/PerfilRoutes')
-const { uploadimages, novaLoja, approvestore, dowloadfiles, novaCategoriaLoja, removerCategoria} = require('./Functions/CandidacyRoutes')
+const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, novaCategoriaLoja, removerCategoria} = require('./Functions/CandidacyRoutes')
 const {listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho} = require('./Functions/ClientesRoutes')
 const {adminStore, adminCourier, deleteStore, deleteCourier} = require('./Functions/AdminRoutes')
 
@@ -52,6 +52,7 @@ router.route('/admin/store/delete').post(deleteStore)
 router.route('/admin/courier/delete').post(deleteCourier)
 
 router.route('/aprovacaoLoja').post(approvestore) // a dar
+router.route('/aprovacaoEstafeta').post(approvecourier)
 router.route('/aprovacaoLojaFicheiro').post(dowloadfiles) // a dar
 
 router.route('/removercategoria').post(removerCategoria) // a dar
