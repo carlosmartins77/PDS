@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const dboperations = require('../dboperations');
 const path = require('path')
 
-const cliente = async (req, res, next) => {
+const cliente = async(req, res, next) => {
     let token
     try {
         token = req.headers.authorization.split(" ")[1]
@@ -28,7 +28,7 @@ const cliente = async (req, res, next) => {
     }
 }
 
-const listarProdutosClientes = async (req, res) => {
+const listarProdutosClientes = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -46,7 +46,7 @@ const listarProdutosClientes = async (req, res) => {
     }
 }
 
-const adicionarCarrinho = async (req, res) => {
+const adicionarCarrinho = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -57,8 +57,8 @@ const adicionarCarrinho = async (req, res) => {
             dboperations.adicionarCarrinho(req.body.clienteId).then(result => {
                 console.log(result)
                 if (result == true) {
-                    res.status(201).send({message: "Inserido com sucesso!"})
-                }else res.status(403).send({message: "ERRO!"})
+                    res.status(201).send({ message: "Inserido com sucesso!" })
+                } else res.status(403).send({ message: "ERRO!" })
             })
         }
     } catch (error) {
@@ -66,7 +66,7 @@ const adicionarCarrinho = async (req, res) => {
     }
 }
 
-const removerCarrinho = async (req, res) => {
+const removerCarrinho = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -77,8 +77,8 @@ const removerCarrinho = async (req, res) => {
             dboperations.removerCarrinho(req.body.idCarrinhoDeCompras).then(result => {
                 console.log(result)
                 if (result == true) {
-                    res.status(201).send({message: "Removido com sucesso!"})
-                }else res.status(403).send({message: "ERRO!"})
+                    res.status(201).send({ message: "Removido com sucesso!" })
+                } else res.status(403).send({ message: "ERRO!" })
             })
         }
     } catch (error) {
@@ -86,7 +86,7 @@ const removerCarrinho = async (req, res) => {
     }
 }
 
-const listarCarrinho = async (req, res) => {
+const listarCarrinho = async(req, res) => {
     try {
         console.log('listarCarrinho')
         token = req.headers.authorization.split(" ")[1]
@@ -99,9 +99,7 @@ const listarCarrinho = async (req, res) => {
                 console.log(result)
                 res.status(200).send(result)
             })
-        }
-        else 
-        {
+        } else {
             res.status(403).send("Nao autorizado!")
         }
     } catch (error) {
@@ -109,9 +107,27 @@ const listarCarrinho = async (req, res) => {
     }
 }
 
+const getMedalhas = async(req, res) => {
+    try {
+        token = req.headers.authorization.split(" ")[1]
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao === 3 || req.user[0].tipoPermissao === 1) {
+            dboperations.getMedalhas(req.body.clienteId).then(result => {
+                res.status(200).send(result)
+            })
+        } else {
+            res.status(403).send("Nao autorizado!")
+        }
+    } catch (error) {
+        res.status(403).send("Não autorizado!")
+    }
+}
+
 module.exports = {
     listarProdutosClientes: listarProdutosClientes,
     adicionarCarrinho: adicionarCarrinho,
     removerCarrinho: removerCarrinho,
-    listarCarrinho: listarCarrinho
+    listarCarrinho: listarCarrinho,
+    getMedalhas: getMedalhas
 }

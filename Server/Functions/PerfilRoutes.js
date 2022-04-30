@@ -5,7 +5,7 @@ const Perfil = require('../Classes/Perfil');
 
 
 // Rota listarProdutos
-const mostrarPerfil = async (request, response) => {
+const mostrarPerfil = async(request, response) => {
     try {
         const token = request.headers.authorization.split(" ")[1]
 
@@ -23,6 +23,9 @@ const mostrarPerfil = async (request, response) => {
     }
 }
 
+
+
 module.exports = {
-    mostrarPerfil: mostrarPerfil
+    mostrarPerfil: mostrarPerfil,
+
 }

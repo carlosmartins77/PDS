@@ -2,21 +2,22 @@ const express = require('express')
 const app = express()
 const dotenv = require('dotenv').config();
 const router = express.Router();
-const { produto, publicarProduto, editarProduto, listarProdutos, novaCategoriaProduto, novaSubCategoriaProduto, removerCategoriaProduto} = require('./Functions/ProductRoutes')
+const { produto, publicarProduto, editarProduto, listarProdutos, novaCategoriaProduto, novaSubCategoriaProduto, removerCategoriaProduto } = require('./Functions/ProductRoutes')
 const { verificartoken, login, registeruser, token } = require('./Functions/OAuthRoutes')
 const { mostrarPerfil } = require('./Functions/PerfilRoutes')
-const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, novaCategoriaLoja, removerCategoria} = require('./Functions/CandidacyRoutes')
-const {listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho} = require('./Functions/ClientesRoutes')
-const {adminStore, adminCourier, deleteStore, deleteCourier} = require('./Functions/AdminRoutes')
+const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, novaCategoriaLoja, removerCategoria } = require('./Functions/CandidacyRoutes')
+const { listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho, getMedalhas } = require('./Functions/ClientesRoutes')
+const { adminStore, adminCourier, deleteStore, deleteCourier } = require('./Functions/AdminRoutes')
 
 app.use('/', router);
 app.use(express.json());
 
 // Clientes
-router.route('/cliente/listarProdutos').get(listarProdutosClientes) 
-router.route('/cliente/adicionarCarrinho').post(adicionarCarrinho) 
-router.route('/cliente/removerCarrinho').post(removerCarrinho) 
-router.route('/cliente/listarCarrinho').get(listarCarrinho) 
+router.route('/cliente/listarProdutos').get(listarProdutosClientes)
+router.route('/cliente/adicionarCarrinho').post(adicionarCarrinho)
+router.route('/cliente/removerCarrinho').post(removerCarrinho)
+router.route('/cliente/listarCarrinho').get(listarCarrinho)
+router.route('/cliente/listarMedalhas').post(getMedalhas)
 
 // Login 
 router.use('/verificartoken', verificartoken)
@@ -52,8 +53,8 @@ router.route('/admin/store/delete').post(deleteStore)
 router.route('/admin/courier/delete').post(deleteCourier)
 
 router.route('/aprovacaoLoja').post(approvestore) // a dar
-router.route('/aprovacaoEstafeta').post(approvecourier)
 router.route('/aprovacaoLojaFicheiro').post(dowloadfiles) // a dar
+router.route('/aprovacao/estafeta').post(approvecourier)
 
 router.route('/removercategoria').post(removerCategoria) // a dar
 

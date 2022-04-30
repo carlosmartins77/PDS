@@ -306,7 +306,7 @@ async function listarProdutosClientes() {
         let pool = await sql.connect(config);
         let product = await pool.request()
             .query("SELECT * from Produto")
-            console.log("n pode")
+        console.log("n pode")
         return product.recordset;
     } catch (err) {
         return Error(err)
@@ -317,7 +317,7 @@ async function adicionarCarrinho(id) {
     try {
         let pool = await sql.connect(config);
         let car = await pool.request()
-            .input('id', sql.Int,id)
+            .input('id', sql.Int, id)
             .query("insert into CarrinhoDeCompras (clienteId) values(@id)")
         return true;
     } catch (err) {
@@ -329,7 +329,7 @@ async function removerCarrinho(id) {
     try {
         let pool = await sql.connect(config);
         let car = await pool.request()
-            .input('id', sql.Int,id)
+            .input('id', sql.Int, id)
             .query("delete from CarrinhoDeCompras where idCarrinhoDeCompras = @id ")
         return true;
     } catch (err) {
@@ -341,9 +341,9 @@ async function listarCarrinho(id) {
     try {
         let pool = await sql.connect(config);
         let product = await pool.request()
-            .input('id', sql.Int,id)
+            .input('id', sql.Int, id)
             .query("SELECT * from CarrinhoDeCompras WHERE clienteId = @id")
-            console.log("n pode")
+        console.log("n pode")
         return product.recordset;
     } catch (err) {
         return Error(err)
@@ -363,7 +363,7 @@ async function getStoreFromAdmin(email, idloja) {
             /* SELECT * FROM AdminLoja 
                 INNER JOIN Loja ON AdminLoja.idAdminLoja = 1
                 WHERE Loja.idLoja = 2*/
-                console.log("getstore2")
+        console.log("getstore2")
         return admin.recordset
     } catch (err) {
         throw new Error(err);
@@ -374,7 +374,7 @@ async function deleteStore(id) {
     try {
         let pool = await sql.connect(config);
         let store = await pool.request()
-            .input('id', sql.SmallInt, id)            
+            .input('id', sql.SmallInt, id)
             .query("UPDATE Loja SET deleted = 1 WHERE idLoja = @id;")
         return true;
     } catch (err) {
@@ -386,13 +386,27 @@ async function deleteCourier(id) {
     try {
         let pool = await sql.connect(config);
         let store = await pool.request()
-            .input('id', sql.SmallInt, id)            
+            .input('id', sql.SmallInt, id)
             .query("UPDATE Estafeta SET deleted = 1 WHERE idEstafeta = @id;")
         return true;
     } catch (err) {
         throw new Error(err);
     }
 }
+
+async function getMedalhas(id) {
+    try {
+        let pool = await sql.connect(config);
+        let medal = await pool.request()
+            .input('id', sql.SmallInt, id)
+            .query("SELECT ListaMedalhas.nomeMedalha, ListaMedalhas.descricao, ListaMedalhas.icon, MedalhasUtilizador.dataDesbloqueio, MedalhasUtilizador.clienteId FROM ListaMedalhas INNER JOIN MedalhasUtilizador ON ListaMedalhas.idMedalha = MedalhasUtilizador.medalhaId WHERE MedalhasUtilizador.clienteId = @id")
+        return medal.recordset
+    } catch (err) {
+        throw new Error(err)
+    }
+}
+
+
 
 //#endregion
 
@@ -425,16 +439,17 @@ module.exports = {
     dowloadfiles: dowloadfiles,
     //#endregion
     //#region Clientes
-    listarProdutosClientes:listarProdutosClientes,
+    listarProdutosClientes: listarProdutosClientes,
     adicionarCarrinho: adicionarCarrinho,
     removerCarrinho: removerCarrinho,
     listarCarrinho: listarCarrinho,
+    getMedalhas: getMedalhas,
     //#endregion
 
     //#region admin
     getStoreFromAdmin: getStoreFromAdmin,
     deleteStore: deleteStore,
     deleteCourier: deleteCourier
-    //#endregion
-    //#endregion
+        //#endregion
+        //#endregion
 }
