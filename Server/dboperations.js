@@ -410,6 +410,45 @@ async function getMedalhas(id) {
 
 //#endregion
 
+// #region Courier
+
+// fzr funcao verificar estado
+async function getCourierState(id) {
+    try {
+        let pool = await sql.connect(config);
+        let store = await pool.request()
+            .input('id', sql.SmallInt, id)
+            .query("SELECT idEstafeta, estado FROM Estafeta WHERE idEstafeta = @id");
+        if (store) {
+            console.log("encontrou o estafeta ->", store.recordset[0]["estado"])
+            return store.recordset[0]["estado"];
+        }
+        else {
+            console.log("NAO encontrou o estafeta!")
+            return -1;
+        }
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+
+async function updateCourierState(id, state) {
+    try {
+        let pool = await sql.connect(config);
+        let store = await pool.request()
+            .input('id', sql.SmallInt, id)
+            .input('state', sql.SmallInt, state)
+            .query("UPDATE Estafeta SET estado = @state WHERE idEstafeta = @id")
+            console.log("update estafeta", store.output)
+        return true;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+// #endregion
+
 module.exports = {
     //#region Produtos
     newProduct: newProduct,
@@ -449,7 +488,11 @@ module.exports = {
     //#region admin
     getStoreFromAdmin: getStoreFromAdmin,
     deleteStore: deleteStore,
-    deleteCourier: deleteCourier
-        //#endregion
-        //#endregion
+    deleteCourier: deleteCourier,
+    //#endregion
+
+    //#region courier
+    getCourierState: getCourierState,
+    updateCourierState: updateCourierState
+    //#endregion
 }
