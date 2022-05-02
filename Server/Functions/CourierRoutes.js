@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 
 const courier = async (request, response, next) => {
     try {
-        console.log("TOU AQUIII")
         const token = request.headers.authorization.split(" ")[1];
         //  Retorna um objeto com os dados do admin
         const decoded = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
@@ -24,15 +23,12 @@ const courier = async (request, response, next) => {
 
 const changeState = async(request, response) => {
     try {
-        //let resp = await dboperations.getCourierState(request.body.idEstafeta);
         let resp = request.courier;
-        console.log("resposta estafeta ", resp);
 
         if (resp) {
             resp = request.courier["estado"];
             // altera o estado 1 - ativo, 0 - inativo
             resp = resp == 1 ? 0 : 1;
-            console.log("resp->", request.courier["idEstafeta"], "|", resp)
             dboperations.updateCourierState(request.courier["idEstafeta"], resp)
             response.status(203).send("Estado alterado com sucesso!");
         } else

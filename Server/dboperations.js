@@ -420,11 +420,9 @@ async function getCourierState(email) {
             .input('email', sql.VarChar, email)
             .query("SELECT idEstafeta, estado FROM Estafeta es INNER JOIN Utilizador u on es.utilizadorId = u.idUtilizador WHERE u.email = @email");
         if (store) {
-            console.log("encontrou o estafeta ->", store.recordset[0]["estado"])
             return store.recordset[0];
         }
         else {
-            console.log("NAO encontrou o estafeta!")
             return -1;
         }
     } catch (err) {
@@ -440,7 +438,6 @@ async function updateCourierState(id, state) {
             .input('id', sql.SmallInt, id)
             .input('state', sql.SmallInt, state)
             .query("UPDATE Estafeta SET estado = @state WHERE idEstafeta = @id")
-            console.log("update estafeta", store.output)
         return true;
     } catch (err) {
         throw new Error(err);
