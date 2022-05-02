@@ -413,15 +413,15 @@ async function getMedalhas(id) {
 // #region Courier
 
 // fzr funcao verificar estado
-async function getCourierState(id) {
+async function getCourierState(email) {
     try {
         let pool = await sql.connect(config);
         let store = await pool.request()
-            .input('id', sql.SmallInt, id)
-            .query("SELECT idEstafeta, estado FROM Estafeta WHERE idEstafeta = @id");
+            .input('email', sql.VarChar, email)
+            .query("SELECT idEstafeta, estado FROM Estafeta es INNER JOIN Utilizador u on es.utilizadorId = u.idUtilizador WHERE u.email = @email");
         if (store) {
             console.log("encontrou o estafeta ->", store.recordset[0]["estado"])
-            return store.recordset[0]["estado"];
+            return store.recordset[0];
         }
         else {
             console.log("NAO encontrou o estafeta!")
