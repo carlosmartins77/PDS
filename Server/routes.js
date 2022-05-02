@@ -7,7 +7,7 @@ const { verificartoken, login, registeruser, token } = require('./Functions/OAut
 const { mostrarPerfil } = require('./Functions/PerfilRoutes')
 const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, novaCategoriaLoja, removerCategoria } = require('./Functions/CandidacyRoutes')
 const { listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho, getMedalhas } = require('./Functions/ClientesRoutes')
-const { adminStore, adminCourier, deleteStore, deleteCourier } = require('./Functions/AdminRoutes')
+const { adminStore, adminCourier, deleteStore, deleteCourier, atribiurMedalhas } = require('./Functions/AdminRoutes')
 const { courier, changeState } = require('./Functions/CourierRoutes')
 
 app.use('/', router);
@@ -52,6 +52,8 @@ router.use("/admin/store", adminStore)
 router.use("/admin/courier", adminCourier)
 router.route('/admin/store/delete').post(deleteStore)
 router.route('/admin/courier/delete').post(deleteCourier)
+router.route('/atribuirMedalhas').get(atribiurMedalhas)
+
 
 router.route('/aprovacaoLoja').post(approvestore) // a dar
 router.route('/aprovacaoLojaFicheiro').post(dowloadfiles) // a dar

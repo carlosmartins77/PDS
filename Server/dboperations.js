@@ -421,8 +421,7 @@ async function getCourierState(email) {
             .query("SELECT idEstafeta, estado FROM Estafeta es INNER JOIN Utilizador u on es.utilizadorId = u.idUtilizador WHERE u.email = @email");
         if (store) {
             return store.recordset[0];
-        }
-        else {
+        } else {
             return -1;
         }
     } catch (err) {
@@ -443,6 +442,77 @@ async function updateCourierState(id, state) {
         throw new Error(err);
     }
 }
+
+async function atribiurMedalhas(idCliente) {
+    try {
+        let pool = await sql.connect(config);
+
+        let nEncomendasPorUtilizador = await pool.request()
+            .input('idCliente', sql.Int, idCliente)
+            .query("SELECT c.idCliente, count(e.clienteId) as nEncomendas FROM Cliente c INNER JOIN Encomenda e ON e.clienteId = c.idCliente WHERE c.idCliente = @idCliente GROUP BY c.idCliente")
+        var nEncomendas = nEncomendasPorUtilizador.recordset[0].nEncomendas
+
+        //#region Gerar valor da data
+        var date_ob = new Date();
+        var day = ("0" + date_ob.getDate()).slice(-2);
+        var month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+        var year = date_ob.getFullYear();
+
+        var date = year + "-" + month + "-" + day;
+        //#endregion
+
+        // Nao verifico se já tem a medalha porque era impossivel ter.
+
+        switch (nEncomendas) {
+            case 1:
+                let atribuiMedalha1 = await pool.request()
+                    .input('medalhaId', sql.Int, 1)
+                    .input('dataDesbloqueio', sql.Date, date)
+                    .input('idCliente', sql.Int, idCliente)
+                    .query("INSERT INTO MedalhasUtilizador (medalhaId, dataDesbloqueio, clienteId)  VALUES(@medalhaId,@dataDesbloqueio,@idCliente)")
+                return true;
+            case 2:
+                let atribuiMedalha2 = await pool.request()
+                    .input('medalhaId', sql.Int, 2)
+                    .input('dataDesbloqueio', sql.Date, date)
+                    .input('idCliente', sql.Int, idCliente)
+                    .query("INSERT INTO MedalhasUtilizador (medalhaId, dataDesbloqueio, clienteId)  VALUES(@medalhaId,@dataDesbloqueio,@idCliente)")
+                return true;
+            case 3:
+                let atribuiMedalha3 = await pool.request()
+                    .input('medalhaId', sql.Int, 3)
+                    .input('dataDesbloqueio', sql.Date, date)
+                    .input('idCliente', sql.Int, idCliente)
+                    .query("INSERT INTO MedalhasUtilizador (medalhaId, dataDesbloqueio, clienteId)  VALUES(@medalhaId,@dataDesbloqueio,@idCliente)")
+                return true;
+            case 4:
+                let atribuiMedalha4 = await pool.request()
+                    .input('medalhaId', sql.Int, 4)
+                    .input('dataDesbloqueio', sql.Date, date)
+                    .input('idCliente', sql.Int, idCliente)
+                    .query("INSERT INTO MedalhasUtilizador (medalhaId, dataDesbloqueio, clienteId)  VALUES(@medalhaId,@dataDesbloqueio,@idCliente)")
+                return true;
+            case 5:
+                let atribuiMedalha5 = await pool.request()
+                    .input('medalhaId', sql.Int, 5)
+                    .input('dataDesbloqueio', sql.Date, date)
+                    .input('idCliente', sql.Int, idCliente)
+                    .query("INSERT INTO MedalhasUtilizador (medalhaId, dataDesbloqueio, clienteId)  VALUES(@medalhaId,@dataDesbloqueio,@idCliente)")
+                return true;
+        }
+    } catch (err) {
+        throw new Error(err)
+    }
+}
+
+// Guardar valores num array
+
+// o nova encomenda recebe o id
+// atribuirmedalhas(id) verifica o numero de encomendas que um certo id tem
+// depois valida se ja tem a medalha adicionada 
+// se nao tiver, insere a medalha na tabela das medalhasutilizador
+
+//OUTRA OPÇAO -> Qunado é feita uma encomenda verificar e atribuir medalha 
 
 // #endregion
 
@@ -486,10 +556,11 @@ module.exports = {
     getStoreFromAdmin: getStoreFromAdmin,
     deleteStore: deleteStore,
     deleteCourier: deleteCourier,
+    atribiurMedalhas: atribiurMedalhas,
     //#endregion
 
     //#region courier
     getCourierState: getCourierState,
     updateCourierState: updateCourierState
-    //#endregion
+        //#endregion
 }

@@ -3,16 +3,16 @@ const { request } = require("express")
 const dboperations = require("../dboperations")
 const jwt = require('jsonwebtoken');
 
-const adminStore = async (request, response, next) => {
+const adminStore = async(request, response, next) => {
     try {
         const token = request.headers.authorization.split(" ")[1]
-        //  Retorna um objeto com os dados do admin
+            //  Retorna um objeto com os dados do admin
         const decoded = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-        //request.use = await dboperations.finduser(decoded)
-        // verificar se possui a loja onde pretende publicar o produto associado
+            //request.use = await dboperations.finduser(decoded)
+            // verificar se possui a loja onde pretende publicar o produto associado
         request.admin = await dboperations.getStoreFromAdmin(request.body.email, request.body.idloja)
         console.log("admin", request.body.email, request.body.idloja)
-        if(request.admin[0]) {
+        if (request.admin[0]) {
             //if (request.use[0].tipoPermissao == 2) next();
             next();
             //else response.status(403).send("Nao possui autorizacao1")
@@ -25,13 +25,13 @@ const adminStore = async (request, response, next) => {
     }
 }
 
-const adminCourier = async (request, response, next) => {
+const adminCourier = async(request, response, next) => {
     try {
         const token = request.headers.authorization.split(" ")[1]
-        //  Retorna um objeto com os dados do admin
+            //  Retorna um objeto com os dados do admin
         const decoded = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-        //request.use = await dboperations.finduser(decoded)
-        if(decoded) {
+            //request.use = await dboperations.finduser(decoded)
+        if (decoded) {
             //if (request.use[0].tipoPermissao == 2) next();
             next();
             //else response.status(403).send("Nao possui autorizacao1")
@@ -66,9 +66,20 @@ const deleteCourier = (request, response) => {
     }
 }
 
+const atribiurMedalhas = async(request, response) => {
+    try {
+        dboperations.atribiurMedalhas(request.body.idCliente).then(result, response => {
+            response.status(200).send(result);
+        })
+    } catch (Error) {
+        response.status(403).send()
+    }
+}
+
 module.exports = {
     adminStore: adminStore,
     adminCourier: adminCourier,
     deleteStore: deleteStore,
-    deleteCourier: deleteCourier
+    deleteCourier: deleteCourier,
+    atribiurMedalhas: atribiurMedalhas
 }
