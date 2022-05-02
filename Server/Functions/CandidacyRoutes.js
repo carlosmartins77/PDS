@@ -182,6 +182,7 @@ module.exports = {
     novaLoja: novaLoja,
     dowloadfiles: dowloadfiles,
     approvestore: approvestore,
+    approvecourier: approvecourier,
     removerCategoria: removerCategoria,
     novaCategoriaLoja: novaCategoriaLoja,
     approvecourier: approvecourier

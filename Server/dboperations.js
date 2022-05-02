@@ -410,6 +410,42 @@ async function getMedalhas(id) {
 
 //#endregion
 
+// #region Courier
+
+// fzr funcao verificar estado
+async function getCourierState(email) {
+    try {
+        let pool = await sql.connect(config);
+        let store = await pool.request()
+            .input('email', sql.VarChar, email)
+            .query("SELECT idEstafeta, estado FROM Estafeta es INNER JOIN Utilizador u on es.utilizadorId = u.idUtilizador WHERE u.email = @email");
+        if (store) {
+            return store.recordset[0];
+        }
+        else {
+            return -1;
+        }
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+
+async function updateCourierState(id, state) {
+    try {
+        let pool = await sql.connect(config);
+        let store = await pool.request()
+            .input('id', sql.SmallInt, id)
+            .input('state', sql.SmallInt, state)
+            .query("UPDATE Estafeta SET estado = @state WHERE idEstafeta = @id")
+        return true;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+// #endregion
+
 module.exports = {
     //#region Produtos
     newProduct: newProduct,
@@ -449,7 +485,11 @@ module.exports = {
     //#region admin
     getStoreFromAdmin: getStoreFromAdmin,
     deleteStore: deleteStore,
-    deleteCourier: deleteCourier
-        //#endregion
-        //#endregion
+    deleteCourier: deleteCourier,
+    //#endregion
+
+    //#region courier
+    getCourierState: getCourierState,
+    updateCourierState: updateCourierState
+    //#endregion
 }

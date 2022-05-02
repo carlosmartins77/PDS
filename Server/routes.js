@@ -8,6 +8,7 @@ const { mostrarPerfil } = require('./Functions/PerfilRoutes')
 const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, novaCategoriaLoja, removerCategoria } = require('./Functions/CandidacyRoutes')
 const { listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho, getMedalhas } = require('./Functions/ClientesRoutes')
 const { adminStore, adminCourier, deleteStore, deleteCourier } = require('./Functions/AdminRoutes')
+const { courier, changeState } = require('./Functions/CourierRoutes')
 
 app.use('/', router);
 app.use(express.json());
@@ -57,5 +58,9 @@ router.route('/aprovacaoLojaFicheiro').post(dowloadfiles) // a dar
 router.route('/aprovacao/estafeta').post(approvecourier)
 
 router.route('/removercategoria').post(removerCategoria) // a dar
+
+// Estafeta
+router.use("/estafeta", courier);
+router.route('/estafeta/mudaEstado/').post(changeState);
 
 module.exports = router
