@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const dboperations = require('../dboperations');
-const path = require('path')
+const path = require('path');
+const { request } = require('http');
 
 const cliente = async(req, res, next) => {
     let token
@@ -124,7 +125,7 @@ const getMedalhas = async(req, res) => {
     }
 }
 
-const verEncomendas = async (req, res) => {
+const verEncomendas = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -136,9 +137,7 @@ const verEncomendas = async (req, res) => {
                 console.log(result)
                 res.status(200).send(result)
             })
-        }
-        else 
-        {
+        } else {
             res.status(403).send("Nao autorizado!")
         }
     } catch (error) {
@@ -146,7 +145,7 @@ const verEncomendas = async (req, res) => {
     }
 }
 
-const publicarEncomenda = async (req, res) => {
+const publicarEncomenda = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -157,17 +156,144 @@ const publicarEncomenda = async (req, res) => {
             let id_Cliente = await dboperations.retornaCliente(req.user[0].idUtilizador)
             dboperations.publicarEncomenda(req.body.numEncomenda, req.body.dataEncomenda, req.body.estado, req.body.valorTotal, req.body.lojaId, parseInt(id_Cliente), req.body.estafetaId).then(result => {
                 console.log(result)
-                res.status(200).send({message: 'Inserido com sucesso'})
+                res.status(200).send({ message: 'Inserido com sucesso' })
             })
-        }
-        else 
-        {
+        } else {
             res.status(403).send("Nao autorizado!")
         }
     } catch (error) {
         res.status(403).send("Nao autorizado!")
     }
 }
+
+const cancelEncomenda = async(req, res) => {
+    try {
+        token = req.headers.authorization.split(" ")[1]
+
+        //  Retorna um objeto com os dados do utilizador
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao === 3) {
+            let cancel = await dboperations.cancelEncomenda(req.body.idEncomenda)
+
+            if (cancel == true) {
+                res.status(200).send({ message: 'Encomenda cancelada com sucesso' })
+            }
+            res.status(403).send("Nao autorizado!")
+        }
+
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+
+}
+
+const acompanharEncomenda = async(req, res) => {
+    try {
+        token = req.headers.authorization.split(" ")[1]
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao === 3) {
+            dboperations.acompanharEncomenda(req.body.idEncomenda).then(result => {
+                res.status(200).send({ message: 'Estado:' + result })
+            })
+        } else {
+            res.status(403).send("Nao autorizado!")
+        }
+    } catch (error) {
+        res.status(403).send("Não autorizado!")
+    }
+}
+
+const filtrarLojasCategoria = async(req, res) => {
+    try {
+        token = req.headers.authorization.split(" ")[1]
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao === 3) {
+            dboperations.filtrarLojasCategoria(req.body.nomeCategoria).then(result => {
+                res.status(200).send(result)
+            })
+        } else {
+            res.status(403).send("Nao autorizado!")
+        }
+    } catch (error) {
+        res.status(403).send("Não autorizado!")
+    }
+}
+
+const filtrarProdutosCategoria = async(req, res) => {
+    try {
+        token = req.headers.authorization.split(" ")[1]
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao === 3) {
+            if ((req.body.nomeCategoria).length > 0 && (req.body.nomeSubCategoria).length > 0) {
+                dboperations.filtrarProdutosCategoria(3, req.body.nomeCategoria, req.body.nomeSubCategoria).then(result => {
+                    res.status(200).send(result)
+                })
+            } else if ((req.body.nomeCategoria).length > 0 && (req.body.nomeSubCategoria).length == 0) {
+                dboperations.filtrarProdutosCategoria(2, req.body.nomeCategoria, req.body.nomeSubCategoria).then(result => {
+                    res.status(200).send(result)
+                })
+            } else if ((req.body.nomeCategoria).length == 0 && (req.body.nomeSubCategoria).length > 0) {
+                dboperations.filtrarProdutosCategoria(1, req.body.nomeCategoria, req.body.nomeSubCategoria).then(result => {
+                    res.status(200).send(result)
+                })
+            }
+
+        } else {
+            res.status(403).send("Nao autorizado!")
+        }
+    } catch (error) {
+        res.status(403).send("Não autorizado!")
+    }
+}
+
+const editarPerfil = async(req, res) => {
+    try {
+        // Cliente
+        let dataNascimento = req.body.dataNascimento
+        let pais = req.body.pais
+        let localizacao = req.body.localizacao
+        let idCliente = req.body.idCliente
+
+        // Utilizador
+        let password = req.body.password
+        let nome = req.body.nome
+        let email = req.body.email
+        let contacto = req.body.contacto
+        let nif = req.body.nif
+
+        // Loja
+        let morada = req.body.nif
+        let nifLoja = req.body.nifLoja
+        let idLoja = req.body.idLoja
+
+        token = req.headers.authorization.split(" ")[1]
+
+        //  Retorna um objeto com os dados do utilizador
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0]) {
+            if (req.user[0].tipoPermissao === 2) {
+                dboperations.editarPerfilLoja(req.user[0].idUtilizador, idLoja, password, nome, email, contacto, nif, morada, nifLoja).then(result => {
+                    res.status(200).send({ message: 'Alterado com sucesso' })
+                })
+            }
+            if (req.user[0].tipoPermissao === 3) {
+                dboperations.editarPerfilCliente(req.user[0].idUtilizador, idCliente, password, nome, email, contacto, nif, dataNascimento, pais, localizacao).then(result => {
+                    res.status(200).send({ message: 'Alterado com sucesso' })
+                })
+            }
+        } else {
+            res.status(403).send("Nao autorizado!")
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
 
 
 module.exports = {
@@ -177,5 +303,10 @@ module.exports = {
     listarCarrinho: listarCarrinho,
     getMedalhas: getMedalhas,
     verEncomendas: verEncomendas,
-    publicarEncomenda:publicarEncomenda
+    publicarEncomenda: publicarEncomenda,
+    cancelEncomenda: cancelEncomenda,
+    acompanharEncomenda: acompanharEncomenda,
+    filtrarLojasCategoria: filtrarLojasCategoria,
+    filtrarProdutosCategoria: filtrarProdutosCategoria,
+    editarPerfil: editarPerfil
 }

@@ -5,10 +5,10 @@ const router = express.Router();
 const { produto, publicarProduto, editarProduto, listarProdutos, novaCategoriaProduto, novaSubCategoriaProduto, removerCategoriaProduto } = require('./Functions/ProductRoutes')
 const { verificartoken, login, registeruser, token } = require('./Functions/OAuthRoutes')
 const { mostrarPerfil } = require('./Functions/PerfilRoutes')
-const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, novaCategoriaLoja, removerCategoria } = require('./Functions/CandidacyRoutes')
+const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, novaCategoriaLoja, removerCategoria, consultarHistoricoLojas, alterarEstadoLoja } = require('./Functions/CandidacyRoutes')
 const { adminStore, adminCourier, deleteStore, deleteCourier, atribiurMedalhas } = require('./Functions/AdminRoutes')
 const { courier, changeState } = require('./Functions/CourierRoutes')
-const {listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho, verEncomendas, publicarEncomenda, getMedalhas} = require('./Functions/ClientesRoutes')
+const { listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho, verEncomendas, publicarEncomenda, getMedalhas, cancelEncomenda, acompanharEncomenda, filtrarLojasCategoria, filtrarProdutosCategoria, editarPerfil } = require('./Functions/ClientesRoutes')
 
 app.use('/', router);
 app.use(express.json());
@@ -19,6 +19,12 @@ router.route('/cliente/adicionarCarrinho').post(adicionarCarrinho)
 router.route('/cliente/removerCarrinho').post(removerCarrinho)
 router.route('/cliente/listarCarrinho').get(listarCarrinho)
 router.route('/cliente/listarMedalhas').post(getMedalhas)
+router.route('/cliente/cancelarEncomenda').post(cancelEncomenda)
+router.route('/cliente/acompanharEncomenda').post(acompanharEncomenda)
+router.route('/cliente/acompanharEncomenda').post(acompanharEncomenda)
+router.route('/cliente/filtrarLojasCategoria').post(filtrarLojasCategoria)
+router.route('/cliente/filtrarProdutosCategoria').post(filtrarProdutosCategoria)
+
 
 // Login 
 router.use('/verificartoken', verificartoken)
@@ -68,5 +74,15 @@ router.route('/estafeta/mudaEstado/').post(changeState);
 // Cliente
 router.route('/verEncomendas').post(verEncomendas)
 router.route('/publicarEncomenda').post(publicarEncomenda)
+
+
+// Lojas
+router.route('/consultarHistoricoLojas').post(consultarHistoricoLojas)
+
+// Perfil's
+router.route('/editarPerfil').post(editarPerfil)
+
+// Aleterar Estado da Loja
+router.route('/alterarEstadoLoja').post(alterarEstadoLoja)
 
 module.exports = router

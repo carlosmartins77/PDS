@@ -435,10 +435,10 @@ async function verEncomendas(id) {
     try {
         let pool = await sql.connect(config);
         let client = await pool.request()
-            .input('id', sql.Int, id)            
+            .input('id', sql.Int, id)
             .query("SELECT Cliente.*, Encomenda.* FROM  Encomenda INNER JOIN Cliente ON Encomenda.clienteId = Cliente.idCliente where Cliente.utilizadorId = @id")
-            console.log(client)
-            return client.recordset;
+        console.log(client)
+        return client.recordset;
     } catch (err) {
         throw new Error(err);
     }
@@ -448,10 +448,10 @@ async function retornaCliente(id) {
     try {
         let pool = await sql.connect(config);
         let client = await pool.request()
-            .input('id', sql.Int, id)            
+            .input('id', sql.Int, id)
             .query("SELECT Cliente.idCliente FROM  Utilizador INNER JOIN Cliente ON Utilizador.idUtilizador = Cliente.utilizadorId where Cliente.utilizadorId = @id")
-            console.log(client.recordset[0].idCliente)
-            return client.recordset[0].idCliente;
+        console.log(client.recordset[0].idCliente)
+        return client.recordset[0].idCliente;
     } catch (err) {
         throw new Error(err);
     }
@@ -461,15 +461,15 @@ async function publicarEncomenda(numEncomenda, dataEncomenda, estado, valorTotal
     try {
         let pool = await sql.connect(config);
         let client = await pool.request()
-            .input('numEncomenda', sql.Int, numEncomenda)            
-            .input('dataEncomenda', sql.DateTime, dataEncomenda)            
-            .input('estado', sql.VarChar, estado)            
-            .input('valorTotal', sql.Int, valorTotal)            
-            .input('lojaId', sql.Int, lojaId)            
-            .input('clienteId', sql.Int, clienteId)            
-            .input('estafetaId', sql.Int, estafetaId)            
-            .query("insert into Encomenda (numEncomenda, dataEncomenda, estado, valorTotal, lojaId, clienteId, estafetaId) values(@numEncomenda, @dataEncomenda, @estado, @valorTotal, @lojaId, @clienteId, @estafetaId)") 
-            return true;
+            .input('numEncomenda', sql.Int, numEncomenda)
+            .input('dataEncomenda', sql.DateTime, dataEncomenda)
+            .input('estado', sql.VarChar, estado)
+            .input('valorTotal', sql.Int, valorTotal)
+            .input('lojaId', sql.Int, lojaId)
+            .input('clienteId', sql.Int, clienteId)
+            .input('estafetaId', sql.Int, estafetaId)
+            .query("insert into Encomenda (numEncomenda, dataEncomenda, estado, valorTotal, lojaId, clienteId, estafetaId) values(@numEncomenda, @dataEncomenda, @estado, @valorTotal, @lojaId, @clienteId, @estafetaId)")
+        return true;
     } catch (err) {
         throw new Error(err);
     }
@@ -595,14 +595,164 @@ async function atribiurMedalhas(idCliente) {
     }
 }
 
-// Guardar valores num array
+async function cancelEncomenda(idEncomenda) {
+    try {
+        let pool = await sql.connect(config);
+        let cancelarEncomenda = await pool.request()
+            .input('idEncomenda', sql.Int, idEncomenda)
+            .query("UPDATE Encomenda SET estado = 'Cancelada' WHERE idEncomenda = @idEncomenda")
 
-// o nova encomenda recebe o id
-// atribuirmedalhas(id) verifica o numero de encomendas que um certo id tem
-// depois valida se ja tem a medalha adicionada 
-// se nao tiver, insere a medalha na tabela das medalhasutilizador
+        return true
 
-//OUTRA OPÇAO -> Qunado é feita uma encomenda verificar e atribuir medalha 
+    } catch (err) {
+        throw new Error(err)
+    }
+}
+
+async function acompanharEncomenda(idEncomenda) {
+    try {
+        let pool = await sql.connect(config);
+        let acompanaEncomenda = await pool.request()
+            .input('idEncomenda', sql.Int, idEncomenda)
+            .query("SELECT estado FROM Encomenda WHERE idEncomenda = @idEncomenda")
+
+        return acompanaEncomenda.recordset[0].estado
+
+    } catch (err) {
+        throw new Error(err)
+    }
+}
+
+async function filtrarLojasCategoria(nomeCategoria) {
+    try {
+        let pool = await sql.connect(config);
+        let categoriaFiltro = await pool.request()
+            .input('nomeCategoria', sql.VarChar, nomeCategoria)
+            .query("SELECT nomeLoja as Nome, morada, c.nome as Categoria FROM Loja l INNER JOIN Categoria c ON l.categoriaId= c.idCategoria WHERE c.nome = @nomeCategoria")
+
+        return categoriaFiltro.recordset
+
+    } catch (err) {
+        throw new Error(err)
+    }
+}
+
+async function filtrarProdutosCategoria(tipo, nomeCategoria, nomeSubCategoria) {
+    try {
+        let pool = await sql.connect(config);
+
+        if (tipo == 3) {
+            let categoriaFiltro = await pool.request()
+                .input('nomeCategoria', sql.VarChar, nomeCategoria)
+                .input('nomeSubCategoria', sql.VarChar, nomeSubCategoria)
+                .query(`SELECT Produto.nomeProduto, Produto.preco, Produto.horaRecolhaMin, Produto.horaRecolhaMax, Produto.fotoProduto, Produto.descricao, CategoriaProduto.nome as categoria, SubCategoriaProduto.nome AS subcategoria
+FROM     Produto INNER JOIN
+                  SubCategoriaProduto ON Produto.SubcategoriaProdId = SubCategoriaProduto.idSubcategoriaProd INNER JOIN
+                  CategoriaProduto ON SubCategoriaProduto.categoria = CategoriaProduto.idCategoriaProd
+                    WHERE CategoriaProduto.nome = @nomeCategoria AND SubCategoriaProduto.nome = @nomeSubCategoria`)
+
+            return categoriaFiltro.recordset
+        }
+        if (tipo == 2) {
+            let categoriaFiltro = await pool.request()
+                .input('nomeCategoria', sql.VarChar, nomeCategoria)
+                .query(`SELECT Produto.nomeProduto, Produto.preco, Produto.horaRecolhaMin, Produto.horaRecolhaMax, Produto.fotoProduto, Produto.descricao, CategoriaProduto.nome as categoria, SubCategoriaProduto.nome AS subcategoria
+FROM     Produto INNER JOIN
+                  SubCategoriaProduto ON Produto.SubcategoriaProdId = SubCategoriaProduto.idSubcategoriaProd INNER JOIN
+                  CategoriaProduto ON SubCategoriaProduto.categoria = CategoriaProduto.idCategoriaProd
+                    WHERE CategoriaProduto.nome = @nomeCategoria`)
+
+            return categoriaFiltro.recordset
+        }
+        if (tipo == 1) {
+            let categoriaFiltro = await pool.request()
+                .input('nomeSubCategoria', sql.VarChar, nomeSubCategoria)
+                .query(`SELECT Produto.nomeProduto, Produto.preco, Produto.horaRecolhaMin, Produto.horaRecolhaMax, Produto.fotoProduto, Produto.descricao, CategoriaProduto.nome as categoria, SubCategoriaProduto.nome AS subcategoria
+FROM     Produto INNER JOIN
+                  SubCategoriaProduto ON Produto.SubcategoriaProdId = SubCategoriaProduto.idSubcategoriaProd INNER JOIN
+                  CategoriaProduto ON SubCategoriaProduto.categoria = CategoriaProduto.idCategoriaProd
+                    WHERE SubCategoriaProduto.nome = @nomeSubCategoria`)
+
+            return categoriaFiltro.recordset
+        }
+
+
+    } catch (err) {
+        throw new Error(err)
+    }
+}
+
+async function consultarHistoricoLojas(id) {
+    try {
+        let pool = await sql.connect(config);
+        let store = await pool.request()
+            .input('id', sql.SmallInt, id)
+            .query("select * from Encomenda where lojaId = @id")
+        return store.recordset;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+async function editarPerfilLoja(id, idLoja, password, nome, email, contacto, nif, morada, nifLoja) {
+    try {
+        let pool = await sql.connect(config);
+        let perfil = await pool.request()
+            .input('id', sql.Int, idLoja)
+            .input('morada', sql.VarChar, morada)
+            .input('nifLoja', sql.Int, nifLoja)
+            .query("update Loja set morada = @morada , nif = @nifLoja WHERE idLoja = @idLoja")
+        let perfil2 = await pool.request()
+            .input('id', sql.VarChar, id)
+            .input('password', sql.VarChar, password)
+            .input('email', sql.VarChar, email)
+            .input('nome', sql.VarChar, nome)
+            .input('nif', sql.Int, nif)
+            .input('contacto', sql.Int, contacto)
+            .query("update Utilizador set password = @password , nome = @nome , email = @email , contacto = @contacto, nif = @nif  WHERE idUtilizador = @id")
+        return true;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+async function editarPerfilCliente(id, idCliente, password, nome, email, contacto, nif, dataNascimento, pais, localizacao) {
+    try {
+        let pool = await sql.connect(config);
+        let perfil = await pool.request()
+            .input('id', sql.Int, idCliente)
+            .input('dataNascimento', sql.VarChar, dataNascimento)
+            .input('pais', sql.VarChar, pais)
+            .input('localizacao', sql.VarChar, localizacao)
+            .query("update Cliente set dataNascimento = @dataNascimento , pais = @pais , localizacao = @localizacao, WHERE idCliente = @id")
+        let perfil2 = await pool.request()
+            .input('id', sql.Int, id)
+            .input('password', sql.VarChar, password)
+            .input('email', sql.VarChar, email)
+            .input('nome', sql.VarChar, nome)
+            .input('nif', sql.Int, nif)
+            .input('contacto', sql.Int, contacto)
+            .query("update Utilizador set password = @password , nome = @nome , email = @email , contacto = @contacto, nif = @nif  WHERE idUtilizador = @id")
+        return true;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+async function alterarEstadoLoja(id, estado) {
+    try {
+        let pool = await sql.connect(config);
+        let perfil = await pool.request()
+            .input('id', sql.Int, id)
+            .input('estado', sql.Int, estado)
+            .query("update Loja set aprovacao = @estado where idLoja = @id")
+        return true;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+
 
 // #endregion
 
@@ -626,6 +776,9 @@ module.exports = {
     mostrarPerfil: mostrarPerfil,
     newCandidacy: newCandidacy,
     newCandidacyCourier: newCandidacyCourier,
+    consultarHistoricoLojas: consultarHistoricoLojas,
+    alterarEstadoLoja: alterarEstadoLoja,
+
     //#endregion
     //#region Aprovacao
     approvestore: approvestore,
@@ -641,6 +794,12 @@ module.exports = {
     removerCarrinho: removerCarrinho,
     listarCarrinho: listarCarrinho,
     getMedalhas: getMedalhas,
+    cancelEncomenda: cancelEncomenda,
+    acompanharEncomenda: acompanharEncomenda,
+    filtrarLojasCategoria: filtrarLojasCategoria,
+    filtrarProdutosCategoria: filtrarProdutosCategoria,
+    editarPerfilLoja: editarPerfilLoja,
+    editarPerfilCliente: editarPerfilCliente,
     //#endregion
 
     //#region admin
@@ -658,6 +817,6 @@ module.exports = {
     //#endregion
     //#endregion
     verEncomendas: verEncomendas,
-    publicarEncomenda:publicarEncomenda,
-    retornaCliente:retornaCliente
+    publicarEncomenda: publicarEncomenda,
+    retornaCliente: retornaCliente
 }

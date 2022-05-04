@@ -199,6 +199,37 @@ const novaCategoriaLoja = async(req, res) => {
     }
 }
 
+const alterarEstadoLoja = async(req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1]
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao == 2) {
+            let estado = req.body.estado
+            let id = req.body.idLoja
+            dboperations.alterarEstadoLoja(id, estado).then(result => {
+                res.status(200).send(result)
+            })
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+const consultarHistoricoLojas = async(req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1]
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao == 2) {
+            dboperations.consultarHistoricoLojas(req.body.idLoja).then(result => {
+                res.status(200).send(result)
+            })
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
 module.exports = {
     uploadimages: uploadimages,
     novaLoja: novaLoja,
@@ -209,4 +240,6 @@ module.exports = {
     removerCategoria: removerCategoria,
     novaCategoriaLoja: novaCategoriaLoja,
     approvecourier: approvecourier,
+    alterarEstadoLoja: alterarEstadoLoja,
+    consultarHistoricoLojas: consultarHistoricoLojas
 }
