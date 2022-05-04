@@ -2,7 +2,6 @@ const { response } = require("express")
 const { request } = require("express")
 const dboperations = require("../dboperations")
 const jwt = require('jsonwebtoken');
-const { getCategoria } = require("../dboperations");
 
 const adminStore = async(request, response, next) => {
     try {

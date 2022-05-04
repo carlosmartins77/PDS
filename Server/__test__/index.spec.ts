@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app = require('../index');
-
+/*
 
 describe('Carrinho de Compras - Clientes', () => {
     it('Adicionar um Produto ao Carrinho válida - token com permissão', async () => {

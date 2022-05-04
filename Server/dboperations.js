@@ -418,7 +418,50 @@ async function getMedalhas(id) {
     }
 }
 
+//
+async function verEncomendas(id) {
+    try {
+        let pool = await sql.connect(config);
+        let client = await pool.request()
+            .input('id', sql.Int, id)            
+            .query("SELECT Cliente.*, Encomenda.* FROM  Encomenda INNER JOIN Cliente ON Encomenda.clienteId = Cliente.idCliente where Cliente.utilizadorId = @id")
+            console.log(client)
+            return client.recordset;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
 
+async function retornaCliente(id) {
+    try {
+        let pool = await sql.connect(config);
+        let client = await pool.request()
+            .input('id', sql.Int, id)            
+            .query("SELECT Cliente.idCliente FROM  Utilizador INNER JOIN Cliente ON Utilizador.idUtilizador = Cliente.utilizadorId where Cliente.utilizadorId = @id")
+            console.log(client.recordset[0].idCliente)
+            return client.recordset[0].idCliente;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+async function publicarEncomenda(numEncomenda, dataEncomenda, estado, valorTotal, lojaId, clienteId, estafetaId) {
+    try {
+        let pool = await sql.connect(config);
+        let client = await pool.request()
+            .input('numEncomenda', sql.Int, numEncomenda)            
+            .input('dataEncomenda', sql.DateTime, dataEncomenda)            
+            .input('estado', sql.VarChar, estado)            
+            .input('valorTotal', sql.Int, valorTotal)            
+            .input('lojaId', sql.Int, lojaId)            
+            .input('clienteId', sql.Int, clienteId)            
+            .input('estafetaId', sql.Int, estafetaId)            
+            .query("insert into Encomenda (numEncomenda, dataEncomenda, estado, valorTotal, lojaId, clienteId, estafetaId) values(@numEncomenda, @dataEncomenda, @estado, @valorTotal, @lojaId, @clienteId, @estafetaId)") 
+            return true;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
 
 //#endregion
 
@@ -598,6 +641,10 @@ module.exports = {
 
     //#region courier
     getCourierState: getCourierState,
-    updateCourierState: updateCourierState
-        //#endregion
+    updateCourierState: updateCourierState,
+    //#endregion
+    //#endregion
+    verEncomendas: verEncomendas,
+    publicarEncomenda:publicarEncomenda,
+    retornaCliente:retornaCliente
 }

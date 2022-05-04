@@ -6,9 +6,9 @@ const { produto, publicarProduto, editarProduto, listarProdutos, novaCategoriaPr
 const { verificartoken, login, registeruser, token } = require('./Functions/OAuthRoutes')
 const { mostrarPerfil } = require('./Functions/PerfilRoutes')
 const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, novaCategoriaLoja, removerCategoria } = require('./Functions/CandidacyRoutes')
-const { listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho, getMedalhas } = require('./Functions/ClientesRoutes')
 const { adminStore, adminCourier, deleteStore, deleteCourier, atribiurMedalhas } = require('./Functions/AdminRoutes')
 const { courier, changeState } = require('./Functions/CourierRoutes')
+const {listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho, verEncomendas, publicarEncomenda, getMedalhas} = require('./Functions/ClientesRoutes')
 
 app.use('/', router);
 app.use(express.json());
@@ -64,5 +64,9 @@ router.route('/removercategoria').post(removerCategoria) // a dar
 // Estafeta
 router.use("/estafeta", courier);
 router.route('/estafeta/mudaEstado/').post(changeState);
+
+// Cliente
+router.route('/verEncomendas').post(verEncomendas)
+router.route('/publicarEncomenda').post(publicarEncomenda)
 
 module.exports = router
