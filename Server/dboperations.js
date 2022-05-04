@@ -399,7 +399,19 @@ async function getCategoria(id) {
         let pool = await sql.connect(config);
         let catg = await pool.request()
             .input('id', sql.SmallInt, id)
-            .query("SELECT Categoria.idCategoria, Categoria.nome, CategoriaProduto.idCategoriaProd, CategoriaProduto.nome FROM Categoria INNER JOIN CategoriaProduto ON Categoria.idCategoria = CategoriaProduto.idCategoriaProd")
+            .query("SELECT * FROM Categoria")
+        return catg.recordset
+    } catch (err) {
+        throw new Error(err)
+    }
+}
+
+async function getCategoriaProd(id) {
+    try {
+        let pool = await sql.connect(config);
+        let catg = await pool.request()
+            .input('id', sql.SmallInt, id)
+            .query("SELECT * FROM CategoriaProduto, SubCategoriaProduto")
         return catg.recordset
     } catch (err) {
         throw new Error(err)
@@ -637,6 +649,7 @@ module.exports = {
     deleteCourier: deleteCourier,
     atribiurMedalhas: atribiurMedalhas,
     getCategoria: getCategoria,
+    getCategoriaProd: getCategoriaProd,
     //#endregion
 
     //#region courier

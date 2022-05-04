@@ -86,11 +86,22 @@ const getCategoria = async(request, response) => {
     }
 }
 
+const getCategoriaProd = async(request, response) => {
+    try {
+        dboperations.getCategoriaProd(request.body.idCategoriaProd).then(result, response => {
+            response.status(200).send(result);
+        })
+    } catch (Error) {
+        response.status(403).send()
+    }
+}
+
 module.exports = {
     adminStore: adminStore,
     adminCourier: adminCourier,
     deleteStore: deleteStore,
     deleteCourier: deleteCourier,
     atribiurMedalhas: atribiurMedalhas,
-    getCategoria: getCategoria
+    getCategoria: getCategoria,
+    getCategoriaProd: getCategoriaProd,
 }
