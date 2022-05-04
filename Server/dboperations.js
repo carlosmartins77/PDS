@@ -394,6 +394,18 @@ async function deleteCourier(id) {
     }
 }
 
+async function getCategoria(id) {
+    try {
+        let pool = await sql.connect(config);
+        let catg = await pool.request()
+            .input('id', sql.SmallInt, id)
+            .query("SELECT Categoria.idCategoria, Categoria.nome, CategoriaProduto.idCategoriaProd, CategoriaProduto.nome FROM Categoria INNER JOIN CategoriaProduto ON Categoria.idCategoria = CategoriaProduto.idCategoriaProd")
+        return catg.recordset
+    } catch (err) {
+        throw new Error(err)
+    }
+}
+
 async function getMedalhas(id) {
     try {
         let pool = await sql.connect(config);
@@ -412,7 +424,7 @@ async function getMedalhas(id) {
 
 // #region Courier
 
-// fzr funcao verificar estado
+// funcao verificar estado
 async function getCourierState(email) {
     try {
         let pool = await sql.connect(config);
@@ -429,6 +441,29 @@ async function getCourierState(email) {
     }
 }
 
+//funcao candidatura estafeta
+async function newCandidacyCourier(candidacy, token) {
+    try {
+        let pool = await sql.connect(config);
+        let can = await pool.request()
+            .input('utilizadorId', sql.Int, candidacy.id)
+            .query("Insert into Estafeta (utilizadorId) values (@utilizadorId);")
+        let idestafeta = await pool.request()
+            .input('input_parameter', sql.Int, candidacy.idEstafeta)
+            .query("select * from Estafeta where idEstafeta = @input_parameter")
+        filename = (token + '--' + idestafeta.recordset[0].idEstafeta + '--' + candidacy.doc).toString()
+        let canestafeta = await pool.request()
+            .input('fotoPerfil', sql.VarChar, filename)
+            .input('fotoCartaoCidadaoFrente', sql.VarChar, filename)
+            .input('fotoCartaoCidadaoVerso', sql.VarChar, filename)
+            .input('pdfRegistoCriminal', sql.VarChar, filename)
+            .input('estafetaId', sql.Int, idestafeta.recordset[0].idestafeta)
+            .query("Insert into DocumentosEstafeta (fotoPerfil, fotoCartaoCidadaoFrente, fotoCartaoCidadaoVerso, pdfRegistoCriminal, estafetaId) values (@fotoPerfil, @fotoCartaoCidadaoFrente, @fotoCartaoCidadaoVerso, @pdfRegistoCriminal, @estafetaId);")
+        return idestafeta.recordset[0].idEstafeta
+    } catch (err) {
+        return Error(err)
+    }
+}
 
 async function updateCourierState(id, state) {
     try {
@@ -535,6 +570,7 @@ module.exports = {
     //#region Candidaturas
     mostrarPerfil: mostrarPerfil,
     newCandidacy: newCandidacy,
+    newCandidacyCourier: newCandidacyCourier,
     //#endregion
     //#region Aprovacao
     approvestore: approvestore,
@@ -557,6 +593,7 @@ module.exports = {
     deleteStore: deleteStore,
     deleteCourier: deleteCourier,
     atribiurMedalhas: atribiurMedalhas,
+    getCategoria: getCategoria,
     //#endregion
 
     //#region courier

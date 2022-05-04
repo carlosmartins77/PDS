@@ -2,6 +2,7 @@ const { response } = require("express")
 const { request } = require("express")
 const dboperations = require("../dboperations")
 const jwt = require('jsonwebtoken');
+const { getCategoria } = require("../dboperations");
 
 const adminStore = async(request, response, next) => {
     try {
@@ -76,10 +77,21 @@ const atribiurMedalhas = async(request, response) => {
     }
 }
 
+const getCategoria = async(request, response) => {
+    try {
+        dboperations.getCategoria(request.body.idCategoria).then(result, response => {
+            response.status(200).send(result);
+        })
+    } catch (Error) {
+        response.status(403).send()
+    }
+}
+
 module.exports = {
     adminStore: adminStore,
     adminCourier: adminCourier,
     deleteStore: deleteStore,
     deleteCourier: deleteCourier,
-    atribiurMedalhas: atribiurMedalhas
+    atribiurMedalhas: atribiurMedalhas,
+    getCategoria: getCategoria
 }

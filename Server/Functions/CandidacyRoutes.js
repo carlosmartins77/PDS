@@ -6,7 +6,7 @@ const path = require('path')
 const Candidacy = require('../Classes/Candidacy');
 const Category = require('../Classes/Category');
 const { Parser } = require('tedious/lib/token/token-stream-parser');
-const { criarCategoriaLoja } = require('../dboperations');
+const { criarCategoriaLoja, newCandidacy, newCandidacyCourier } = require('../dboperations');
 
 
 const uploadimages = async(req, res) => {
@@ -60,6 +60,28 @@ const novaLoja = async(req, res) => {
                     nif: cand.nif,
                     adminloja: cand.id,
                     categoria: cand.category
+                })
+            })
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
+const novoEstafeta = async(req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1]
+            //  Retorna um objeto com os dados do utilizador
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao == 3) {
+            // Id, Doc
+            const cand = new Candidacy(req.body.utilizadorId, "", req.body.filename)
+            dboperations.newCandidacy(cand, token).then(result => {
+                console.log(result)
+                res.status(200).send({
+                    idEstafeta: 0,
+                    utilizadorId: cand.id,
                 })
             })
         }
@@ -180,10 +202,11 @@ const novaCategoriaLoja = async(req, res) => {
 module.exports = {
     uploadimages: uploadimages,
     novaLoja: novaLoja,
+    novoEstafeta: novoEstafeta,
     dowloadfiles: dowloadfiles,
     approvestore: approvestore,
     approvecourier: approvecourier,
     removerCategoria: removerCategoria,
     novaCategoriaLoja: novaCategoriaLoja,
-    approvecourier: approvecourier
+    approvecourier: approvecourier,
 }
