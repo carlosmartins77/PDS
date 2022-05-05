@@ -496,6 +496,20 @@ async function getCourierState(email) {
     }
 }
 
+// funcao altera estado da encomenda
+async function changeOrderStatus(id, status) {
+    try {
+        let pool = await sql.connect(config);
+        let client = await pool.request()
+            .input('id', sql.SmallInt, id)
+            .input('estado', sql.VarChar, status)
+            .query("UPDATE Encomenda SET estado = @estado WHERE idEncomenda = @id");
+        return true;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
 //funcao candidatura estafeta
 async function newCandidacyCourier(candidacy, token) {
     try {
@@ -814,6 +828,7 @@ module.exports = {
     //#region courier
     getCourierState: getCourierState,
     updateCourierState: updateCourierState,
+    changeOrderStatus: changeOrderStatus,
     //#endregion
     //#endregion
     verEncomendas: verEncomendas,

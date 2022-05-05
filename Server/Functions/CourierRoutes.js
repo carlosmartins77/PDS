@@ -38,7 +38,36 @@ const changeState = async(request, response) => {
     }
 }
 
+/* 
+    Estados da encomenda
+    - Em processamento (só altera se já estiver em processamento)
+    - Em transporte
+    - Entregue
+*/
+// altera o estado da encomenda no seguinte fluxo:
+// Em processamento(estado inicial) -> Em transporte -> Entregue(último estado)
+const changeStatus = async(request, response) => {
+    try {
+        let status = await dboperations.acompanharEncomenda(request.body.idEncomenda);
+
+        if(status == "Em processamento") {
+            dboperations.changeOrderStatus(request.body.idEncomenda, "Em transporte");
+            response.status(203).send("Estado alterado com sucesso!");
+            
+        } else if(status == "Em transporte") {
+            dboperations.changeOrderStatus(request.body.idEncomenda, "Entregue");
+            response.status(203).send("Estado alterado com sucesso!");
+
+        } else
+            response.status("403").send("Não é possível alterar o estado da encomenda!");
+
+    } catch (Error) {
+        response.status(403).send("Não autorizado!");
+    }
+}
+
 module.exports = {
     courier: courier,
-    changeState: changeState
+    changeState: changeState,
+    changeStatus: changeStatus
 }
