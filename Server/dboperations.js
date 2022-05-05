@@ -766,6 +766,19 @@ async function alterarEstadoLoja(id, estado) {
     }
 }
 
+async function verEncomenda(idEncomenda) {
+    try {
+        let pool = await sql.connect(config);
+        let acompanaEncomenda = await pool.request()
+            .input('idEncomenda', sql.Int, idEncomenda)
+            .query("SELECT * FROM Encomenda WHERE idEncomenda = @idEncomenda")
+
+        return acompanaEncomenda.recordset
+
+    } catch (err) {
+        throw new Error(err)
+    }
+}
 
 
 // #endregion
@@ -829,6 +842,7 @@ module.exports = {
     getCourierState: getCourierState,
     updateCourierState: updateCourierState,
     changeOrderStatus: changeOrderStatus,
+    verEncomenda: verEncomenda,
     //#endregion
     //#endregion
     verEncomendas: verEncomendas,
