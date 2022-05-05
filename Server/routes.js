@@ -7,7 +7,7 @@ const { verificartoken, login, registeruser, token } = require('./Functions/OAut
 const { mostrarPerfil } = require('./Functions/PerfilRoutes')
 const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, novaCategoriaLoja, removerCategoria, consultarHistoricoLojas, alterarEstadoLoja } = require('./Functions/CandidacyRoutes')
 const { adminStore, adminCourier, deleteStore, deleteCourier, atribiurMedalhas } = require('./Functions/AdminRoutes')
-const { courier, changeState } = require('./Functions/CourierRoutes')
+const { courier, changeState, verEncomenda } = require('./Functions/CourierRoutes')
 const { listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho, verEncomendas, publicarEncomenda, getMedalhas, cancelEncomenda, acompanharEncomenda, filtrarLojasCategoria, filtrarProdutosCategoria, editarPerfil } = require('./Functions/ClientesRoutes')
 
 app.use('/', router);
@@ -70,6 +70,7 @@ router.route('/removercategoria').post(removerCategoria) // a dar
 // Estafeta
 router.use("/estafeta", courier);
 router.route('/estafeta/mudaEstado/').post(changeState);
+router.route('/estafeta/verEncomenda').post(verEncomenda)
 
 // Cliente
 router.route('/verEncomendas').post(verEncomendas)

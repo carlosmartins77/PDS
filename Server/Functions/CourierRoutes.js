@@ -38,7 +38,25 @@ const changeState = async(request, response) => {
     }
 }
 
+const verEncomenda = async(req, res) => {
+    try {
+        token = req.headers.authorization.split(" ")[1]
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao === 3) {
+            dboperations.verEncomenda(req.body.idEncomenda).then(result => {
+                res.status(200).send(result)
+            })
+        } else {
+            res.status(403).send("Nao autorizado!")
+        }
+    } catch (error) {
+        res.status(403).send("Não autorizado!")
+    }
+}
+
 module.exports = {
     courier: courier,
-    changeState: changeState
+    changeState: changeState,
+    verEncomenda: verEncomenda
 }
