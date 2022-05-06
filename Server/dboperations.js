@@ -100,8 +100,9 @@ async function editProduct(product, id) {
             .input('hourRecoMax', sql.DateTime, product.hourRecoMax)
             .input('image', sql.VarChar, product.image)
             .input('lojaId', sql.Int, product.lojaId)
+            .input('description', sql.VarChar, product.description)
             .input('subCatProdId', sql.Int, product.subCatProdId)
-            .query("update Produto set nomeProduto = @name , quantidade = @quantity , preco = @price , horaRecolhaMin = @hourRecoMin, horaRecolhaMax = @hourRecoMax, fotoProduto = @image, lojaId = @lojaId, SubcategoriaProdId = @subCatProdId WHERE idProduto = @id")
+            .query("Insert into Produto (nomeProduto, quantidade, preco, horaRecolhaMin, horaRecolhaMax, fotoProduto, lojaId, descricao, SubcategoriaProdId) values (@name, @quantity, @price, @hourRecoMin,@hourRecoMax, @image,@lojaId, @description, @subCatProdId);")
         return true;
     } catch (err) {
         return Error(err)
@@ -114,10 +115,10 @@ async function editProduct(product, id) {
 async function listProduct() {
     try {
         let pool = await sql.connect(config);
-        let editProduct = await pool.request()
+        let listProduct = await pool.request()
             .query("select * from Produto")
-        console.log(editProduct.recordset)
-        return editProduct.recordset;
+        console.log(listProduct.recordset)
+        return listProduct.recordset;
     } catch (err) {
         return Error(err)
     }
@@ -232,10 +233,20 @@ async function removerCategoria(nome) {
 async function novaCategoriaLoja(category) {
     try {
         let pool = await sql.connect(config);
-        let registerCategory = await pool.request()
+
+        let findCategory = await pool.request()
             .input('nomeCategoria', sql.VarChar, category.categoria)
-            .query("INSERT INTO Categoria (Nome) VALUES (@nomeCategoria);")
-        return true
+            .query("SELECT COUNT(*) as ContaLinhas FROM Categoria WHERE nome = @nomeCategoria")
+        var nRegistos = findCategory.recordset[0].ContaLinhas
+            //console.log(nRegistos)
+
+        if (nRegistos == 0) {
+            let registerCategory = await pool.request()
+                .input('nomeCategoria', sql.VarChar, category.categoria)
+                .query("INSERT INTO Categoria (Nome) VALUES (@nomeCategoria);")
+            return true
+        }
+
     } catch (err) {
         return Error(err)
     }
@@ -244,10 +255,19 @@ async function novaCategoriaLoja(category) {
 async function novaCategoriaProduto(category) {
     try {
         let pool = await sql.connect(config);
-        let registerCategory = await pool.request()
+
+        let findCategory = await pool.request()
             .input('nomeCategoria', sql.VarChar, category.categoria)
-            .query("INSERT INTO CategoriaProduto (Nome) VALUES (@nomeCategoria);")
-        return true
+            .query("SELECT COUNT(*) as ContaLinhas FROM CategoriaProduto WHERE nome = @nomeCategoria")
+        var nRegistos = findCategory.recordset[0].ContaLinhas
+            //console.log(nRegistos)
+
+        if (nRegistos == 0) {
+            let registerCategory = await pool.request()
+                .input('nomeCategoria', sql.VarChar, category.categoria)
+                .query("INSERT INTO CategoriaProduto (Nome) VALUES (@nomeCategoria);")
+            return true
+        }
     } catch (err) {
         return Error(err)
     }
@@ -291,7 +311,6 @@ async function novaSubCategoriaProduto(subcategory) {
                 .input('nomeSubCategoria', sql.VarChar, subcategory.subcategoria)
                 .input('idCategoria', sql.Int, id)
                 .query("INSERT INTO SubCategoriaProduto (Nome, categoria) VALUES (@nomeSubCategoria, @idCategoria);")
-
             return true
         }
         return false;

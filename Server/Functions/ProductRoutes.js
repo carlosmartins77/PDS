@@ -36,7 +36,7 @@ const publicarProduto = (request, response) => {
     try {
         // Name, Quantity, Price, hourRecoMin, HourRecoMax, Image, lojaId, subCatProdId
         let product = new Product(0, request.body.name, request.body.quantity, request.body.price, request.body.hourRecoMin, request.body.hourRecoMax,
-            request.body.image, request.body.lojaId, request.body.subCatProdId)
+            request.body.image, request.body.lojaId, request.body.description, request.body.subCatProdId)
         console.log("Produto a publicar", product)
 
         dboperations.newProduct(product).then(result => {
@@ -118,7 +118,6 @@ const novaSubCategoriaProduto = async(req, res) => {
                 if (result == true) {
 
                     res.status(200).send({
-                        idSubCategoria: 0,
                         subcategoria: cat.subcategoria,
                         categoria: cat.categoria
                     })

@@ -12,10 +12,7 @@ const cliente = async(req, res, next) => {
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
 
         req.user = await dboperations.finduser(decoded)
-        console.log("Calho:", req.user)
-        console.log("Calho:", req.user[0].tipoPermissao)
         if (req.user[0].tipoPermissao === 3) {
-            console.log("what??")
             next()
         } else response.status(403).send("Nao possui autorizacao")
     } catch (error) {

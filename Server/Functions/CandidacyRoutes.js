@@ -187,11 +187,18 @@ const novaCategoriaLoja = async(req, res) => {
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao == 1) {
             const cat = new Category(req.body.categoria)
-            dboperations.novaCategoriaLoja(cat).then(result => {
-                res.status(200).send({
-                    idCategoria: 0,
-                    categoria: cat.categoria
-                })
+            dboperations.novaCategoriaProduto(cat).then(result => {
+                if (result == true) {
+
+                    res.status(200).send({
+                        categoria: cat.categoria
+                    })
+                } else {
+                    res.status(401).send({
+                        message: "Erro ao inserir categoria"
+                    })
+                }
+
             })
         }
     } catch (error) {

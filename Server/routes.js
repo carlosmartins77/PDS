@@ -17,7 +17,7 @@ app.use(express.json());
 router.route('/cliente/listarProdutos').get(listarProdutosClientes)
 router.route('/cliente/adicionarCarrinho').post(adicionarCarrinho)
 router.route('/cliente/removerCarrinho').post(removerCarrinho)
-router.route('/cliente/listarCarrinho').get(listarCarrinho)
+router.route('/cliente/listarCarrinho').post(listarCarrinho)
 router.route('/cliente/listarMedalhas').post(getMedalhas)
 router.route('/cliente/cancelarEncomenda').post(cancelEncomenda)
 router.route('/cliente/acompanharEncomenda').post(acompanharEncomenda)
@@ -58,7 +58,7 @@ router.use("/admin/store", adminStore)
 router.use("/admin/courier", adminCourier)
 router.route('/admin/store/delete').post(deleteStore)
 router.route('/admin/courier/delete').post(deleteCourier)
-router.route('/atribuirMedalhas').get(atribiurMedalhas)
+router.route('/atribuirMedalhas').post(atribiurMedalhas)
 
 
 router.route('/aprovacaoLoja').post(approvestore) // a dar
