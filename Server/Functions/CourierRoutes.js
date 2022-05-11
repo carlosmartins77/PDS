@@ -51,11 +51,13 @@ const changeStatus = async(request, response) => {
         let status = await dboperations.acompanharEncomenda(request.body.idEncomenda);
 
         if(status == "Em processamento") {
-            dboperations.changeOrderStatus(request.body.idEncomenda, "Em transporte");
+            status = "Em transporte";
+            dboperations.changeOrderStatus(request.body.idEncomenda, status);
             response.status(203).send({ message: "Estado alterado com sucesso!", idEncomenda: request.body.idEncomenda, status: status});
             
         } else if(status == "Em transporte") {
-            dboperations.changeOrderStatus(request.body.idEncomenda, "Entregue");
+            status = "Entregue";
+            dboperations.changeOrderStatus(request.body.idEncomenda, status);
             response.status(203).send({ message: "Estado alterado com sucesso!", idEncomenda: request.body.idEncomenda, status: status});
 
         } else
