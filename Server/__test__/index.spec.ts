@@ -430,6 +430,43 @@ describe('Mostrar um Perfil', () => {
 
 */
 
+describe('Estafeta', () => {
+    it('Mudar estado do estafeta (Tem permissões - token)', async () => {
+        const response = await request(app)
+            .post("/estafeta/mudaEstado")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8');
+        expect(response.status).toBe(200)
+
+    });
+    it('Mudar estado do estafeta (Não tem permissões - token) ', async () => {
+        const response = await request(app)
+            .post("/estafeta/mudaEstado");
+        expect(response.status).toBe(403)
+    });
+
+    it('Mudar estado da encomenda (Tem permissões - token)', async () => {
+        const order = {
+            "idEncomenda": 1
+        }
+
+        const response = await request(app)
+            .post("/estafeta/encomenda/alterarEstado")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(order);
+        expect(response.status).toBe(200)
+
+    });
+    it('Mudar estado do estafeta (Não tem permissões - token) ', async () => {
+        const order = {
+            "idEncomenda": 1
+        }
+
+        const response = await request(app)
+            .post("/estafeta/encomenda/alterarEstado")
+            .send(order);
+        expect(response.status).toBe(403)
+    });
+});
 
 describe('Apagar - Admin', () => {
     it('Loja apagada (Tem permissões - token)', async () => {
@@ -438,8 +475,11 @@ describe('Apagar - Admin', () => {
             "idloja": 2
         }
 
-        const response = await request(app).post("/admin/store/delete").set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI').send(store);
-        expect(response.status).toBe(201)
+        const response = await request(app)
+            .delete("/admin/store/delete")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI')
+            .send(store);
+        expect(response.status).toBe(200)
 
     });
     it('Loja não apagada (Não tem permissões - token) ', async () => {
@@ -448,7 +488,9 @@ describe('Apagar - Admin', () => {
             "idloja": 2
         }
 
-        const response = await request(app).post("/admin/store/delete").send(store);
+        const response = await request(app)
+            .delete("/admin/store/delete")
+            .send(store);
         expect(response.status).toBe(403)
     });
     it('Estafeta apagado (Tem permissões - token)', async () => {
@@ -456,8 +498,11 @@ describe('Apagar - Admin', () => {
             "idloja": 2
         }
 
-        const response = await request(app).post("/admin/courier/delete").set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI').send(courier);
-        expect(response.status).toBe(201)
+        const response = await request(app)
+            .delete("/admin/courier/delete")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI')
+            .send(courier);
+        expect(response.status).toBe(200)
 
     });
     it('Estafeta não apagado (Não tem permissões - token) ', async () => {
@@ -466,7 +511,9 @@ describe('Apagar - Admin', () => {
             "idloja": 2
         }
 
-        const response = await request(app).post("/admin/courier/delete").send(courier);
+        const response = await request(app)
+            .delete("/admin/courier/delete")
+            .send(courier);
         expect(response.status).toBe(403)
     });
 });

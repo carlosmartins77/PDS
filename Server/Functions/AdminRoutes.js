@@ -11,7 +11,6 @@ const adminStore = async(request, response, next) => {
             //request.use = await dboperations.finduser(decoded)
             // verificar se possui a loja onde pretende publicar o produto associado
         request.admin = await dboperations.getStoreFromAdmin(request.body.email, request.body.idloja)
-        console.log("admin", request.body.email, request.body.idloja)
         if (request.admin[0]) {
             //if (request.use[0].tipoPermissao == 2) next();
             next();
@@ -47,7 +46,7 @@ const adminCourier = async(request, response, next) => {
 const deleteStore = (request, response) => {
     try {
         dboperations.deleteStore(request.body.idloja).then(result => {
-            if (result) response.status(201).send("Store deleted with success!")
+            if (result) response.status(200).send({ message: "Store deleted with success!" })
         })
     } catch (error) {
         response.status(403).send("Nao autorizado!")
@@ -56,10 +55,8 @@ const deleteStore = (request, response) => {
 
 const deleteCourier = (request, response) => {
     try {
-        // adicionar verificar permissao tp 1
-        console.log("route-delete-Courier")
         dboperations.deleteCourier(request.body.idEstafeta).then(result => {
-            if (result) response.status(201).send("Courier deleted with success!")
+            if (result) response.status(200).send({ message: "Courier deleted with success!" })
         })
     } catch (error) {
         response.status(403).send("Nao autorizado!")

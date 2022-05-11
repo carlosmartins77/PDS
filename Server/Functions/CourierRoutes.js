@@ -30,7 +30,7 @@ const changeState = async(request, response) => {
             // altera o estado 1 - ativo, 0 - inativo
             resp = resp == 1 ? 0 : 1;
             dboperations.updateCourierState(request.courier["idEstafeta"], resp)
-            response.status(203).send({ message: "Estado alterado com sucesso!", status: resp});
+            response.status(200).send({ message: "Estado alterado com sucesso!", status: resp});
         } else
             response.status(404).send("Estafeta não encontrado");
     } catch (Error) {
@@ -53,12 +53,12 @@ const changeStatus = async(request, response) => {
         if(status == "Em processamento") {
             status = "Em transporte";
             dboperations.changeOrderStatus(request.body.idEncomenda, status);
-            response.status(203).send({ message: "Estado alterado com sucesso!", idEncomenda: request.body.idEncomenda, status: status});
+            response.status(200).send({ message: "Estado alterado com sucesso!", idEncomenda: request.body.idEncomenda, status: status});
             
         } else if(status == "Em transporte") {
             status = "Entregue";
             dboperations.changeOrderStatus(request.body.idEncomenda, status);
-            response.status(203).send({ message: "Estado alterado com sucesso!", idEncomenda: request.body.idEncomenda, status: status});
+            response.status(200).send({ message: "Estado alterado com sucesso!", idEncomenda: request.body.idEncomenda, status: status});
 
         } else
             response.status("403").send("Não é possível alterar o estado da encomenda!");

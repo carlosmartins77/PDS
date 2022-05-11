@@ -56,8 +56,8 @@ router.route('/candidaturaLojaFicheiro/:id').post(uploadimages) // a dar
 // Admin
 router.use("/admin/store", adminStore)
 router.use("/admin/courier", adminCourier)
-router.route('/admin/store/delete').post(deleteStore)
-router.route('/admin/courier/delete').post(deleteCourier)
+router.route('/admin/store/delete').delete(deleteStore)
+router.route('/admin/courier/delete').delete(deleteCourier)
 router.route('/atribuirMedalhas').post(atribiurMedalhas)
 
 
