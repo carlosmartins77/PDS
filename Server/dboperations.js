@@ -1,6 +1,7 @@
 var config = require('./dbconfig');
 const sql = require('mssql');
 const Int = require('tedious/lib/data-types/int');
+//const { produto } = require('./Functions/ProductRoutes');
 
 //#region Login 
 async function loginUser(user) {
@@ -69,17 +70,27 @@ async function newProduct(product) {
     try {
         // Name, Quantity, Price, hourRecoMin, HourRecoMax, Image, lojaId, subCatProdId
         let pool = await sql.connect(config);
-        let newProduct = await pool.request()
-            .input('name', sql.VarChar, product.name)
-            .input('quantity', sql.Int, product.quantity)
-            .input('price', sql.Float, product.price)
-            .input('hourRecoMin', sql.DateTime, product.hourRecoMin)
-            .input('hourRecoMax', sql.DateTime, product.hourRecoMax)
-            .input('image', sql.VarChar, product.image)
+        let verifyStore = await pool.request()
             .input('lojaId', sql.Int, product.lojaId)
-            .input('subCatProdId', sql.Int, product.subCatProdId)
-            .query("Insert into Produto (nomeProduto, quantidade, preco, horaRecolhaMin, horaRecolhaMax, fotoProduto, lojaId, SubcategoriaProdId) values (@name, @quantity, @price, @hourRecoMin,@hourRecoMax, @image,@lojaId, @subCatProdId);")
-        return true;
+            .query("SELECT COUNT(*) as ContasLinhas FROM Loja WHERE Aprovacao = 1 ANd idLoja = @lojaId")
+
+        let nRegistos = verifyStore.recordset[0].ContaLinhas
+
+        if (verifyStore.recordset[0].ContasLinhas == 1) {
+
+            let newProduct = await pool.request()
+                .input('name', sql.VarChar, product.name)
+                .input('quantity', sql.Int, product.quantity)
+                .input('price', sql.Float, product.price)
+                .input('hourRecoMin', sql.DateTime, product.hourRecoMin)
+                .input('hourRecoMax', sql.DateTime, product.hourRecoMax)
+                .input('image', sql.VarChar, product.image)
+                .input('lojaId', sql.Int, product.lojaId)
+                .input('subCatProdId', sql.Int, product.subCatProdId)
+                .query("Insert into Produto (nomeProduto, quantidade, preco, horaRecolhaMin, horaRecolhaMax, fotoProduto, lojaId, SubcategoriaProdId) values (@name, @quantity, @price, @hourRecoMin,@hourRecoMax, @image,@lojaId, @subCatProdId);")
+            return true
+        }
+        return false
     } catch (err) {
         return Error(err)
     }

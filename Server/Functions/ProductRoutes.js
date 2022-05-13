@@ -37,10 +37,13 @@ const publicarProduto = (request, response) => {
         // Name, Quantity, Price, hourRecoMin, HourRecoMax, Image, lojaId, subCatProdId
         let product = new Product(0, request.body.name, request.body.quantity, request.body.price, request.body.hourRecoMin, request.body.hourRecoMax,
             request.body.image, request.body.lojaId, request.body.description, request.body.subCatProdId)
-        console.log("Produto a publicar", product)
 
         dboperations.newProduct(product).then(result => {
-            if (result) response.status(201).send(product)
+            if (result) {
+                response.status(201).send({ message: "Produto publicado" })
+            } else {
+                response.status(403).send({ message: "Produto nao publicado" })
+            }
         })
     } catch (Error) {
         console.log("publicarProduto: ", Error)
