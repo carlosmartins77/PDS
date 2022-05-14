@@ -249,7 +249,7 @@ async function novaCategoriaLoja(category) {
             .input('nomeCategoria', sql.VarChar, category.categoria)
             .query("SELECT COUNT(*) as ContaLinhas FROM Categoria WHERE nome = @nomeCategoria")
         var nRegistos = findCategory.recordset[0].ContaLinhas
-        //console.log(nRegistos)
+            //console.log(nRegistos)
 
         if (nRegistos == 0) {
             let registerCategory = await pool.request()
@@ -271,7 +271,7 @@ async function novaCategoriaProduto(category) {
             .input('nomeCategoria', sql.VarChar, category.categoria)
             .query("SELECT COUNT(*) as ContaLinhas FROM CategoriaProduto WHERE nome = @nomeCategoria")
         var nRegistos = findCategory.recordset[0].ContaLinhas
-        //console.log(nRegistos)
+            //console.log(nRegistos)
 
         if (nRegistos == 0) {
             let registerCategory = await pool.request()
@@ -290,7 +290,7 @@ async function removerCategoriaProduto(nome) {
         let categoria = await pool.request()
             .input('nome', sql.VarChar, nome)
             .query("DELETE from CategoriaProduto WHERE nome = @nome")
-        //console.log(categoria)
+            //console.log(categoria)
         if (categoria.rowsAffected == 0) {
             return categoria.Error
         } else {
@@ -390,9 +390,9 @@ async function getStoreFromAdmin(email, idloja) {
             .input('email', sql.VarChar, email)
             .input('idloja', sql.SmallInt, idloja)
             .query("SELECT * FROM AdminLoja INNER JOIN Loja ON Loja.idLoja = @idloja INNER JOIN Utilizador ON AdminLoja.utilizadorId = Utilizador.idUtilizador where Utilizador.email = @email")
-        /* SELECT * FROM AdminLoja 
-            INNER JOIN Loja ON AdminLoja.idAdminLoja = 1
-            WHERE Loja.idLoja = 2*/
+            /* SELECT * FROM AdminLoja 
+                INNER JOIN Loja ON AdminLoja.idAdminLoja = 1
+                WHERE Loja.idLoja = 2*/
         console.log("getstore2")
         return admin.recordset
     } catch (err) {
@@ -686,6 +686,7 @@ async function filtrarProdutosCategoria(tipo, nomeCategoria, nomeSubCategoria) {
         let pool = await sql.connect(config);
 
         if (tipo == 3) {
+            3
             let categoriaFiltro = await pool.request()
                 .input('nomeCategoria', sql.VarChar, nomeCategoria)
                 .input('nomeSubCategoria', sql.VarChar, nomeSubCategoria)

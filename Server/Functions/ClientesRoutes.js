@@ -273,22 +273,22 @@ const editarPerfil = async(req, res) => {
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
         dboperations.editarPerfilLoja(req.user[0].idUtilizador, idLoja, password, nome, email, contacto, nif, morada, nifLoja).then(result => {
-            res.status(200).send({ message: 'Alterado com sucesso' })
-        })
-        //if (req.user[0]) {
-        //    if (req.user[0].tipoPermissao === 2) {
-        //        dboperations.editarPerfilLoja(req.user[0].idUtilizador, idLoja, password, nome, email, contacto, nif, morada, nifLoja).then(result => {
-        //            res.status(200).send({ message: 'Alterado com sucesso' })
-        //        })
-        //    }
-        //    if (req.user[0].tipoPermissao === 3) {
-        //        dboperations.editarPerfilCliente(req.user[0].idUtilizador, idCliente, password, nome, email, contacto, nif, dataNascimento, pais, localizacao).then(result => {
-        //            res.status(200).send({ message: 'Alterado com sucesso' })
-        //        })
-        //    }
-        //} else {
-        //    res.status(403).send("Nao autorizado!")
-        //}
+                res.status(200).send({ message: 'Alterado com sucesso' })
+            })
+            //if (req.user[0]) {
+            //    if (req.user[0].tipoPermissao === 2) {
+            //        dboperations.editarPerfilLoja(req.user[0].idUtilizador, idLoja, password, nome, email, contacto, nif, morada, nifLoja).then(result => {
+            //            res.status(200).send({ message: 'Alterado com sucesso' })
+            //        })
+            //    }
+            //    if (req.user[0].tipoPermissao === 3) {
+            //        dboperations.editarPerfilCliente(req.user[0].idUtilizador, idCliente, password, nome, email, contacto, nif, dataNascimento, pais, localizacao).then(result => {
+            //            res.status(200).send({ message: 'Alterado com sucesso' })
+            //        })
+            //    }
+            //} else {
+            //    res.status(403).send("Nao autorizado!")
+            //}
     } catch (error) {
         res.status(403).send("Nao autorizado!")
     }

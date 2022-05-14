@@ -14,13 +14,12 @@ app.use('/', router);
 app.use(express.json());
 
 // Clientes
-router.route('/cliente/listarProdutos').get(listarProdutosClientes)
+router.route('/cliente/listarProdutos').get(listarProdutosClientes) //ta
 router.route('/cliente/adicionarCarrinho').post(adicionarCarrinho)
 router.route('/cliente/removerCarrinho').post(removerCarrinho)
 router.route('/cliente/listarCarrinho').post(listarCarrinho)
 router.route('/cliente/listarMedalhas').post(getMedalhas)
 router.route('/cliente/cancelarEncomenda').post(cancelEncomenda)
-router.route('/cliente/acompanharEncomenda').post(acompanharEncomenda)
 router.route('/cliente/acompanharEncomenda').post(acompanharEncomenda)
 router.route('/cliente/filtrarLojasCategoria').post(filtrarLojasCategoria)
 router.route('/cliente/filtrarProdutosCategoria').post(filtrarProdutosCategoria)
@@ -38,12 +37,12 @@ router.route('/produto/publicarProduto').post(publicarProduto) // a dar
 router.route('/produto/editarProduto').post(editarProduto) // a dar
 router.route('/produto/listarProdutos').get(listarProdutos) // a dar
 router.route('/removerCategoriaProduto').post(removerCategoriaProduto)
-router.route('/criarCategoriaProduto').post(novaCategoriaProduto) // a dar
-router.route('/criarSubCategoriaProduto').post(novaSubCategoriaProduto) // a dar
+router.route('/criarCategoriaProduto').post(novaCategoriaProduto)
+router.route('/criarSubCategoriaProduto').post(novaSubCategoriaProduto)
 
 
 //Categorias
-router.route('/loja/criarCategoriaLoja').post(novaCategoriaLoja) // a dar
+router.route('/loja/criarCategoriaLoja').post(novaCategoriaLoja)
 
 // Mostrar Perfil
 router.route('/mostarPerfil').post(mostrarPerfil) // a dar

@@ -24,11 +24,9 @@
                 ],
                 "summary": "publicar um produto",
                 "operationId": "Produtos_publicarProduto",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -81,11 +79,9 @@
                 ],
                 "summary": "editar um produto",
                 "operationId": "Produtos_editarProduto",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -139,11 +135,9 @@
                 ],
                 "summary": "listar todos os produtos",
                 "operationId": "Produtos_listarProduto",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "responses": {
                     "403": {
                         "description": "Forbidden!"
@@ -170,11 +164,9 @@
                 ],
                 "summary": "efetuar o login",
                 "operationId": "Security_login",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -218,11 +210,9 @@
                 ],
                 "summary": "registar um utilizador",
                 "operationId": "Security_registeruser",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -282,11 +272,9 @@
                 ],
                 "summary": "mostrar o perfil do utilizador",
                 "operationId": "Security_mostarPerfil",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -321,11 +309,9 @@
                 ],
                 "summary": "candidatura de uma loja",
                 "operationId": "Candidaturas_candidatura",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -378,23 +364,19 @@
                 ],
                 "summary": "enviar ficheiros para a candidatura de uma loja",
                 "operationId": "Candidaturas_candidaturaLojaFicheiro",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "schema": {
-                            "type": "integer",
-                            "format": "int32"
-                        },
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "x-nullable": false
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "parameters": [{
+                    "schema": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "x-nullable": false
+                }],
                 "requestBody": {
                     "content": {
                         "multipart/form-data": {
@@ -439,11 +421,9 @@
                 ],
                 "summary": "enviar ficheiros para a candidatura de uma loja",
                 "operationId": "Admin_aprovacaoLoja",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -490,11 +470,9 @@
                 ],
                 "summary": "enviar ficheiros para a candidatura de uma loja",
                 "operationId": "Admin_aprovacaoLojaFicheiro",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -530,11 +508,9 @@
                 ],
                 "summary": "Criar uma nova categoria de Loja",
                 "operationId": "Admin_CriarCategoriaLoja",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -570,11 +546,9 @@
                 ],
                 "summary": "Criar uma nova categoria de produto",
                 "operationId": "Admin_CriarCategoriaProduto",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -582,6 +556,47 @@
                                 "type": "object",
                                 "properties": {
                                     "categoria": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "403": {
+                        "description": "Unauthorized!"
+                    },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
+                    "201": {
+                        "description": "Created Category!"
+                    }
+                }
+            }
+        },
+        "/criarSubCategoriaProduto": {
+            "post": {
+                "description": "Criação de Subcategorias de Produto",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Criar uma nova subcategoria de produto",
+                "operationId": "Admin_CriarSubategoriaProduto",
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "categoria": {
+                                        "type": "string"
+                                    },
+                                    "subcategoria": {
                                         "type": "string"
                                     }
                                 }
@@ -610,11 +625,9 @@
                 ],
                 "summary": "Listar os Produtos que um cliente tem acesso",
                 "operationId": "Cliente_ListarProdutos",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "responses": {
                     "403": {
                         "description": "Unauthorized!"
@@ -644,11 +657,9 @@
                 ],
                 "summary": "Adicionar um Produto ao carrinho do Cliente",
                 "operationId": "Cliente_adicionarCarrinho",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -684,11 +695,9 @@
                 ],
                 "summary": "Remover um Produto do Carrinho",
                 "operationId": "Cliente_removerCarrinho",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -716,6 +725,237 @@
                 }
             }
         },
+        "/cliente/listarMedalhas": {
+            "post": {
+                "description": "Listar medalhas de um cliente",
+                "tags": [
+                    "Medalhas"
+                ],
+                "summary": "Listar medalhas de um cliente",
+                "operationId": "Cliente_listarMedalhas",
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "clienteId": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request!"
+                    },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
+                    "200": {
+                        "description": "Listed succesfully!"
+                    }
+                }
+            }
+        },
+        "/cliente/cancelarEncomenda": {
+            "post": {
+                "description": "Cancelar uma encomenda",
+                "tags": [
+                    "Encomenda"
+                ],
+                "summary": "Cancelar uma encomenda",
+                "operationId": "cancelar_encomenda",
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idEncomenda": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request!"
+                    },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
+                    "200": {
+                        "description": "Cancelled succesfully!"
+                    }
+                }
+            }
+        },
+        "/cliente/acompanharEncomenda": {
+            "post": {
+                "description": "Acompanhar encomenda",
+                "tags": [
+                    "Encomenda"
+                ],
+                "summary": "Acompanhar encomenda",
+                "operationId": "acompanhar_encomenda",
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idEncomenda": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request!"
+                    },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
+                    "200": {
+                        "description": "Cancelled succesfully!"
+                    }
+                }
+            }
+        },
+        "/cliente/filtrarLojasCategoria": {
+            "post": {
+                "description": "Filtrar lojas por categoria",
+                "tags": [
+                    "Loja"
+                ],
+                "summary": "Filtrar lojas por categoria",
+                "operationId": "Filtrar_Loja_Categoria",
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nomeCategoria": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request!"
+                    },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
+                    "200": {
+                        "description": "Listed succesfully!"
+                    }
+                }
+            }
+        },
+        "/cliente/filtrarProdutosCategoria": {
+            "post": {
+                "description": "Filtrar produtos por categoria e ou subcategoria",
+                "tags": [
+                    "Produtos"
+                ],
+                "summary": "Filtrar produtos por categoria",
+                "operationId": "Filtrar_Produto_Categoria",
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nomeCategoria": {
+                                        "type": "string"
+                                    },
+                                    "nomeSubCategoria": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request!"
+                    },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
+                    "200": {
+                        "description": "Listed succesfully!"
+                    }
+                }
+            }
+        },
+        "/atribuirMedalhas": {
+            "post": {
+                "description": "Atribuir Medalhas",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Atribuir Medalhas",
+                "operationId": "Atribuir_medalhas",
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idCliente": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request!"
+                    },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
+                    "200": {
+                        "description": "Listed succesfully!"
+                    }
+                }
+            }
+        },
         "/editarPerfil": {
             "post": {
                 "description": "Editar Perfil de uma Loja",
@@ -724,11 +964,9 @@
                 ],
                 "summary": "Editar Dados de uma Loja",
                 "operationId": "Loja_editarPerfil",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "requestBody": {
                     "content": {
                         "application/json": {
