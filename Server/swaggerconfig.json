@@ -715,6 +715,67 @@
                     }
                 }
             }
+        },
+        "/editarPerfil": {
+            "post": {
+                "description": "Editar Perfil de uma Loja",
+                "tags": [
+                    "Loja"
+                ],
+                "summary": "Editar Dados de uma Loja",
+                "operationId": "Loja_editarPerfil",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "nome": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "contacto": {
+                                        "type": "integer"
+                                    },
+                                    "nif": {
+                                        "type": "integer"
+                                    },
+                                    "morada": {
+                                        "type": "string"
+                                    },
+                                    "nifLoja": {
+                                        "type": "integer"
+                                    },
+                                    "idLoja": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "403": {
+                        "description": "Unauthorized!"
+                    },
+                    "500": {
+                        "description": "Internal Error!"
+                    },
+                    "201": {
+                        "description": "Created Category!"
+                    }
+                }
+            }
         }
     },
     "components": {

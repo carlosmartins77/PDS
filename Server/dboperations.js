@@ -249,7 +249,7 @@ async function novaCategoriaLoja(category) {
             .input('nomeCategoria', sql.VarChar, category.categoria)
             .query("SELECT COUNT(*) as ContaLinhas FROM Categoria WHERE nome = @nomeCategoria")
         var nRegistos = findCategory.recordset[0].ContaLinhas
-            //console.log(nRegistos)
+        //console.log(nRegistos)
 
         if (nRegistos == 0) {
             let registerCategory = await pool.request()
@@ -271,7 +271,7 @@ async function novaCategoriaProduto(category) {
             .input('nomeCategoria', sql.VarChar, category.categoria)
             .query("SELECT COUNT(*) as ContaLinhas FROM CategoriaProduto WHERE nome = @nomeCategoria")
         var nRegistos = findCategory.recordset[0].ContaLinhas
-            //console.log(nRegistos)
+        //console.log(nRegistos)
 
         if (nRegistos == 0) {
             let registerCategory = await pool.request()
@@ -290,7 +290,7 @@ async function removerCategoriaProduto(nome) {
         let categoria = await pool.request()
             .input('nome', sql.VarChar, nome)
             .query("DELETE from CategoriaProduto WHERE nome = @nome")
-            //console.log(categoria)
+        //console.log(categoria)
         if (categoria.rowsAffected == 0) {
             return categoria.Error
         } else {
@@ -390,9 +390,9 @@ async function getStoreFromAdmin(email, idloja) {
             .input('email', sql.VarChar, email)
             .input('idloja', sql.SmallInt, idloja)
             .query("SELECT * FROM AdminLoja INNER JOIN Loja ON Loja.idLoja = @idloja INNER JOIN Utilizador ON AdminLoja.utilizadorId = Utilizador.idUtilizador where Utilizador.email = @email")
-            /* SELECT * FROM AdminLoja 
-                INNER JOIN Loja ON AdminLoja.idAdminLoja = 1
-                WHERE Loja.idLoja = 2*/
+        /* SELECT * FROM AdminLoja 
+            INNER JOIN Loja ON AdminLoja.idAdminLoja = 1
+            WHERE Loja.idLoja = 2*/
         console.log("getstore2")
         return admin.recordset
     } catch (err) {
@@ -741,18 +741,41 @@ async function consultarHistoricoLojas(id) {
 async function editarPerfilLoja(id, idLoja, password, nome, email, contacto, nif, morada, nifLoja) {
     try {
         let pool = await sql.connect(config);
-        let perfil = await pool.request()
+        let person = await pool.request()
             .input('id', sql.Int, idLoja)
-            .input('morada', sql.VarChar, morada)
-            .input('nifLoja', sql.Int, nifLoja)
+            .query("select * from Loja WHERE idLoja = @id")
+        let person2 = await pool.request()
+            .input('idu', sql.Int, id)
+            .query("select * from Utilizador WHERE idUtilizador = @idu")
+        let product = {
+            morada: person.recordset[0].morada,
+            nif: person.recordset[0].nif
+        }
+        let util = {
+            password: person2.recordset[0].password,
+            nome: person2.recordset[0].nome,
+            email: person2.recordset[0].email,
+            contacto: person2.recordset[0].contacto,
+            nif: person2.recordset[0].nif
+        }
+        console.log("Dados Loja: ", product)
+        console.log("Dados Util: ", util)
+        console.log("TEST: ", morada == "string" || morada.length == 0 ? product.morada : morada)
+        console.log("TEST: ", morada)
+        console.log("TEST: ", contacto)
+
+        let perfil = await pool.request()
+            .input('idLoja', sql.Int, idLoja)
+            .input('morada', sql.VarChar, morada == "string" || morada.length == 0 ? product.morada : morada)
+            .input('nifLoja', sql.Int, nifLoja == 0 || nifLoja.length == 0 ? product.nif : nifLoja)
             .query("update Loja set morada = @morada , nif = @nifLoja WHERE idLoja = @idLoja")
         let perfil2 = await pool.request()
-            .input('id', sql.VarChar, id)
-            .input('password', sql.VarChar, password)
-            .input('email', sql.VarChar, email)
-            .input('nome', sql.VarChar, nome)
-            .input('nif', sql.Int, nif)
-            .input('contacto', sql.Int, contacto)
+            .input('id', sql.Int, id)
+            .input('password', sql.VarChar, password == "string" || password.length == 0 ? util.password : password)
+            .input('email', sql.VarChar, email == "string" || email.length == 0 ? util.email : email)
+            .input('nome', sql.VarChar, nome == "string" || nome.length == 0 ? util.nome : nome)
+            .input('nif', sql.Int, nif == 0 || nif.length == 0 ? util.nif : nif)
+            .input('contacto', sql.Int, contacto === 0 || mocontactorada.length == 0 ? util.contacto : contacto)
             .query("update Utilizador set password = @password , nome = @nome , email = @email , contacto = @contacto, nif = @nif  WHERE idUtilizador = @id")
         return true;
     } catch (err) {
