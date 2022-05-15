@@ -8,7 +8,7 @@ const { mostrarPerfil } = require('./Functions/PerfilRoutes')
 const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, novaCategoriaLoja, removerCategoria, consultarHistoricoLojas, alterarEstadoLoja } = require('./Functions/CandidacyRoutes')
 const { adminStore, adminCourier, deleteStore, deleteCourier, atribiurMedalhas } = require('./Functions/AdminRoutes')
 const { courier, changeState, verEncomenda, changeStatus } = require('./Functions/CourierRoutes')
-const { listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho, verEncomendas, publicarEncomenda, getMedalhas, cancelEncomenda, acompanharEncomenda, filtrarLojasCategoria, filtrarProdutosCategoria, editarPerfil } = require('./Functions/ClientesRoutes')
+const { listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho, verEncomendas, publicarEncomenda, getMedalhas, cancelEncomenda, acompanharEncomenda, filtrarLojasCategoria, filtrarProdutosCategoria, editarPerfilLoja, editarPerfilCliente} = require('./Functions/ClientesRoutes')
 
 app.use('/', router);
 app.use(express.json());
@@ -81,7 +81,8 @@ router.route('/publicarEncomenda').post(publicarEncomenda)
 router.route('/consultarHistoricoLojas').post(consultarHistoricoLojas)
 
 // Perfil's
-router.route('/editarPerfil').post(editarPerfil)
+router.route('/editarPerfil/Loja').post(editarPerfilLoja)
+router.route('/editarPerfil/Cliente').post(editarPerfilCliente)
 
 // Aleterar Estado da Loja
 router.route('/alterarEstadoLoja').post(alterarEstadoLoja)

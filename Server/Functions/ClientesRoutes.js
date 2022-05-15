@@ -3,7 +3,7 @@ const dboperations = require('../dboperations');
 const path = require('path');
 const { request } = require('http');
 
-const cliente = async(req, res, next) => {
+const cliente = async (req, res, next) => {
     let token
     try {
         token = req.headers.authorization.split(" ")[1]
@@ -26,7 +26,7 @@ const cliente = async(req, res, next) => {
     }
 }
 
-const listarProdutosClientes = async(req, res) => {
+const listarProdutosClientes = async (req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -44,7 +44,7 @@ const listarProdutosClientes = async(req, res) => {
     }
 }
 
-const adicionarCarrinho = async(req, res) => {
+const adicionarCarrinho = async (req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -64,7 +64,7 @@ const adicionarCarrinho = async(req, res) => {
     }
 }
 
-const removerCarrinho = async(req, res) => {
+const removerCarrinho = async (req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -84,7 +84,7 @@ const removerCarrinho = async(req, res) => {
     }
 }
 
-const listarCarrinho = async(req, res) => {
+const listarCarrinho = async (req, res) => {
     try {
         console.log('listarCarrinho')
         token = req.headers.authorization.split(" ")[1]
@@ -105,7 +105,7 @@ const listarCarrinho = async(req, res) => {
     }
 }
 
-const getMedalhas = async(req, res) => {
+const getMedalhas = async (req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
@@ -122,7 +122,7 @@ const getMedalhas = async(req, res) => {
     }
 }
 
-const verEncomendas = async(req, res) => {
+const verEncomendas = async (req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -142,7 +142,7 @@ const verEncomendas = async(req, res) => {
     }
 }
 
-const publicarEncomenda = async(req, res) => {
+const publicarEncomenda = async (req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -163,7 +163,7 @@ const publicarEncomenda = async(req, res) => {
     }
 }
 
-const cancelEncomenda = async(req, res) => {
+const cancelEncomenda = async (req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -185,7 +185,7 @@ const cancelEncomenda = async(req, res) => {
 
 }
 
-const acompanharEncomenda = async(req, res) => {
+const acompanharEncomenda = async (req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
@@ -202,7 +202,7 @@ const acompanharEncomenda = async(req, res) => {
     }
 }
 
-const filtrarLojasCategoria = async(req, res) => {
+const filtrarLojasCategoria = async (req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
@@ -219,7 +219,7 @@ const filtrarLojasCategoria = async(req, res) => {
     }
 }
 
-const filtrarProdutosCategoria = async(req, res) => {
+const filtrarProdutosCategoria = async (req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
@@ -247,14 +247,8 @@ const filtrarProdutosCategoria = async(req, res) => {
     }
 }
 
-const editarPerfil = async(req, res) => {
+const editarPerfilLoja = async (req, res) => {
     try {
-        // Cliente
-        let dataNascimento = req.body.dataNascimento
-        let pais = req.body.pais
-        let localizacao = req.body.localizacao
-        let idCliente = req.body.idCliente
-
         // Utilizador
         let password = req.body.password
         let nome = req.body.nome
@@ -272,23 +266,44 @@ const editarPerfil = async(req, res) => {
         //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
-        dboperations.editarPerfilLoja(req.user[0].idUtilizador, idLoja, password, nome, email, contacto, nif, morada, nifLoja).then(result => {
+        if (req.user[0].tipoPermissao === 2) {
+            dboperations.editarPerfilLoja(req.user[0].idUtilizador, idLoja, password, nome, email, contacto, nif, morada, nifLoja).then(result => {
                 res.status(200).send({ message: 'Alterado com sucesso' })
             })
-            //if (req.user[0]) {
-            //    if (req.user[0].tipoPermissao === 2) {
-            //        dboperations.editarPerfilLoja(req.user[0].idUtilizador, idLoja, password, nome, email, contacto, nif, morada, nifLoja).then(result => {
-            //            res.status(200).send({ message: 'Alterado com sucesso' })
-            //        })
-            //    }
-            //    if (req.user[0].tipoPermissao === 3) {
-            //        dboperations.editarPerfilCliente(req.user[0].idUtilizador, idCliente, password, nome, email, contacto, nif, dataNascimento, pais, localizacao).then(result => {
-            //            res.status(200).send({ message: 'Alterado com sucesso' })
-            //        })
-            //    }
-            //} else {
-            //    res.status(403).send("Nao autorizado!")
-            //}
+        } else {
+            res.status(403).send("Nao autorizado!")
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+const editarPerfilCliente = async (req, res) => {
+    try {
+        // Cliente
+        let dataNascimento = req.body.dataNascimento
+        let pais = req.body.pais
+        let localizacao = req.body.localizacao
+        let idCliente = req.body.idCliente
+
+        // Utilizador
+        let password = req.body.password
+        let nome = req.body.nome
+        let email = req.body.email
+        let contacto = req.body.contacto
+        let nif = req.body.nif
+
+        token = req.headers.authorization.split(" ")[1]
+
+        //  Retorna um objeto com os dados do utilizador
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao === 3) {
+            dboperations.editarPerfilCliente(req.user[0].idUtilizador, idCliente, password, nome, email, contacto, nif, dataNascimento, pais, localizacao).then(result => {
+                res.status(200).send({ message: 'Alterado com sucesso' })
+            })
+        } else {
+            res.status(403).send("Nao autorizado!")
+        }
     } catch (error) {
         res.status(403).send("Nao autorizado!")
     }
@@ -308,5 +323,6 @@ module.exports = {
     acompanharEncomenda: acompanharEncomenda,
     filtrarLojasCategoria: filtrarLojasCategoria,
     filtrarProdutosCategoria: filtrarProdutosCategoria,
-    editarPerfil: editarPerfil
+    editarPerfilLoja: editarPerfilLoja,
+    editarPerfilCliente: editarPerfilCliente
 }
