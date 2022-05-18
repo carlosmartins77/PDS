@@ -297,6 +297,7 @@ const editarPerfilCliente = async (req, res) => {
         //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
+        console.log("Aqui", req.user)
         if (req.user[0].tipoPermissao === 3) {
             dboperations.editarPerfilCliente(req.user[0].idUtilizador, idCliente, password, nome, email, contacto, nif, dataNascimento, pais, localizacao).then(result => {
                 res.status(200).send({ message: 'Alterado com sucesso' })

@@ -2,13 +2,13 @@ const request = require("supertest");
 const app = require('../index');
 
 
-
+/*
 describe('Listar todos os produtos - Cliente', () => {
     it('Produtos Retornados (Tem permissões - token)', async () => {
         const response = await request(app)
             .get("/cliente/listarProdutos")
             .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
-        expect(response.status).toBe([])
+        expect(response.status).toBe(200)
 
     });
     it('Produtos nao retornados (Não tem permissões - token) ', async () => {
@@ -54,11 +54,11 @@ describe('Editar perfil - Loja', () => {
     it('Editar perfil - Loja (Tem permissões - token)', async () => {
         const user =
         {
-            "password": "1234",
-            "nome": "ricardog",
-            "email": "codesolutions@gmail.com",
-            "contacto": 123456709,
-            "nif": 12345432,
+            "password": "pastelaria1774",
+            "nome": "Pastelaria Pereira",
+            "email": "silva.pastelaria@outlook.com",
+            "contacto": 0,
+            "nif": 0,
             "morada": "Rua",
             "nifLoja": 1,
             "idLoja": 1
@@ -74,11 +74,11 @@ describe('Editar perfil - Loja', () => {
     it('Editar perfil - Loja (Não tem permissões - token) ', async () => {
         const user =
         {
-            "password": "1234",
-            "nome": "ricardog",
-            "email": "codesolutions@gmail.com",
-            "contacto": 123456709,
-            "nif": 12345432,
+            "password": "pastelaria1774",
+            "nome": "Pastelaria Pereira",
+            "email": "silva.pastelaria@outlook.com",
+            "contacto": 0,
+            "nif": 0,
             "morada": "Rua",
             "nifLoja": 1,
             "idLoja": 1
@@ -96,16 +96,17 @@ describe('Editar perfil - Cliente', () => {
     it('Editar perfil - Cliente (Tem permissões - token)', async () => {
         const user =
         {
-            "password": "1234",
-            "nome": "joao",
-            "email": "joao.aluno@gmail.com",
-            "contacto": 98765431,
-            "nif": 18935666,
-            "dataNascimento": "8/8/1999",
+            "password": "aristeu_900",
+            "nome": "Aristeu Pereira",
+            "email": "aristeu.pereira@gmail.com",
+            "contacto":  12,
+            "nif": 12,
+            "dataNascimento": "1/1/2001",
             "pais": "pt",
             "localizacao": "braga",
             "idCliente": 1
         }
+
 
         const response = await request(app)
             .post("/editarPerfil/Cliente")
@@ -117,14 +118,15 @@ describe('Editar perfil - Cliente', () => {
     it('Editar perfil - Cliente (Não tem permissões - token) ', async () => {
         const user =
         {
-            "password": "1234",
-            "nome": "ricardog",
-            "email": "codesolutions@gmail.com",
-            "contacto": 123456709,
-            "nif": 12345432,
-            "morada": "Rua",
-            "nifLoja": 1,
-            "idLoja": 1
+            "password": "aristeu_900",
+            "nome": "Aristeu Pereira",
+            "email": "aristeu.pereira@gmail.com",
+            "contacto":  12,
+            "nif": 12,
+            "dataNascimento": "1/1/2001",
+            "pais": "pt",
+            "localizacao": "braga",
+            "idCliente": 1
         }
 
         const response = await request(app)
@@ -219,6 +221,9 @@ describe('Visualizar Encomendas (Historico) - Cliente', () => {
         expect(response.status).toBe(403)
     });
 });
+*/
+
+
 
 /*
 
@@ -648,7 +653,7 @@ describe('Mostrar um Perfil', () => {
     });
 }); 
 
-*/
+
 
 describe('Estafeta', () => {
     it('Mudar estado do estafeta (Tem permissões - token)', async () => {
@@ -737,3 +742,4 @@ describe('Apagar - Admin', () => {
         expect(response.status).toBe(403)
     });
 });
+*/

@@ -807,20 +807,21 @@ async function editarPerfilCliente(id, idCliente, password, nome, email, contact
             contacto: person2.recordset[0].contacto,
             nif: person2.recordset[0].nif
         }
+        console.log(product,util)
 
         let perfil = await pool.request()
             .input('id', sql.Int, idCliente)
-            .input('dataNascimento', sql.VarChar, dataNascimento == "string" || dataNascimento.length == 0 ? product.dataNascimento : dataNascimento)
+            .input('dataNascimento', sql.Date, dataNascimento == "string" || dataNascimento.length == 0 ? product.dataNascimento : dataNascimento)
             .input('pais', sql.VarChar,  pais == "string" || pais.length == 0 ? product.pais : pais)
             .input('localizacao', sql.VarChar,  localizacao == "string" || localizacao.length == 0 ? product.localizacao : localizacao)
-            .query("update Cliente set dataNascimento = @dataNascimento , pais = @pais , localizacao = @localizacao, WHERE idCliente = @id")
+            .query("update Cliente set dataNascimento = @dataNascimento, pais = @pais, localizacao = @localizacao WHERE idCliente = @id")
         let perfil2 = await pool.request()
             .input('id', sql.Int, id)
             .input('password', sql.VarChar, password == "string" || password.length == 0 ? util.password : password)
             .input('email', sql.VarChar, email == "string" || email.length == 0 ? util.email : email)
             .input('nome', sql.VarChar, nome == "string" || nome.length == 0 ? util.nome : nome)
             .input('nif', sql.Int, nif == 0 || nif.length == 0 ? util.nif : nif)
-            .input('contacto', sql.Int, contacto === 0 || mocontactorada.length == 0 ? util.contacto : contacto)
+            .input('contacto', sql.Int, contacto === 0 || contacto.length == 0 ? util.contacto : contacto)
             .query("update Utilizador set password = @password , nome = @nome , email = @email , contacto = @contacto, nif = @nif  WHERE idUtilizador = @id")
         return true;
     } catch (err) {
