@@ -128,8 +128,30 @@ async function listProduct() {
         let pool = await sql.connect(config);
         let listProduct = await pool.request()
             .query("select * from Produto")
-        console.log(listProduct.recordset)
         return listProduct.recordset;
+    } catch (err) {
+        return Error(err)
+    }
+}
+
+async function listProductsFromStore(lojaId) {
+    try {
+        let pool = await sql.connect(config);
+
+        let findStore = await pool.request()
+            .input('lojaId', sql.Int, lojaId)
+            .query("SELECT Count(*) as ContaLinhas FROM Loja WHERE IdLoja = @lojaId")
+
+        let nRegistos = findStore.recordset[0].ContaLinhas
+
+        if (nRegistos == 1) {
+            let listProduct = await pool.request()
+                .input('lojaId', sql.Int, lojaId)
+                .query("SELECT * FROM Produto WHERE LojaId = @lojaId")
+
+            return listProduct.recordset
+        }
+
     } catch (err) {
         return Error(err)
     }
@@ -249,7 +271,7 @@ async function novaCategoriaLoja(category) {
             .input('nomeCategoria', sql.VarChar, category.categoria)
             .query("SELECT COUNT(*) as ContaLinhas FROM Categoria WHERE nome = @nomeCategoria")
         var nRegistos = findCategory.recordset[0].ContaLinhas
-        //console.log(nRegistos)
+            //console.log(nRegistos)
 
         if (nRegistos == 0) {
             let registerCategory = await pool.request()
@@ -271,14 +293,14 @@ async function novaCategoriaProduto(category) {
             .input('nomeCategoria', sql.VarChar, category.categoria)
             .query("SELECT COUNT(*) as ContaLinhas FROM CategoriaProduto WHERE nome = @nomeCategoria")
         var nRegistos = findCategory.recordset[0].ContaLinhas
-        //console.log(nRegistos)
+            //console.log(nRegistos)
 
         if (nRegistos == 0) {
             let registerCategory = await pool.request()
                 .input('nomeCategoria', sql.VarChar, category.categoria)
                 .query("INSERT INTO CategoriaProduto (Nome) VALUES (@nomeCategoria);")
             return true
-        }
+        } else return false
     } catch (err) {
         return Error(err)
     }
@@ -290,7 +312,7 @@ async function removerCategoriaProduto(nome) {
         let categoria = await pool.request()
             .input('nome', sql.VarChar, nome)
             .query("DELETE from CategoriaProduto WHERE nome = @nome")
-        //console.log(categoria)
+            //console.log(categoria)
         if (categoria.rowsAffected == 0) {
             return categoria.Error
         } else {
@@ -318,13 +340,22 @@ async function novaSubCategoriaProduto(subcategory) {
         var id = findIdCategory.recordset[0].idCategoria
 
         if (nRegistos == 1) {
-            let registerSubCategory = await pool.request()
+
+            let findSubCategory = await pool.request()
                 .input('nomeSubCategoria', sql.VarChar, subcategory.subcategoria)
-                .input('idCategoria', sql.Int, id)
-                .query("INSERT INTO SubCategoriaProduto (Nome, categoria) VALUES (@nomeSubCategoria, @idCategoria);")
-            return true
-        }
-        return false;
+                .query("SELECT COUNT(*) as ContaLinhasSub FROM SubCategoriaProduto WHERE nome = @nomeSubCategoria")
+
+            var subRegistos = findSubCategory.recordset[0].ContaLinhasSub
+
+            if (subRegistos == 0) {
+                let registerSubCategory = await pool.request()
+                    .input('nomeSubCategoria', sql.VarChar, subcategory.subcategoria)
+                    .input('idCategoria', sql.Int, id)
+                    .query("INSERT INTO SubCategoriaProduto (Nome, categoria) VALUES (@nomeSubCategoria, @idCategoria);")
+                return true
+            }
+
+        } else return false;
 
     } catch (err) {
         return Error(err)
@@ -336,7 +367,6 @@ async function listarProdutosClientes() {
         let pool = await sql.connect(config);
         let product = await pool.request()
             .query("SELECT * from Produto")
-        console.log("n pode")
         return product.recordset;
     } catch (err) {
         return Error(err)
@@ -390,9 +420,9 @@ async function getStoreFromAdmin(email, idloja) {
             .input('email', sql.VarChar, email)
             .input('idloja', sql.SmallInt, idloja)
             .query("SELECT * FROM AdminLoja INNER JOIN Loja ON Loja.idLoja = @idloja INNER JOIN Utilizador ON AdminLoja.utilizadorId = Utilizador.idUtilizador where Utilizador.email = @email")
-        /* SELECT * FROM AdminLoja 
-            INNER JOIN Loja ON AdminLoja.idAdminLoja = 1
-            WHERE Loja.idLoja = 2*/
+            /* SELECT * FROM AdminLoja 
+                INNER JOIN Loja ON AdminLoja.idAdminLoja = 1
+                WHERE Loja.idLoja = 2*/
         console.log("getstore2")
         return admin.recordset
     } catch (err) {
@@ -776,7 +806,7 @@ async function editarPerfilLoja(id, idLoja, password, nome, email, contacto, nif
             .input('email', sql.VarChar, email == "string" || email.length == 0 ? util.email : email)
             .input('nome', sql.VarChar, nome == "string" || nome.length == 0 ? util.nome : nome)
             .input('nif', sql.Int, nif == 0 || nif.length == 0 ? util.nif : nif)
-            .input('contacto', sql.Int, contacto === 0 || mocontactorada.length == 0 ? util.contacto : contacto)
+            .input('contacto', sql.Int, contacto === 0 || contacto.length == 0 ? util.contacto : contacto)
             .query("update Utilizador set password = @password , nome = @nome , email = @email , contacto = @contacto, nif = @nif  WHERE idUtilizador = @id")
         return true;
     } catch (err) {
@@ -807,22 +837,22 @@ async function editarPerfilCliente(id, idCliente, password, nome, email, contact
             contacto: person2.recordset[0].contacto,
             nif: person2.recordset[0].nif
         }
-        console.log(product,util)
+        console.log(product, util)
 
         let perfil = await pool.request()
             .input('id', sql.Int, idCliente)
             .input('dataNascimento', sql.Date, dataNascimento == "string" || dataNascimento.length == 0 ? product.dataNascimento : dataNascimento)
-            .input('pais', sql.VarChar,  pais == "string" || pais.length == 0 ? product.pais : pais)
-            .input('localizacao', sql.VarChar,  localizacao == "string" || localizacao.length == 0 ? product.localizacao : localizacao)
-            .query("update Cliente set dataNascimento = @dataNascimento, pais = @pais, localizacao = @localizacao WHERE idCliente = @id")
+            .input('pais', sql.VarChar, pais == "string" || pais.length == 0 ? product.pais : pais)
+            .input('localizacao', sql.VarChar, localizacao == "string" || localizacao.length == 0 ? product.localizacao : localizacao)
+            .query("update Cliente set dataNascimento = @dataNascimento , pais = @pais , localizacao = @localizacao, WHERE idCliente = @id")
         let perfil2 = await pool.request()
             .input('id', sql.Int, id)
             .input('password', sql.VarChar, password == "string" || password.length == 0 ? util.password : password)
             .input('email', sql.VarChar, email == "string" || email.length == 0 ? util.email : email)
             .input('nome', sql.VarChar, nome == "string" || nome.length == 0 ? util.nome : nome)
             .input('nif', sql.Int, nif == 0 || nif.length == 0 ? util.nif : nif)
-            .input('contacto', sql.Int, contacto === 0 || contacto.length == 0 ? util.contacto : contacto)
-            .query("update Utilizador set password = @password , nome = @nome , email = @email , contacto = @contacto, nif = @nif  WHERE idUtilizador = @id")
+            .input('contacto', sql.Int, contacto === 0 || mocontactorada.length == 0 ? util.contacto : contacto)
+            .query("update Cliente set dataNascimento = @dataNascimento, pais = @pais, localizacao = @localizacao WHERE idCliente = @id")
         return true;
     } catch (err) {
         throw new Error(err);
@@ -864,6 +894,7 @@ module.exports = {
     newProduct: newProduct,
     editProduct: editProduct,
     listProduct: listProduct,
+    listProductsFromStore: listProductsFromStore,
     removerCategoriaProduto: removerCategoriaProduto,
     novaCategoriaProduto: novaCategoriaProduto,
     novaSubCategoriaProduto: novaSubCategoriaProduto,

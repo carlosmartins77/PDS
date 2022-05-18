@@ -187,7 +187,7 @@ const novaCategoriaLoja = async(req, res) => {
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao == 1) {
             const cat = new Category(req.body.categoria)
-            dboperations.novaCategoriaProduto(cat).then(result => {
+            dboperations.novaCategoriaLoja(cat).then(result => {
                 if (result == true) {
 
                     res.status(200).send({

@@ -1,8 +1,8 @@
 const request = require("supertest");
 const app = require('../index');
 
-
 /*
+
 describe('Listar todos os produtos - Cliente', () => {
     it('Produtos Retornados (Tem permissões - token)', async () => {
         const response = await request(app)
@@ -107,7 +107,7 @@ describe('Editar perfil - Cliente', () => {
             "idCliente": 1
         }
 
-
+        
         const response = await request(app)
             .post("/editarPerfil/Cliente")
             .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
@@ -130,7 +130,7 @@ describe('Editar perfil - Cliente', () => {
         }
 
         const response = await request(app)
-            .post("/editarPerfil/Cliente")
+            .post("/editarPerfil/Cliente")  
             .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1')
             .send(user)
         expect(response.status).toBe(403)
@@ -225,8 +225,377 @@ describe('Visualizar Encomendas (Historico) - Cliente', () => {
 
 
 
-/*
+describe('Obter Medalhas - Cliente', () => {
+    it('Obter Medalhas - Cliente (Tem permissões - token)', async () => {
 
+        const user = {
+            "clienteId": 5
+        }
+
+        const response = await request(app)
+            .post("/cliente/listarMedalhas")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(user)
+        expect(response.status).toBe(200)
+
+    });
+    it('Obter Medalhas - Cliente (Sem permissões - token) ', async () => {
+        const response = await request(app)
+            .post("/verEncomendas")
+        expect(response.status).toBe(403)
+    });
+});
+
+describe('Atribuir Medalhas - Admin', () => {
+    it('Atribuir Medalhas - Admin (Tem permissões - token)', async () => {
+        
+        const user = {
+            "idCliente": 5
+        }
+
+        const response = await request(app)
+            .post('/atribuirMedalhas')
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0aW9ucy5wdA.TEow1rNQRINYiToJ6z5MaR6nOyoBMXve3gsnsPrjybw')
+            .send(user)
+        expect(response.status).toBe(200)
+
+    });
+    it('Atribuir Medalhas - Admin (Não tem permissões - token) ', async () => {
+        const response = await request(app)
+            .post('/atribuirMedalhas')
+        expect(response.status).toBe(403)
+    });
+});
+
+describe('Criar Categoria Produto- Admin', () => {
+    it('Criar Categoria - Admin (Tem permissões - token)', async () => {
+
+        const categoria = {
+            "categoria":"Ciclismo"        
+        }
+
+        const response = await request(app)
+            .post("/criarCategoriaProduto")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0aW9ucy5wdA.TEow1rNQRINYiToJ6z5MaR6nOyoBMXve3gsnsPrjybw')
+            .send(categoria)
+        expect(response.status).toBe(200)
+
+    });
+    it('Criar Categoria Duplicada - Admin (Tem permissões - token)', async () => {
+
+        const categoria = {
+            "categoria":"Ciclismo"        
+        }
+
+        const response = await request(app)
+            .post("/criarCategoriaProduto")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0aW9ucy5wdA.TEow1rNQRINYiToJ6z5MaR6nOyoBMXve3gsnsPrjybw')
+            .send(categoria)
+        expect(response.status).toBe(401)
+
+    });
+    it('Criar Categoria - Admin (Sem permissões - token) ', async () => {
+
+        const categoria = {
+            "categoria":"Ciclismo"
+        }
+
+        const response = await request(app)
+            .post("/criarCategoriaProduto")
+            .set('Authorization', 'Bearer X')
+            .send(categoria)
+        expect(response.status).toBe(403)
+    });
+});
+
+
+describe('Criar Subcategoria - Admin', () => {
+    it('Criar Subcategoria - Admin (Tem permissões - token)', async () => {
+
+        const subcategoria = {
+            "categoria":"Bebidas",
+            "subcategoria":"Espirituosas"
+        }
+
+        const response = await request(app)
+            .post("/criarSubCategoriaProduto")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0aW9ucy5wdA.TEow1rNQRINYiToJ6z5MaR6nOyoBMXve3gsnsPrjybw')
+            .send(subcategoria)
+        expect(response.status).toBe(200)
+
+    });
+    it('Criar Subcategoria Duplicada - Admin (Tem permissões - token)', async () => {
+
+        const subcategoria = {
+            "categoria":"Bebidas",
+            "subcategoria":"Espirituosas"
+        }
+
+        const response = await request(app)
+            .post("/criarSubCategoriaProduto")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0aW9ucy5wdA.TEow1rNQRINYiToJ6z5MaR6nOyoBMXve3gsnsPrjybw')
+            .send(subcategoria)
+        expect(response.status).toBe(401)
+
+    });
+    it('Criar Subcategoria - Admin (Sem permissões - token) ', async () => {
+
+        const user = {
+            "categoria":"Bebidas",
+            "subcategoria":"Sem Alcool"
+        }
+
+        const response = await request(app)
+            .post("/criarSubCategoriaProduto")
+            .set('Authorization', 'Beared X')
+            .set(user)
+        expect(response.status).toBe(403)
+    });
+});
+
+
+
+
+describe('Criar Categoria Loja - Admin', () => {
+    it('Criar Categoria - Admin (Tem permissões - token)', async () => {
+
+        const categoria = {
+            "categoria":"Ciclismo"        
+        }
+
+        const response = await request(app)
+            .post("/loja/criarCategoriaLoja")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0aW9ucy5wdA.TEow1rNQRINYiToJ6z5MaR6nOyoBMXve3gsnsPrjybw')
+            .send(categoria)
+        expect(response.status).toBe(200)
+
+    });
+    it('Criar Categoria Loja Duplicada - Admin (Tem permissões - token)', async () => {
+
+        const categoria = {
+            "categoria":"Ciclismo"        
+        }
+
+        const response = await request(app)
+            .post("/loja/criarCategoriaLoja")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.am9hby5mZXJuYW5kZXNAY29kZXNvbHV0aW9ucy5wdA.TEow1rNQRINYiToJ6z5MaR6nOyoBMXve3gsnsPrjybw')
+            .send(categoria)
+        expect(response.status).toBe(401)
+
+    });
+    it('Criar Categoria Loja - Admin (Sem permissões - token) ', async () => {
+
+        const categoria = {
+            "categoria":"Ciclismo"
+        }
+
+        const response = await request(app)
+            .post("/loja/criarCategoriaLoja")
+            .set('Authorization', 'Bearer X')
+            .send(categoria)
+        expect(response.status).toBe(403)
+    });
+});
+
+
+describe('Filtrar Produtos por Loja - Cliente', () => {
+    it('Filtrar Produtos por Loja - Cliente (Tem permissões - token)', async () => {
+
+        const user = {
+            "lojaId": 1
+        }
+
+        const response = await request(app)
+            .post("/listarProdutosPorLoja")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(user)
+        expect(response.status).toBe(200)
+
+    });
+    it('Filtrar Produtos por Loja - Cliente (Sem permissões - token)', async () => {
+
+        const user = {
+            "lojaId": 1
+        }
+
+        const response = await request(app)
+            .post("/listarProdutosPorLoja")
+            .set('Authorization', 'Bearer .X.X')
+            .send(user)
+        expect(response.status).toBe(403)
+
+    });
+    it('Filtrar Produtos por Loja - Loja nao existe', async () => {
+
+        const user = {
+            "lojaId": 55
+        }
+
+        const response = await request(app)
+            .post("/listarProdutosPorLoja")
+            .set('Authorization', 'Bearer .X.X')
+            .send(user)
+        expect(response.status).toBe(403)
+
+    });
+});
+
+
+describe('Filtrar Loja por Categoria - Cliente', () => {
+    it('Filtrar Loja por Categoria - Cliente (Tem permissões - token)', async () => {
+
+        const user = {
+            "nomeCategoria": "pastelaria"
+        }
+
+        const response = await request(app)
+            .post("/cliente/filtrarLojasCategoria")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(user)
+        expect(response.status).toBe(200)
+
+    });
+    it('Filtrar Produtos por Loja - Cliente (Sem permissões - token)', async () => {
+
+        const user = {
+            "nomeCategoria": "pastelaria"
+        }
+
+        const response = await request(app)
+            .post("/cliente/filtrarLojasCategoria")
+            .set('Authorization', 'Bearer .X.X')
+            .send(user)
+        expect(response.status).toBe(403)
+
+    })
+});
+
+
+
+describe('Filtrar Produtos - Cliente', () => {
+    it('Filtrar Produtos por Categoria - Cliente (Tem permissões - token)', async () => {
+
+        const user = {
+            "nomeCategoria": "Bebidas",
+            "nomeSubCategoria":""
+        }
+
+        const response = await request(app)
+            .post("/cliente/filtrarProdutosCategoria")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(user)
+        expect(response.status).toBe(200)
+
+    });
+    it('Filtrar Produtos por Subcategoria - Cliente (Tem permissões - token)', async () => {
+
+        const user = {
+            "nomeCategoria": "",
+            "nomeSubCategoria":"C/Alcool"
+        }
+
+        const response = await request(app)
+            .post("/cliente/filtrarProdutosCategoria")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(user)
+        expect(response.status).toBe(200)
+
+    });
+    it('Filtrar Produtos por Categoria e Subcategoria - Cliente (Tem permissões - token)', async () => {
+
+        const user = {
+            "nomeCategoria": "Bebidas",
+            "nomeSubCategoria":"C/Alcool"
+        }
+
+        const response = await request(app)
+            .post("/cliente/filtrarProdutosCategoria")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(user)
+        expect(response.status).toBe(200)
+
+    });
+    it('Filtrar Produtos - Cliente (Sem permissões - token)', async () => {
+
+        const user = {
+            "nomeCategoria": "Bebidas",
+            "nomeSubCategoria":"C/Alcool"
+        }
+
+        const response = await request(app)
+            .post("/cliente/filtrarProdutosCategoria")
+            .set('Authorization', 'Bearer X.X.X')
+            .send(user)
+        expect(response.status).toBe(403)
+
+    });
+});
+
+
+
+describe('Cancelar Encomenda - Cliente', () => {
+    it('Cancelar Encomenda - Cliente (Tem permissões - token)', async () => {
+
+        const user = {
+            "idEncomenda": 5
+        }
+
+        const response = await request(app)
+            .post("/cliente/cancelarEncomenda")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(user)
+        expect(response.status).toBe(200)
+
+    });
+    it('Cancelar Encomenda - Cliente (Sem permissões - token)', async () => {
+
+        const user = {
+            "idEncomenda": 5
+        }
+
+        const response = await request(app)
+            .post("/cliente/cancelarEncomenda")
+            .set('Authorization', 'Bearer .X.X')
+            .send(user)
+        expect(response.status).toBe(403)
+
+    });
+});
+
+
+describe('Acompanhar Estado - Cliente', () => {
+    it('Acompanhar Estado - Cliente (Tem permissões - token)', async () => {
+
+        const user = {
+            "idEncomenda": 5
+        }
+
+        const response = await request(app)
+            .post("/cliente/acompanharEncomenda")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(user)
+        expect(response.status).toBe(200)
+
+    });
+    it('Acompanhar Estado - Cliente (Sem permissões - token)', async () => {
+
+        const user = {
+            "idEncomenda": 5
+        }
+
+        const response = await request(app)
+            .post("/cliente/acompanharEncomenda")
+            .set('Authorization', 'Bearer .X.X')
+            .send(user)
+        expect(response.status).toBe(403)
+
+    });
+});
+
+
+
+
+/*
 describe('Carrinho de Compras - Clientes', () => {
     it('Adicionar um Produto ao Carrinho válida - token com permissão', async () => {
         const user = {
@@ -653,8 +1022,9 @@ describe('Mostrar um Perfil', () => {
     });
 }); 
 
-
 */
+
+/*
 describe('Estafeta', () => {
     it('Mudar estado do estafeta (Tem permissões - token)', async () => {
         const response = await request(app)
@@ -741,5 +1111,5 @@ describe('Apagar - Admin', () => {
             .send(courier);
         expect(response.status).toBe(403)
     });
-});
-*/
+});*/
+

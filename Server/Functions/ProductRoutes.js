@@ -79,6 +79,28 @@ const listarProdutos = async(request, response) => {
     }
 }
 
+const listProductsFromStore = async(req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1]
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao == 3) {
+            dboperations.listProductsFromStore(req.body.lojaId).then(result => {
+                if (result) {
+                    res.status(200).send(result)
+                } else {
+                    res.status(404).send({
+                        message: "Loja nao encontrada"
+                    })
+                }
+
+            })
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
 const novaCategoriaProduto = async(req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
@@ -159,5 +181,6 @@ module.exports = {
     listarProdutos: listarProdutos,
     removerCategoriaProduto: removerCategoriaProduto,
     novaCategoriaProduto: novaCategoriaProduto,
-    novaSubCategoriaProduto: novaSubCategoriaProduto
+    novaSubCategoriaProduto: novaSubCategoriaProduto,
+    listProductsFromStore: listProductsFromStore,
 }

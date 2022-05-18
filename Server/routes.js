@@ -2,13 +2,13 @@ const express = require('express')
 const app = express()
 const dotenv = require('dotenv').config();
 const router = express.Router();
-const { produto, publicarProduto, editarProduto, listarProdutos, novaCategoriaProduto, novaSubCategoriaProduto, removerCategoriaProduto } = require('./Functions/ProductRoutes')
+const { produto, publicarProduto, editarProduto, listarProdutos, novaCategoriaProduto, novaSubCategoriaProduto, removerCategoriaProduto, listProductsFromStore } = require('./Functions/ProductRoutes')
 const { verificartoken, login, registeruser, token } = require('./Functions/OAuthRoutes')
 const { mostrarPerfil } = require('./Functions/PerfilRoutes')
 const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, novaCategoriaLoja, removerCategoria, consultarHistoricoLojas, alterarEstadoLoja } = require('./Functions/CandidacyRoutes')
 const { adminStore, adminCourier, deleteStore, deleteCourier, atribiurMedalhas } = require('./Functions/AdminRoutes')
 const { courier, changeState, verEncomenda, changeStatus } = require('./Functions/CourierRoutes')
-const { listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho, verEncomendas, publicarEncomenda, getMedalhas, cancelEncomenda, acompanharEncomenda, filtrarLojasCategoria, filtrarProdutosCategoria, editarPerfilLoja, editarPerfilCliente} = require('./Functions/ClientesRoutes')
+const { listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho, verEncomendas, publicarEncomenda, getMedalhas, cancelEncomenda, acompanharEncomenda, filtrarLojasCategoria, filtrarProdutosCategoria, editarPerfilLoja, editarPerfilCliente } = require('./Functions/ClientesRoutes')
 
 app.use('/', router);
 app.use(express.json());
@@ -36,6 +36,7 @@ router.use("/produto", produto) // a dar
 router.route('/produto/publicarProduto').post(publicarProduto) // a dar
 router.route('/produto/editarProduto').post(editarProduto) // a dar
 router.route('/produto/listarProdutos').get(listarProdutos) // a dar
+router.route('/listarProdutosPorLoja').post(listProductsFromStore) // a dar
 router.route('/removerCategoriaProduto').post(removerCategoriaProduto)
 router.route('/criarCategoriaProduto').post(novaCategoriaProduto)
 router.route('/criarSubCategoriaProduto').post(novaSubCategoriaProduto)

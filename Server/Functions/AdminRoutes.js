@@ -65,15 +65,13 @@ const deleteCourier = (request, response) => {
 
 const atribiurMedalhas = async(req, res) => {
     try {
-        token = req.headers.authorization.split(" ")[1]
-
-        //  Retorna um objeto com os dados do utilizador
+        const token = req.headers.authorization.split(" ")[1]
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao === 1) {
             let atribuir = await dboperations.atribiurMedalhas(req.body.idCliente)
-
-            if (atribuir == true) {
+                //console.log("STATUS", atribuir)
+            if (atribuir) {
                 res.status(200).send({ message: 'Medalha(s) atribuida(s) com sucesso' })
             }
         }

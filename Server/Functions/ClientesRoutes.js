@@ -3,7 +3,7 @@ const dboperations = require('../dboperations');
 const path = require('path');
 const { request } = require('http');
 
-const cliente = async (req, res, next) => {
+const cliente = async(req, res, next) => {
     let token
     try {
         token = req.headers.authorization.split(" ")[1]
@@ -26,7 +26,7 @@ const cliente = async (req, res, next) => {
     }
 }
 
-const listarProdutosClientes = async (req, res) => {
+const listarProdutosClientes = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -44,7 +44,7 @@ const listarProdutosClientes = async (req, res) => {
     }
 }
 
-const adicionarCarrinho = async (req, res) => {
+const adicionarCarrinho = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -64,7 +64,7 @@ const adicionarCarrinho = async (req, res) => {
     }
 }
 
-const removerCarrinho = async (req, res) => {
+const removerCarrinho = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -84,7 +84,7 @@ const removerCarrinho = async (req, res) => {
     }
 }
 
-const listarCarrinho = async (req, res) => {
+const listarCarrinho = async(req, res) => {
     try {
         console.log('listarCarrinho')
         token = req.headers.authorization.split(" ")[1]
@@ -105,9 +105,9 @@ const listarCarrinho = async (req, res) => {
     }
 }
 
-const getMedalhas = async (req, res) => {
+const getMedalhas = async(req, res) => {
     try {
-        token = req.headers.authorization.split(" ")[1]
+        const token = req.headers.authorization.split(" ")[1]
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao === 3 || req.user[0].tipoPermissao === 1) {
@@ -122,7 +122,7 @@ const getMedalhas = async (req, res) => {
     }
 }
 
-const verEncomendas = async (req, res) => {
+const verEncomendas = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -142,7 +142,7 @@ const verEncomendas = async (req, res) => {
     }
 }
 
-const publicarEncomenda = async (req, res) => {
+const publicarEncomenda = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -163,7 +163,7 @@ const publicarEncomenda = async (req, res) => {
     }
 }
 
-const cancelEncomenda = async (req, res) => {
+const cancelEncomenda = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
 
@@ -175,17 +175,22 @@ const cancelEncomenda = async (req, res) => {
 
             if (cancel == true) {
                 res.status(200).send({ message: 'Encomenda cancelada com sucesso' })
+            } else {
+                res.status(403).send({
+                    message: "Nao autorizado!"
+                })
             }
-            res.status(403).send("Nao autorizado!")
         }
 
     } catch (error) {
-        res.status(403).send("Nao autorizado!")
+        res.status(403).send({
+            message: "Nao autorizado!"
+        })
     }
 
 }
 
-const acompanharEncomenda = async (req, res) => {
+const acompanharEncomenda = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
@@ -202,7 +207,7 @@ const acompanharEncomenda = async (req, res) => {
     }
 }
 
-const filtrarLojasCategoria = async (req, res) => {
+const filtrarLojasCategoria = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
@@ -219,7 +224,7 @@ const filtrarLojasCategoria = async (req, res) => {
     }
 }
 
-const filtrarProdutosCategoria = async (req, res) => {
+const filtrarProdutosCategoria = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
@@ -247,7 +252,7 @@ const filtrarProdutosCategoria = async (req, res) => {
     }
 }
 
-const editarPerfilLoja = async (req, res) => {
+const editarPerfilLoja = async(req, res) => {
     try {
         // Utilizador
         let password = req.body.password
@@ -266,6 +271,7 @@ const editarPerfilLoja = async (req, res) => {
         //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
+        console.log("Aqui", req.user)
         if (req.user[0].tipoPermissao === 2) {
             dboperations.editarPerfilLoja(req.user[0].idUtilizador, idLoja, password, nome, email, contacto, nif, morada, nifLoja).then(result => {
                 res.status(200).send({ message: 'Alterado com sucesso' })
@@ -277,7 +283,7 @@ const editarPerfilLoja = async (req, res) => {
         res.status(403).send("Nao autorizado!")
     }
 }
-const editarPerfilCliente = async (req, res) => {
+const editarPerfilCliente = async(req, res) => {
     try {
         // Cliente
         let dataNascimento = req.body.dataNascimento
@@ -297,7 +303,6 @@ const editarPerfilCliente = async (req, res) => {
         //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
-        console.log("Aqui", req.user)
         if (req.user[0].tipoPermissao === 3) {
             dboperations.editarPerfilCliente(req.user[0].idUtilizador, idCliente, password, nome, email, contacto, nif, dataNascimento, pais, localizacao).then(result => {
                 res.status(200).send({ message: 'Alterado com sucesso' })
