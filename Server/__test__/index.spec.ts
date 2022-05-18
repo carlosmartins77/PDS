@@ -650,7 +650,6 @@ describe('Mostrar um Perfil', () => {
 
 */
 
-/*
 describe('Estafeta', () => {
     it('Mudar estado do estafeta (Tem permissões - token)', async () => {
         const response = await request(app)
