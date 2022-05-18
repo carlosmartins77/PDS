@@ -1037,7 +1037,7 @@
                 }
             }
         },
-        "/editarPerfilLoja": {
+        "/editarPerfil/Loja": {
             "post": {
                 "description": "Editar Perfil de uma Loja",
                 "tags": [
@@ -1098,13 +1098,13 @@
                 }
             }
         },
-        "/editarPerfilCliente": {
+        "/editarPerfil/Cliente": {
             "post": {
-                "description": "Editar Perfil de uma Loja",
+                "description": "Editar Perfil de um Cliente",
                 "tags": [
                     "Cliente"
                 ],
-                "summary": "Editar Dados de uma Loja",
+                "summary": "Editar Dados de um Cliente",
                 "operationId": "Loja_editarPerfil",
                 "security": [
                     {
@@ -1190,12 +1190,12 @@
         },
         "/publicarEncomenda": {
             "post": {
-                "description": "Visualizar Encomendas",
+                "description": "Publicar Encomendas",
                 "tags": [
-                    "Loja"
+                    "Cliente"
                 ],
-                "summary": "Visualizar Encomendas de uma Loja",
-                "operationId": "Loja_everEncomendas",
+                "summary": "Publicar Encomendas",
+                "operationId": "Cliente_everEncomendas",
                 "security": [
                     {
                         "bearerAuth": []

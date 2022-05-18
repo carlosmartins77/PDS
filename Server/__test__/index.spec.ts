@@ -2,6 +2,224 @@ const request = require("supertest");
 const app = require('../index');
 
 
+
+describe('Listar todos os produtos - Cliente', () => {
+    it('Produtos Retornados (Tem permissões - token)', async () => {
+        const response = await request(app)
+            .get("/cliente/listarProdutos")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+        expect(response.status).toBe([])
+
+    });
+    it('Produtos nao retornados (Não tem permissões - token) ', async () => {
+        const response = await request(app)
+            .get("/cliente/listarProdutos")
+            .set('Authorization', 'Bearer eyJhbGciOiJIU3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+        expect(response.status).toBe(403)
+    });
+});
+
+describe('Suspender/reativar contas - Loja', () => {
+    it('Suspender/reativar contas - Loja (Tem permissões - token)', async () => {
+        const user =
+        {
+            "idLoja": 1,
+            "estado": 1
+        }
+
+        const response = await request(app)
+            .post("/alterarEstadoLoja")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI')
+            .send(user)
+        expect(response.status).toBe(200)
+
+    });
+    it('Suspender/reativar contas - Loja (Não tem permissões - token) ', async () => {
+        const user =
+        {
+            "idLoja": 1,
+            "estado": 1
+        }
+
+        const response = await request(app)
+            .post("/alterarEstadoLoja")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjG')
+            .send(user)
+        expect(response.status).toBe(403)
+    });
+});
+
+
+describe('Editar perfil - Loja', () => {
+    it('Editar perfil - Loja (Tem permissões - token)', async () => {
+        const user =
+        {
+            "password": "1234",
+            "nome": "ricardog",
+            "email": "codesolutions@gmail.com",
+            "contacto": 123456709,
+            "nif": 12345432,
+            "morada": "Rua",
+            "nifLoja": 1,
+            "idLoja": 1
+        }
+
+        const response = await request(app)
+            .post("/editarPerfil/Loja")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI')
+            .send(user)
+        expect(response.status).toBe(200)
+
+    });
+    it('Editar perfil - Loja (Não tem permissões - token) ', async () => {
+        const user =
+        {
+            "password": "1234",
+            "nome": "ricardog",
+            "email": "codesolutions@gmail.com",
+            "contacto": 123456709,
+            "nif": 12345432,
+            "morada": "Rua",
+            "nifLoja": 1,
+            "idLoja": 1
+        }
+
+        const response = await request(app)
+            .post("/editarPerfil/Loja")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjG')
+            .send(user)
+        expect(response.status).toBe(403)
+    });
+});
+
+describe('Editar perfil - Cliente', () => {
+    it('Editar perfil - Cliente (Tem permissões - token)', async () => {
+        const user =
+        {
+            "password": "1234",
+            "nome": "joao",
+            "email": "joao.aluno@gmail.com",
+            "contacto": 98765431,
+            "nif": 18935666,
+            "dataNascimento": "8/8/1999",
+            "pais": "pt",
+            "localizacao": "braga",
+            "idCliente": 1
+        }
+
+        const response = await request(app)
+            .post("/editarPerfil/Cliente")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(user)
+        expect(response.status).toBe(200)
+
+    });
+    it('Editar perfil - Cliente (Não tem permissões - token) ', async () => {
+        const user =
+        {
+            "password": "1234",
+            "nome": "ricardog",
+            "email": "codesolutions@gmail.com",
+            "contacto": 123456709,
+            "nif": 12345432,
+            "morada": "Rua",
+            "nifLoja": 1,
+            "idLoja": 1
+        }
+
+        const response = await request(app)
+            .post("/editarPerfil/Cliente")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1')
+            .send(user)
+        expect(response.status).toBe(403)
+    });
+});
+
+describe('Consultar o histórico de vendas - Loja', () => {
+    it('Consultar o histórico de vendas - Loja (Tem permissões - token)', async () => {
+        const user =
+        {
+            "idLoja": 1
+        }
+
+        const response = await request(app)
+            .post("/consultarHistoricoLojas")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.c2lsdmEucGFzdGVsYXJpYUBvdXRsb29rLmNvbQ.703UrqoZVtpVtqLjGILK05OrnNYUEnN_3URwkOjbymI')
+            .send(user)
+        expect(response.status).toBe(200)
+
+    });
+    it('Editar perfil - Cliente (Não tem permissões - token) ', async () => {
+        const user =
+        {
+            "idLoja": 1
+        }
+
+        const response = await request(app)
+            .post("/consultarHistoricoLojas")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1')
+            .send(user)
+        expect(response.status).toBe(403)
+    });
+});
+
+describe('Criar uma Nova Encomenda - Cliente', () => {
+    it('Criar uma Nova Encomenda - Cliente (Tem permissões - token)', async () => {
+        const user =
+        {
+            "numEncomenda": 1,
+            "dataEncomenda": "8/8/2022",
+            "estado": "Entregue",
+            "valorTotal": 10,
+            "lojaId": 1,
+            "id_Cliente": 1,
+            "estafetaId": 1
+        }
+
+        const response = await request(app)
+            .post("/publicarEncomenda")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+            .send(user)
+        expect(response.status).toBe(200)
+
+    });
+    it('Criar uma Nova Encomenda - Cliente (Não tem permissões - token) ', async () => {
+        const user =
+        {
+            "numEncomenda": 1,
+            "dataEncomenda": "8/8/2022",
+            "estado": "Entregue",
+            "valorTotal": 10,
+            "lojaId": 1,
+            "id_Cliente": 1,
+            "estafetaId": 1
+        }
+
+        const response = await request(app)
+            .post("/publicarEncomenda")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVT')
+            .send(user)
+        expect(response.status).toBe(403)
+    });
+});
+
+
+describe('Visualizar Encomendas (Historico) - Cliente', () => {
+    it('Visualizar Encomendas - Cliente (Tem permissões - token)', async () => {
+        const response = await request(app)
+            .post("/verEncomendas")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+        expect(response.status).toBe(200)
+
+    });
+    it('Visualizar Encomendas - Cliente (Não tem permissões - token) ', async () => {
+        const response = await request(app)
+            .post("/verEncomendas")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVT')
+        expect(response.status).toBe(403)
+    });
+});
+
 /*
 
 describe('Carrinho de Compras - Clientes', () => {
@@ -432,6 +650,7 @@ describe('Mostrar um Perfil', () => {
 
 */
 
+/*
 describe('Estafeta', () => {
     it('Mudar estado do estafeta (Tem permissões - token)', async () => {
         const response = await request(app)
