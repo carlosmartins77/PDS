@@ -174,6 +174,26 @@ const removerCategoriaProduto = async(req, res) => {
     }
 }
 
+const getCategoria = async(request, response) => {
+    try {
+        dboperations.getCategoria(request.body.idCategoria).then(result, response => {
+            response.status(200).send(result);
+        })
+    } catch (Error) {
+        response.status(403).send()
+    }
+}
+
+const getCategoriaProd = async(request, response) => {
+    try {
+        dboperations.getCategoriaProd(request.body.idCategoriaProd).then(result, response => {
+            response.status(200).send(result);
+        })
+    } catch (Error) {
+        response.status(403).send()
+    }
+}
+
 module.exports = {
     produto: produto,
     publicarProduto: publicarProduto,
@@ -183,4 +203,6 @@ module.exports = {
     novaCategoriaProduto: novaCategoriaProduto,
     novaSubCategoriaProduto: novaSubCategoriaProduto,
     listProductsFromStore: listProductsFromStore,
+    getCategoria: getCategoria,
+    getCategoriaProd: getCategoriaProd
 }

@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const dotenv = require('dotenv').config();
 const router = express.Router();
-const { produto, publicarProduto, editarProduto, listarProdutos, novaCategoriaProduto, novaSubCategoriaProduto, removerCategoriaProduto, listProductsFromStore } = require('./Functions/ProductRoutes')
+const { produto, publicarProduto, editarProduto, listarProdutos, novaCategoriaProduto, novaSubCategoriaProduto, getCategoriaProd, removerCategoriaProduto, listProductsFromStore } = require('./Functions/ProductRoutes')
 const { verificartoken, login, registeruser, token } = require('./Functions/OAuthRoutes')
 const { mostrarPerfil } = require('./Functions/PerfilRoutes')
 const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, novaCategoriaLoja, removerCategoria, consultarHistoricoLojas, alterarEstadoLoja } = require('./Functions/CandidacyRoutes')
@@ -40,6 +40,7 @@ router.route('/listarProdutosPorLoja').post(listProductsFromStore) // a dar
 router.route('/removerCategoriaProduto').post(removerCategoriaProduto)
 router.route('/criarCategoriaProduto').post(novaCategoriaProduto)
 router.route('/criarSubCategoriaProduto').post(novaSubCategoriaProduto)
+router.route('produto/getCategoriaProd').get(getCategoriaProd)
 
 
 //Categorias

@@ -19,6 +19,22 @@ describe('Listar todos os produtos - Cliente', () => {
     });
 });
 
+describe('Obter categorias - Cliente', () => {
+    it('Produtos Retornados (Tem permissões - token)', async () => {
+        const response = await request(app)
+            .get("produto/getCategoriaProd")
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.YXJpc3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+        expect(response.status).toBe(200)
+
+    });
+    it('Categorias nao retornadas (Não tem permissões - token) ', async () => {
+        const response = await request(app)
+            .get("produto/getCategoriaProd")
+            .set('Authorization', 'Bearer eyJhbGciOiJIU3RldS5wZXJlaXJhQGdtYWlsLmNvbQ.xGEYi6cznV2ZGwU1phBOpVTJlVT3FIQEtx1d4VcScE8')
+        expect(response.status).toBe(403)
+    });
+});
+
 describe('Suspender/reativar contas - Loja', () => {
     it('Suspender/reativar contas - Loja (Tem permissões - token)', async () => {
         const user =

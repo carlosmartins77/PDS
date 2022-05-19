@@ -210,6 +210,37 @@
                 }
             }
         },
+        "/produto/getCategoriaProd": {
+            "get": {
+                "description": "Categorias e Subscategorias Produtos",
+                "tags": [
+                    "Produtos"
+                ],
+                "summary": "Obter Categorias e Subcategorias",
+                "operationId": "Produtos_getCategoriaProd",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "403": {
+                        "description": "Forbidden!"
+                    },
+                    "200": {
+                        "description": "OK!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Categorias"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/registeruser": {
             "post": {
                 "description": "Efetuar um Registo",
@@ -1446,6 +1477,17 @@
                         "type": "number"
                     },
                     "contacto": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Categorias": {
+                "type": "object",
+                "properties": {
+                    "nomeCategoria": {
+                        "type": "string"
+                    },
+                    "nomeSubcategoria": {
                         "type": "string"
                     }
                 }
