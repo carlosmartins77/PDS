@@ -946,6 +946,18 @@ async function getState(utilizadorId) {
     }
 }
 
+
+async function getcategory() {
+    try {
+        let pool = await sql.connect(config);
+        let category = await pool.request()
+            .query("select * from Categoria")
+        return category.recordset ;
+    } catch (err) {
+        return Error(err)
+    }
+}
+
 // #endregion
 
 module.exports = {
@@ -1006,6 +1018,7 @@ module.exports = {
     getstores:getstores,
     getReprovedStores: getReprovedStores,
     getAproveStores:getAproveStores,
+    getcategory:getcategory,
     //#endregion
 
     //#region courier

@@ -5,7 +5,7 @@ const router = express.Router();
 const { produto, publicarProduto, editarProduto, listarProdutos, novaCategoriaProduto, novaSubCategoriaProduto, getCategoriaProd, removerCategoriaProduto, listProductsFromStore, listarProdutoPorId} = require('./Functions/ProductRoutes')
 const { verificartoken, login, registeruser, token } = require('./Functions/OAuthRoutes')
 const { mostrarPerfil } = require('./Functions/PerfilRoutes')
-const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, getAproveStores, getReprovedStores, novaCategoriaLoja, removerCategoria, consultarHistoricoLojas, alterarEstadoLoja, getstores } = require('./Functions/CandidacyRoutes')
+const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, getAproveStores, getReprovedStores, novaCategoriaLoja, removerCategoria, consultarHistoricoLojas, alterarEstadoLoja, getstores, getcategorias } = require('./Functions/CandidacyRoutes')
 const { adminStore, adminCourier, deleteStore, deleteCourier, atribiurMedalhas } = require('./Functions/AdminRoutes')
 const { courier, changeState, verEncomenda, changeStatus, getState } = require('./Functions/CourierRoutes')
 const { listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho, verEncomendas, publicarEncomenda, getMedalhas, cancelEncomenda, acompanharEncomenda, filtrarLojasCategoria, filtrarProdutosCategoria, editarPerfilLoja, editarPerfilCliente } = require('./Functions/ClientesRoutes')
@@ -62,6 +62,7 @@ router.route('/admin/courier/delete').delete(deleteCourier)
 router.route('/atribuirMedalhas').post(atribiurMedalhas)
 
 
+router.route('/listacategoria').get(getcategorias)
 router.route('/listalojas').get(getstores)
 router.route('/lojasAprovadas').get(getAproveStores)
 router.route('/lojasReprovadas').get(getReprovedStores)

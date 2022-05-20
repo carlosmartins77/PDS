@@ -288,6 +288,22 @@ const getReprovedStores = async (req, res) => {
     }
 }
 
+const getcategorias = async (req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1]
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao == 1) {
+            dboperations.getcategory().then(result => {
+                res.send(result)
+            })
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
+
 module.exports = {
     uploadimages: uploadimages,
     novaLoja: novaLoja,
@@ -303,4 +319,5 @@ module.exports = {
     getstores: getstores,
     getReprovedStores: getReprovedStores,
     getAproveStores: getAproveStores,
+    getcategorias:getcategorias
 }
