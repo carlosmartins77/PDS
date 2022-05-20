@@ -240,7 +240,6 @@ describe('Visualizar Encomendas (Historico) - Cliente', () => {
 */
 
 
-
 describe('Obter Medalhas - Cliente', () => {
     it('Obter Medalhas - Cliente (Tem permissões - token)', async () => {
 
@@ -607,8 +606,6 @@ describe('Acompanhar Estado - Cliente', () => {
 
     });
 });
-
-
 
 
 /*

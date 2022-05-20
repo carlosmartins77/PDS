@@ -194,6 +194,17 @@ const getCategoriaProd = async(request, response) => {
     }
 }
 
+const listarProdutoPorId = async(request, response) => {
+    try {
+        dboperations.listarProdutoPorId(request.params.id).then(result => {
+            //const product = await Product.findById(request.params.id);
+            response.status(200).send(result);
+        })
+    } catch (Error) {
+        response.status(403).send()
+    }
+}
+
 module.exports = {
     produto: produto,
     publicarProduto: publicarProduto,
@@ -204,5 +215,6 @@ module.exports = {
     novaSubCategoriaProduto: novaSubCategoriaProduto,
     listProductsFromStore: listProductsFromStore,
     getCategoria: getCategoria,
-    getCategoriaProd: getCategoriaProd
+    getCategoriaProd: getCategoriaProd,
+    listarProdutoPorId: listarProdutoPorId,
 }

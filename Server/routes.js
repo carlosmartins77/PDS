@@ -2,12 +2,12 @@ const express = require('express')
 const app = express()
 const dotenv = require('dotenv').config();
 const router = express.Router();
-const { produto, publicarProduto, editarProduto, listarProdutos, novaCategoriaProduto, novaSubCategoriaProduto, getCategoriaProd, removerCategoriaProduto, listProductsFromStore } = require('./Functions/ProductRoutes')
+const { produto, publicarProduto, editarProduto, listarProdutos, novaCategoriaProduto, novaSubCategoriaProduto, getCategoriaProd, removerCategoriaProduto, listProductsFromStore, listarProdutoPorId} = require('./Functions/ProductRoutes')
 const { verificartoken, login, registeruser, token } = require('./Functions/OAuthRoutes')
 const { mostrarPerfil } = require('./Functions/PerfilRoutes')
-const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, novaCategoriaLoja, removerCategoria, consultarHistoricoLojas, alterarEstadoLoja } = require('./Functions/CandidacyRoutes')
+const { uploadimages, novaLoja, approvestore, approvecourier, dowloadfiles, getAproveStores, getReprovedStores, novaCategoriaLoja, removerCategoria, consultarHistoricoLojas, alterarEstadoLoja, getstores } = require('./Functions/CandidacyRoutes')
 const { adminStore, adminCourier, deleteStore, deleteCourier, atribiurMedalhas } = require('./Functions/AdminRoutes')
-const { courier, changeState, verEncomenda, changeStatus } = require('./Functions/CourierRoutes')
+const { courier, changeState, verEncomenda, changeStatus, getState } = require('./Functions/CourierRoutes')
 const { listarProdutosClientes, adicionarCarrinho, removerCarrinho, listarCarrinho, verEncomendas, publicarEncomenda, getMedalhas, cancelEncomenda, acompanharEncomenda, filtrarLojasCategoria, filtrarProdutosCategoria, editarPerfilLoja, editarPerfilCliente } = require('./Functions/ClientesRoutes')
 
 app.use('/', router);
@@ -62,6 +62,12 @@ router.route('/admin/courier/delete').delete(deleteCourier)
 router.route('/atribuirMedalhas').post(atribiurMedalhas)
 
 
+router.route('/listalojas').get(getstores)
+router.route('/lojasAprovadas').get(getAproveStores)
+router.route('/lojasReprovadas').get(getReprovedStores)
+
+
+
 router.route('/aprovacaoLoja').post(approvestore) // a dar
 router.route('/aprovacaoLojaFicheiro').post(dowloadfiles) // a dar
 router.route('/aprovacao/estafeta').post(approvecourier)
@@ -78,6 +84,8 @@ router.route('/estafeta/verEncomenda').post(verEncomenda)
 router.route('/verEncomendas').post(verEncomendas)
 router.route('/publicarEncomenda').post(publicarEncomenda)
 
+router.route('/listarProdutoPorId/:id').get(listarProdutoPorId)
+
 
 // Lojas
 router.route('/consultarHistoricoLojas').post(consultarHistoricoLojas)
@@ -88,5 +96,8 @@ router.route('/editarPerfil/Cliente').post(editarPerfilCliente)
 
 // Aleterar Estado da Loja
 router.route('/alterarEstadoLoja').post(alterarEstadoLoja)
+
+// Estafeta
+router.route('/estafeta/verificarEstado').post(getState);
 
 module.exports = router

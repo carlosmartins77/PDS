@@ -886,6 +886,65 @@ async function verEncomenda(idEncomenda) {
     }
 }
 
+async function getstores() {
+    try {
+        let pool = await sql.connect(config);
+        let stores = await pool.request()
+            .query("select * from Categoria as c join Loja l ON c.idCategoria = l.categoriaId where aprovacao = 0")
+        return stores.recordset;
+    } catch (err) {
+        return Error(err)
+    }
+}
+
+async function getAproveStores() {
+    try {
+        let pool = await sql.connect(config);
+        let name = await pool.request()
+        .query("select * from Categoria as c join Loja l ON c.idCategoria = l.categoriaId where aprovacao = 1")
+        return name.recordset;
+    } catch (err) {
+        return Error(err)
+    }
+}
+
+async function getReprovedStores() {
+    try {
+        let pool = await sql.connect(config);
+        let name = await pool.request()
+        .query("select * from Categoria as c join Loja l ON c.idCategoria = l.categoriaId where aprovacao = 2")
+        return name.recordset;
+    } catch (err) {
+        return Error(err)
+    }
+}
+
+async function listarProdutoPorId(id) {
+    try {
+        let pool = await sql.connect(config);
+        let getProduct = await pool.request()
+            .input('id', sql.Int, id)
+            .query("SELECT Produto.idProduto, Loja.nomeLoja, Produto.nomeProduto, Produto.descricao, Produto.quantidade, Produto.preco, Produto.horaRecolhaMin, Produto.horaRecolhaMax, Produto.fotoProduto FROM Loja INNER JOIN Produto ON Loja.idLoja = Produto.lojaId WHERE Produto.IdProduto = @id")
+        console.log(getProduct.recordset)
+        return getProduct.recordset;
+    } catch (err) {
+        return Error(err)
+    }
+} 
+
+async function getState(utilizadorId) {
+    try {
+        let pool = await sql.connect(config);
+        let estado = await pool.request()
+            .input('utilizadorId', sql.Int, utilizadorId)
+            .query("SELECT estado FROM Estafeta WHERE utilizadorId = @utilizadorId")
+
+        return estado.recordset[0]
+
+    } catch (err) {
+        throw new Error(err)
+    }
+}
 
 // #endregion
 
@@ -936,6 +995,7 @@ module.exports = {
     filtrarProdutosCategoria: filtrarProdutosCategoria,
     editarPerfilLoja: editarPerfilLoja,
     editarPerfilCliente: editarPerfilCliente,
+    listarProdutoPorId: listarProdutoPorId,
     //#endregion
 
     //#region admin
@@ -943,6 +1003,9 @@ module.exports = {
     deleteStore: deleteStore,
     deleteCourier: deleteCourier,
     atribiurMedalhas: atribiurMedalhas,
+    getstores:getstores,
+    getReprovedStores: getReprovedStores,
+    getAproveStores:getAproveStores,
     //#endregion
 
     //#region courier
@@ -950,6 +1013,7 @@ module.exports = {
     updateCourierState: updateCourierState,
     changeOrderStatus: changeOrderStatus,
     verEncomenda: verEncomenda,
+    getState: getState,
     //#endregion
     //#endregion
     verEncomendas: verEncomendas,

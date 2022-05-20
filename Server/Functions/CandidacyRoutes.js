@@ -237,6 +237,57 @@ const consultarHistoricoLojas = async(req, res) => {
     }
 }
 
+
+const getstores = async (req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1]
+        //  Retorna um objeto com os dados do utilizador
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao == 1) {
+            dboperations.getstores().then(result => {
+                res.send(result)
+            })
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
+const getAproveStores = async (req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1]
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        //  Retorna um objeto com os dados do utilizador
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao == 1) {
+            dboperations.getAproveStores().then(result => {
+                console.log("Aprovadas: ", result)
+                res.send(result)
+            })
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
+const getReprovedStores = async (req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1]
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        //  Retorna um objeto com os dados do utilizador
+        req.user = await dboperations.finduser(decoded)
+        if (req.user[0].tipoPermissao == 1) {
+            dboperations.getReprovedStores().then(result => {
+                console.log(result)
+                res.send(result)
+            })
+        }
+    } catch (error) {
+        res.status(403).send("Nao autorizado!")
+    }
+}
+
 module.exports = {
     uploadimages: uploadimages,
     novaLoja: novaLoja,
@@ -248,5 +299,8 @@ module.exports = {
     novaCategoriaLoja: novaCategoriaLoja,
     approvecourier: approvecourier,
     alterarEstadoLoja: alterarEstadoLoja,
-    consultarHistoricoLojas: consultarHistoricoLojas
+    consultarHistoricoLojas: consultarHistoricoLojas,
+    getstores: getstores,
+    getReprovedStores: getReprovedStores,
+    getAproveStores: getAproveStores,
 }

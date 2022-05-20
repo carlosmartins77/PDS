@@ -317,6 +317,8 @@ const editarPerfilCliente = async(req, res) => {
 
 
 
+
+
 module.exports = {
     listarProdutosClientes: listarProdutosClientes,
     adicionarCarrinho: adicionarCarrinho,
