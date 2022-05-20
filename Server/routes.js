@@ -66,7 +66,7 @@ router.route('/aprovacaoLoja').post(approvestore) // a dar
 router.route('/aprovacaoLojaFicheiro').post(dowloadfiles) // a dar
 router.route('/aprovacao/estafeta').post(approvecourier)
 
-router.route('/removercategoria').post(removerCategoria) // a dar
+router.route('/removerCategoriaLoja').post(removerCategoria) // a dar
 
 // Estafeta
 router.use("/estafeta", courier);

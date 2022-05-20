@@ -593,6 +593,46 @@
                 }
             }
         },
+        "/removerCategoriaLoja": {
+            "post": {
+                "description": "Remover Categoria de lojas",
+                "tags": [
+                    "Loja"
+                ],
+                "summary": "Remover uma categoria de lojas",
+                "operationId": "Cliente_removerCategoriaLoja",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nome": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "403": {
+                        "description": "Unauthorized!"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "200": {
+                        "description": "Category Removed"
+                    }
+                }
+            }
+        },
         "/criarCategoriaProduto": {
             "post": {
                 "description": "Criação de Categorias de Produto",
@@ -786,6 +826,43 @@
                     },
                     "201": {
                         "description": "Created Category!"
+                    }
+                }
+            }
+        },
+        "/cliente/listarCarrinho": {
+            "post": {
+                "description": "Listar Carrinho de Compras",
+                "tags": [
+                    "Cliente"
+                ],
+                "summary": "Listar Carrinho de Compras",
+                "operationId": "Cliente_listarCarrinho",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idCarrinhoDeCompras": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "403": {
+                        "description": "Unauthorized!"
+                    },
+                    "200": {
+                        "description": "Listed Succesfully"
                     }
                 }
             }
@@ -989,6 +1066,43 @@
                     },
                     "200": {
                         "description": "Listed succesfully!"
+                    }
+                }
+            }
+        },
+        "/estafeta/verEncomenda": {
+            "post": {
+                "description": "Ver Encomenda",
+                "tags": [
+                    "Estafeta"
+                ],
+                "summary": "Ver Encomenda",
+                "operationId": "Estafeta_verEncomenda",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idEncomenda": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "403": {
+                        "description": "Unauthorized!"
+                    },
+                    "200": {
+                        "description": "Success"
                     }
                 }
             }
