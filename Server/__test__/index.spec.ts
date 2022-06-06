@@ -286,7 +286,7 @@ describe('Criar Categoria Produto- Admin', () => {
     it('Criar Categoria - Admin (Tem permissões - token)', async () => {
 
         const categoria = {
-            "categoria":"Ciclismo"        
+            "categoria":"Croissant"        
         }
 
         const response = await request(app)
@@ -299,7 +299,7 @@ describe('Criar Categoria Produto- Admin', () => {
     it('Criar Categoria Duplicada - Admin (Tem permissões - token)', async () => {
 
         const categoria = {
-            "categoria":"Ciclismo"        
+            "categoria":"Croissant"        
         }
 
         const response = await request(app)
@@ -312,7 +312,7 @@ describe('Criar Categoria Produto- Admin', () => {
     it('Criar Categoria - Admin (Sem permissões - token) ', async () => {
 
         const categoria = {
-            "categoria":"Ciclismo"
+            "categoria":"Croissant"
         }
 
         const response = await request(app)
@@ -329,7 +329,7 @@ describe('Criar Subcategoria - Admin', () => {
 
         const subcategoria = {
             "categoria":"Bebidas",
-            "subcategoria":"Espirituosas"
+            "subcategoria":"Pretas"
         }
 
         const response = await request(app)
@@ -343,7 +343,7 @@ describe('Criar Subcategoria - Admin', () => {
 
         const subcategoria = {
             "categoria":"Bebidas",
-            "subcategoria":"Espirituosas"
+            "subcategoria":"Pretas"
         }
 
         const response = await request(app)
@@ -357,7 +357,7 @@ describe('Criar Subcategoria - Admin', () => {
 
         const user = {
             "categoria":"Bebidas",
-            "subcategoria":"Sem Alcool"
+            "subcategoria":"Pretas"
         }
 
         const response = await request(app)
@@ -375,7 +375,7 @@ describe('Criar Categoria Loja - Admin', () => {
     it('Criar Categoria - Admin (Tem permissões - token)', async () => {
 
         const categoria = {
-            "categoria":"Ciclismo"        
+            "categoria":"Futebol Americano"        
         }
 
         const response = await request(app)
@@ -388,7 +388,7 @@ describe('Criar Categoria Loja - Admin', () => {
     it('Criar Categoria Loja Duplicada - Admin (Tem permissões - token)', async () => {
 
         const categoria = {
-            "categoria":"Ciclismo"        
+            "categoria":"Futebol Americano"        
         }
 
         const response = await request(app)
@@ -401,7 +401,7 @@ describe('Criar Categoria Loja - Admin', () => {
     it('Criar Categoria Loja - Admin (Sem permissões - token) ', async () => {
 
         const categoria = {
-            "categoria":"Ciclismo"
+            "categoria":"Futebol Americano"
         }
 
         const response = await request(app)
