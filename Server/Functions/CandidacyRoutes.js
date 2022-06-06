@@ -20,11 +20,13 @@ const uploadimages = async (req, res) => {
             let filename = '';
             let storage = multer.diskStorage({
                 destination: function (req, file, cb) {
-                    cb(null, './Documents/Documents_store')
+                    cb(null, '../Documents/Documents_store')
+                    console.log(file)
                 },
                 filename: function (req, file, cb) {
                     filename = file.originalname
-                    cb(null, token + '--' + idstore + '--' + filename)
+                    cb(null, idstore + '--' + filename)
+                    console.log(file.originalname)
                 }
             })
             const upload = multer({ storage: storage }).single('file')
