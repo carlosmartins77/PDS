@@ -39,7 +39,7 @@ const publicarProduto = (request, response) => {
             request.body.image, request.body.lojaId, request.body.description, request.body.subCatProdId)
 
         dboperations.newProduct(product).then(result => {
-            if (result) {
+            if (result == true) {
                 response.status(201).send({ message: "Produto publicado" })
             } else {
                 response.status(403).send({ message: "Produto nao publicado" })

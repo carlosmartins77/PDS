@@ -74,8 +74,6 @@ async function newProduct(product) {
             .input('lojaId', sql.Int, product.lojaId)
             .query("SELECT COUNT(*) as ContasLinhas FROM Loja WHERE Aprovacao = 1 ANd idLoja = @lojaId")
 
-        let nRegistos = verifyStore.recordset[0].ContaLinhas
-
         if (verifyStore.recordset[0].ContasLinhas == 1) {
 
             let newProduct = await pool.request()
