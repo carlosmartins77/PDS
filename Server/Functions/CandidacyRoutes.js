@@ -9,27 +9,27 @@ const { Parser } = require('tedious/lib/token/token-stream-parser');
 const { criarCategoriaLoja, newCandidacy, newCandidacyCourier } = require('../dboperations');
 
 
-const uploadimages = async(req, res) => {
+const uploadimages = async (req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
-            //  Retorna um objeto com os dados do utilizador
+        //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         let idstore = req.params.id
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao == 2) {
             let filename = '';
             let storage = multer.diskStorage({
-                destination: function(req, file, cb) {
+                destination: function (req, file, cb) {
                     cb(null, './Documents/Documents_store')
                 },
-                filename: function(req, file, cb) {
+                filename: function (req, file, cb) {
                     filename = file.originalname
                     cb(null, token + '--' + idstore + '--' + filename)
                 }
             })
             const upload = multer({ storage: storage }).single('file')
 
-            upload(req, res, function(err) {
+            upload(req, res, function (err) {
                 if (err instanceof multer.MulterError) {
                     return res.status(500).json(err)
                 } else if (err) {
@@ -43,23 +43,19 @@ const uploadimages = async(req, res) => {
     }
 }
 
-const novaLoja = async(req, res) => {
+const novaLoja = async (req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
-            //  Retorna um objeto com os dados do utilizador
+        //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao == 2) {
             // Id, Name, Address, Nif, Category, Approval, Doc
-            const cand = new Candidacy(req.body.adminloja, "", req.body.morada, req.body.nif, req.body.categoria, "", req.body.filename)
-            dboperations.newCandidacy(cand, token).then(result => {
+            const cand = new Candidacy(req.body.adminloja, "", req.body.morada, req.body.nif, req.body.categoria, 0, req.body.filename)
+            dboperations.newCandidacy(cand).then(result => {
                 console.log(result)
                 res.status(200).send({
-                    idLoja: 0,
-                    morada: cand.adress,
-                    nif: cand.nif,
-                    adminloja: cand.id,
-                    categoria: cand.category
+                    message: 'Inserido com sucesso!'
                 })
             })
         }
@@ -68,10 +64,10 @@ const novaLoja = async(req, res) => {
     }
 }
 
-const novoEstafeta = async(req, res) => {
+const novoEstafeta = async (req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
-            //  Retorna um objeto com os dados do utilizador
+        //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao == 3) {
@@ -90,10 +86,10 @@ const novoEstafeta = async(req, res) => {
     }
 }
 
-const approvestore = async(req, res) => {
+const approvestore = async (req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
-            //  Retorna um objeto com os dados do utilizador
+        //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao == 1) {
@@ -101,8 +97,8 @@ const approvestore = async(req, res) => {
             console.log(req.body.idLoja, req.body.aprovacao)
             dboperations.approvestore(req.body.idLoja, req.body.aprovacao).then(result => {
                 console.log(result)
-                    // 1 PARA APROVADO
-                    // 2 PARA NAO APROVADO
+                // 1 PARA APROVADO
+                // 2 PARA NAO APROVADO
                 let approve = "aprovado"
                 if (result == 2) approve = "nao foi  aprovado"
                 res.status(200).send(result);
@@ -113,10 +109,10 @@ const approvestore = async(req, res) => {
     }
 }
 
-const approvecourier = async(req, res) => {
+const approvecourier = async (req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
-            //  Retorna um objeto com os dados do utilizador
+        //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao == 1) {
@@ -124,8 +120,8 @@ const approvecourier = async(req, res) => {
             console.log(req.body.idEstafeta, req.body.aprovacao)
             dboperations.approvestore(req.body.idEstafeta, req.body.aprovacao).then(result => {
                 console.log(result)
-                    // 1 PARA APROVADO
-                    // 2 PARA NAO APROVADO
+                // 1 PARA APROVADO
+                // 2 PARA NAO APROVADO
                 let approve = "aprovado"
                 if (result == 2) approve = "nao foi aprovado"
                 res.status(200).send(result);
@@ -137,10 +133,10 @@ const approvecourier = async(req, res) => {
 }
 
 
-const dowloadfiles = async(req, res) => {
+const dowloadfiles = async (req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
-            //  Retorna um objeto com os dados do utilizador
+        //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao == 1) {
@@ -159,10 +155,10 @@ const dowloadfiles = async(req, res) => {
     }
 }
 
-const removerCategoria = async(req, res) => {
+const removerCategoria = async (req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
-            //  Retorna um objeto com os dados do utilizador
+        //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao == 1) {
@@ -180,7 +176,7 @@ const removerCategoria = async(req, res) => {
 }
 
 
-const novaCategoriaLoja = async(req, res) => {
+const novaCategoriaLoja = async (req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
@@ -206,7 +202,7 @@ const novaCategoriaLoja = async(req, res) => {
     }
 }
 
-const alterarEstadoLoja = async(req, res) => {
+const alterarEstadoLoja = async (req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
@@ -222,7 +218,7 @@ const alterarEstadoLoja = async(req, res) => {
         res.status(403).send("Nao autorizado!")
     }
 }
-const consultarHistoricoLojas = async(req, res) => {
+const consultarHistoricoLojas = async (req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
@@ -319,5 +315,5 @@ module.exports = {
     getstores: getstores,
     getReprovedStores: getReprovedStores,
     getAproveStores: getAproveStores,
-    getcategorias:getcategorias
+    getcategorias: getcategorias
 }

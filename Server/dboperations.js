@@ -159,7 +159,7 @@ async function listProductsFromStore(lojaId) {
 // Publicar uma Candidatura 
 // Input _> Candidatura
 // Output _> true/erro
-async function newCandidacy(candidacy, token) {
+async function newCandidacy(candidacy) {
     try {
         let pool = await sql.connect(config);
         let can = await pool.request()
@@ -171,12 +171,14 @@ async function newCandidacy(candidacy, token) {
         let idloja = await pool.request()
             .input('input_parameter', sql.Int, candidacy.nif)
             .query("select * from Loja where nif = @input_parameter")
-        filename = (token + '--' + idloja.recordset[0].idLoja + '--' + candidacy.doc).toString()
+
+        console.log(idloja.recordset[0].idLoja)
+        filename = (idloja.recordset[0].idLoja + '--' + candidacy.doc).toString()
         let canloja = await pool.request()
             .input('pdfExtratoAnoAnterior', sql.VarChar, filename)
             .input('lojaId', sql.Int, idloja.recordset[0].idLoja)
             .query("Insert into DocumentosLoja (pdfExtratoAnoAnterior, lojaId) values (@pdfExtratoAnoAnterior, @lojaId);")
-        return idloja.recordset[0].idLoja
+        return true
     } catch (err) {
         return Error(err)
     }
@@ -786,11 +788,6 @@ async function editarPerfilLoja(id, idLoja, password, nome, email, contacto, nif
             contacto: person2.recordset[0].contacto,
             nif: person2.recordset[0].nif
         }
-        console.log("Dados Loja: ", product)
-        console.log("Dados Util: ", util)
-        console.log("TEST: ", morada == "string" || morada.length == 0 ? product.morada : morada)
-        console.log("TEST: ", morada)
-        console.log("TEST: ", contacto)
 
         let perfil = await pool.request()
             .input('idLoja', sql.Int, idLoja)
