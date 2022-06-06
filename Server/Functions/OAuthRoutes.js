@@ -60,13 +60,13 @@ const registeruser = async (request, response) => {
 
         request.user = await dboperations.finduser(decoded)
         if (request.user[0]) {
-            const salt = await bcrypt.genSalt();
-            const hashedPassword = await bcrypt.hash(request.body.password, salt);
-            console.log("Salt: " + salt);
-            console.log("Password: " + hashedPassword);
+            //const salt = await bcrypt.genSalt();
+            //const hashedPassword = await bcrypt.hash(request.body.password, salt);
+            //console.log("Salt: " + salt);
+            //console.log("Password: " + hashedPassword);
 
             // Name, Password, Email, Contact, Nif, Permission
-            let user = new User(request.body.name, hashedPassword, request.body.email, request.body.contact, request.body.nif, request.body.permission)
+            let user = new User(request.body.name, request.body.password, request.body.email, request.body.contact, request.body.nif, request.body.permission)
             console.log("registaruser: ", user)
 
             // Verificar se ja existe alguem com esse mail
