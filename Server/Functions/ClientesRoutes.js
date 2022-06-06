@@ -145,13 +145,15 @@ const verEncomendas = async(req, res) => {
 const publicarEncomenda = async(req, res) => {
     try {
         token = req.headers.authorization.split(" ")[1]
-
         //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
         if (req.user[0].tipoPermissao === 3) {
-            let id_Cliente = await dboperations.retornaCliente(req.user[0].idUtilizador)
-            dboperations.publicarEncomenda(req.body.numEncomenda, req.body.dataEncomenda, req.body.estado, req.body.valorTotal, req.body.lojaId, parseInt(id_Cliente), req.body.estafetaId).then(result => {
+            //let id_Cliente = await dboperations.retornaCliente(req.user[0].idUtilizador)
+//
+            //console.log(id_Cliente)
+
+            dboperations.publicarEncomenda(req.body.numEncomenda, req.body.dataEncomenda, req.body.estado, req.body.valorTotal, req.body.lojaId, req.body.id_Cliente, req.body.estafetaId).then(result => {
                 console.log(result)
                 res.status(200).send({ message: 'Inserido com sucesso' })
             })

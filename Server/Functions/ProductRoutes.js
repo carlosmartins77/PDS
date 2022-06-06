@@ -84,6 +84,7 @@ const listProductsFromStore = async(req, res) => {
         const token = req.headers.authorization.split(" ")[1]
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = await dboperations.finduser(decoded)
+        console.clear()
         if (req.user[0].tipoPermissao == 3) {
             dboperations.listProductsFromStore(req.body.lojaId).then(result => {
                 if (result) {
@@ -93,7 +94,6 @@ const listProductsFromStore = async(req, res) => {
                         message: "Loja nao encontrada"
                     })
                 }
-
             })
         }
     } catch (error) {

@@ -143,7 +143,6 @@ async function listProductsFromStore(lojaId) {
             .query("SELECT Count(*) as ContaLinhas FROM Loja WHERE IdLoja = @lojaId")
 
         let nRegistos = findStore.recordset[0].ContaLinhas
-
         if (nRegistos == 1) {
             let listProduct = await pool.request()
                 .input('lojaId', sql.Int, lojaId)
@@ -271,7 +270,7 @@ async function novaCategoriaLoja(category) {
             .input('nomeCategoria', sql.VarChar, category.categoria)
             .query("SELECT COUNT(*) as ContaLinhas FROM Categoria WHERE nome = @nomeCategoria")
         var nRegistos = findCategory.recordset[0].ContaLinhas
-            //console.log(nRegistos)
+        //console.log(nRegistos)
 
         if (nRegistos == 0) {
             let registerCategory = await pool.request()
@@ -293,7 +292,7 @@ async function novaCategoriaProduto(category) {
             .input('nomeCategoria', sql.VarChar, category.categoria)
             .query("SELECT COUNT(*) as ContaLinhas FROM CategoriaProduto WHERE nome = @nomeCategoria")
         var nRegistos = findCategory.recordset[0].ContaLinhas
-            //console.log(nRegistos)
+        //console.log(nRegistos)
 
         if (nRegistos == 0) {
             let registerCategory = await pool.request()
@@ -312,7 +311,7 @@ async function removerCategoriaProduto(nome) {
         let categoria = await pool.request()
             .input('nome', sql.VarChar, nome)
             .query("DELETE from CategoriaProduto WHERE nome = @nome")
-            //console.log(categoria)
+        //console.log(categoria)
         if (categoria.rowsAffected == 0) {
             return categoria.Error
         } else {
@@ -420,9 +419,9 @@ async function getStoreFromAdmin(email, idloja) {
             .input('email', sql.VarChar, email)
             .input('idloja', sql.SmallInt, idloja)
             .query("SELECT * FROM AdminLoja INNER JOIN Loja ON Loja.idLoja = @idloja INNER JOIN Utilizador ON AdminLoja.utilizadorId = Utilizador.idUtilizador where Utilizador.email = @email")
-            /* SELECT * FROM AdminLoja 
-                INNER JOIN Loja ON AdminLoja.idAdminLoja = 1
-                WHERE Loja.idLoja = 2*/
+        /* SELECT * FROM AdminLoja 
+            INNER JOIN Loja ON AdminLoja.idAdminLoja = 1
+            WHERE Loja.idLoja = 2*/
         console.log("getstore2")
         return admin.recordset
     } catch (err) {
@@ -500,20 +499,20 @@ async function verEncomendas(id) {
         console.log(client)
         return client.recordset;
     } catch (err) {
-        throw new Error(err);
+        console.log(err);
     }
 }
 
-async function retornaCliente(id) {
+async function retornaCliente(idc) {
     try {
         let pool = await sql.connect(config);
         let client = await pool.request()
-            .input('id', sql.Int, id)
-            .query("SELECT Cliente.idCliente FROM  Utilizador INNER JOIN Cliente ON Utilizador.idUtilizador = Cliente.utilizadorId where Cliente.utilizadorId = @id")
-        console.log(client.recordset[0].idCliente)
+            .input('cliente_id', sql.Int, idc)
+            .query("SELECT Cliente.idCliente FROM  Utilizador INNER JOIN Cliente ON Utilizador.idUtilizador = Cliente.utilizadorId where Cliente.utilizadorId = @cliente_id")
+        console.log(client.recordset[0].idCliente);
         return client.recordset[0].idCliente;
     } catch (err) {
-        throw new Error(err);
+        console.log("Pois", client.recordset[0].idCliente);
     }
 }
 
@@ -901,7 +900,7 @@ async function getAproveStores() {
     try {
         let pool = await sql.connect(config);
         let name = await pool.request()
-        .query("select * from Categoria as c join Loja l ON c.idCategoria = l.categoriaId where aprovacao = 1")
+            .query("select * from Categoria as c join Loja l ON c.idCategoria = l.categoriaId where aprovacao = 1")
         return name.recordset;
     } catch (err) {
         return Error(err)
@@ -912,7 +911,7 @@ async function getReprovedStores() {
     try {
         let pool = await sql.connect(config);
         let name = await pool.request()
-        .query("select * from Categoria as c join Loja l ON c.idCategoria = l.categoriaId where aprovacao = 2")
+            .query("select * from Categoria as c join Loja l ON c.idCategoria = l.categoriaId where aprovacao = 2")
         return name.recordset;
     } catch (err) {
         return Error(err)
@@ -930,7 +929,7 @@ async function listarProdutoPorId(id) {
     } catch (err) {
         return Error(err)
     }
-} 
+}
 
 async function getState(utilizadorId) {
     try {
@@ -952,7 +951,7 @@ async function getcategory() {
         let pool = await sql.connect(config);
         let category = await pool.request()
             .query("select * from Categoria")
-        return category.recordset ;
+        return category.recordset;
     } catch (err) {
         return Error(err)
     }
@@ -1015,10 +1014,10 @@ module.exports = {
     deleteStore: deleteStore,
     deleteCourier: deleteCourier,
     atribiurMedalhas: atribiurMedalhas,
-    getstores:getstores,
+    getstores: getstores,
     getReprovedStores: getReprovedStores,
-    getAproveStores:getAproveStores,
-    getcategory:getcategory,
+    getAproveStores: getAproveStores,
+    getcategory: getcategory,
     //#endregion
 
     //#region courier
