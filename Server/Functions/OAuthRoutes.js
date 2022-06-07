@@ -54,7 +54,6 @@ function generateAcessToken(user) {
 const registeruser = async (request, response) => {
     try {
         const token = request.headers.authorization.split(" ")[1]
-
         //  Retorna um objeto com os dados do utilizador
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
 
@@ -67,14 +66,13 @@ const registeruser = async (request, response) => {
 
             // Name, Password, Email, Contact, Nif, Permission
             let user = new User(request.body.name, request.body.password, request.body.email, request.body.contact, request.body.nif, request.body.permission)
-            console.log("registaruser: ", user)
 
             // Verificar se ja existe alguem com esse mail
             let newuser = await dboperations.finduser(request.body.email)
             console.log("novo: ", newuser)
             if (newuser.length == 0) {
                 dboperations.registeruser(user)
-                response.status(201).send("Registo efetuado")
+                response.status(201).send({message: "Registo efetuado"})
             } else response.status(401).send("Ja possui um utilizador com esse email!")
 
         }

@@ -11,7 +11,6 @@ async function loginUser(user) {
             .input('email', sql.VarChar, user.email)
             .input('password', sql.VarChar, user.password)
             .query("SELECT * FROM Utilizador where email = @email and password = @password;")
-        console.log("dentro", logUser.recordset[0])
         return !!logUser.recordset[0]
     } catch (err) {
         return Error(err)
